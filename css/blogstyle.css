@@ -1,0 +1,65 @@
+html {
+    font-family: 'Montserrat', sans-serif;
+}
+body {
+    margin: 0;
+    background-color: #efefef;
+}
+
+
+header {
+    text-align: center;
+    background-color: #364552;
+    color: white;
+    padding: 1.5rem 1.5rem;
+}
+
+header h1 {
+    font-size: 2rem;
+}
+
+.container {
+    width: 400px; /* Espacio que mas o menos ocupan las imagenes */
+    margin: 0 auto; /* Esto es para centrar lo que hay dentro */
+}
+
+section article {
+     transition: box-shadow 0.3s ease; /*Esto es para hacer transiciones en caja */
+    background-color: white;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0;
+    cursor: pointer;
+}
+
+section article h2, section article p {
+    margin: 1rem;
+}
+
+section article:hover {
+    box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.3); /* Esta es la caja de transcision */
+}
+
+footer {
+    background-color: #364552;
+    color: white;
+    padding: 3rem ;
+}
+
+footer section {
+    float: right;
+}
+
+footer p {
+    margin: 0rem;  
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease; /* para hacer transicion del color de abajo */
+}
+
+footer a:hover{
+    color: teal;
+}

@@ -23,6 +23,21 @@ header h1 {
     margin: 0 auto; /* Esto es para centrar lo que hay dentro */
 }
 
+.contador {
+    transition: box-shadow 0.3s ease; /*Esto es para hacer transiciones en caja */
+    display: inline;
+    background-color: white;
+    border: 0.1rem solid; 
+    margin: 1rem 0;
+    border-radius: 1rem;
+    padding: 0.40rem;
+    vertical-align: middle;
+
+}
+
+.contador:hover {
+    box-shadow: 0 0.1rem 0.4rem rgba(0, 0, 0, 0.3); /* Esta es la caja de transcision */
+}
 section article {
      transition: box-shadow 0.3s ease; /*Esto es para hacer transiciones en caja */
     background-color: white;

@@ -52,6 +52,8 @@ const canonical = new URL(`${langPrefix(lang)}/`, Astro.site).href;
     <meta id="tc" name="theme-color" content="#0a0a0a" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {/* iOS ignora los favicon SVG: para la pantalla de inicio hace falta PNG. */}
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonical} />
     {
       langs.map((l) => (

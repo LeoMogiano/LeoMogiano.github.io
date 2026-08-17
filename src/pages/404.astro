@@ -1,0 +1,101 @@
+---
+/**
+ * GitHub Pages sirve /404.html en cualquier ruta que no exista. Sin este
+ * archivo mostraba la página genérica de GitHub, fuera del sitio.
+ */
+import { getDict } from '../i18n';
+import Base from '../layouts/Base.astro';
+
+const t = getDict('es');
+---
+
+<Base lang="es" t={t}>
+  <canvas class="lasso" aria-hidden="true"></canvas>
+
+  <main class="lost">
+    <p class="lost__code">404</p>
+    <h1 class="lost__title">Esta página se <em>fue</em> 🛰️</h1>
+    <p class="lost__text">
+      El enlace no lleva a ningún lado. Puede que la ruta haya cambiado o que la
+      dirección tenga un dedazo.
+    </p>
+    <nav class="lost__links">
+      <a href="/">Inicio</a>
+      <a href="/en/">English</a>
+      <a href="/ja/">日本語</a>
+    </nav>
+  </main>
+
+  <script>
+    import '../scripts/theme';
+    import '../scripts/lasso';
+  </script>
+</Base>
+
+<style>
+  .lost {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 10vh 5vw;
+    max-width: 46ch;
+  }
+
+  .lost__code {
+    margin: 0;
+    font-family: var(--label);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--faint);
+  }
+
+  .lost__title {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(40px, 9vw, 96px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .lost__title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .lost__text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--dim);
+    text-wrap: pretty;
+  }
+
+  .lost__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .lost__links a {
+    font-family: var(--label);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 11px 20px;
+    background: var(--card);
+    cursor: none;
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+
+  .lost__links a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

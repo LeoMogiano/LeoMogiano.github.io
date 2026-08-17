@@ -2,7 +2,11 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://leomogiano.dev',
+  // La URL real del sitio. El artefacto del builder traía leomogiano.dev, un
+  // dominio que no está registrado: canonical, los tres hreflang y og:url
+  // apuntaban a un host muerto. Si algún día se compra el dominio, se cambia
+  // aquí y se agrega public/CNAME.
+  site: 'https://leomogiano.github.io',
   trailingSlash: 'always',
   build: {
     // El CSS del sitio es pequeño y crítico: inline evita un round-trip.

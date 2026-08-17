@@ -1,0 +1,163 @@
+/* Reset mínimo, reglas de documento y keyframes. Portado 1:1 del legacy. */
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  min-height: 100%;
+  /* El fondo va en <html>, no solo en <body>: Safari muestrea los bordes del
+     viewport para teñir su barra y necesita encontrar color ahí. */
+  background-color: #0a0a0a;
+  transition: background-color 0.5s ease;
+}
+
+html[data-t='light'] {
+  background-color: #e9e4da;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--font);
+  transition: background 0.5s ease;
+}
+
+a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+::selection {
+  background: var(--accent);
+  color: #0a0a0a;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Gradiente de fondo. Se desvanece en los primeros y últimos 120px para que
+   Safari no muestree color de acento al teñir su barra. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 120px, #000 calc(100% - 120px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 120px, #000 calc(100% - 120px), transparent 100%);
+  background-image:
+    radial-gradient(900px 620px at 78% -8%, oklch(0.5 0.13 152 / 0.3), transparent 62%),
+    radial-gradient(760px 560px at 6% 22%, oklch(0.45 0.12 250 / 0.22), transparent 64%),
+    radial-gradient(1100px 700px at 46% 108%, oklch(0.55 0.1 190 / 0.16), transparent 66%);
+}
+
+html[data-t='light'] body::before {
+  background-image:
+    radial-gradient(820px 560px at 84% -8%, oklch(0.86 0.07 145 / 0.7), transparent 62%),
+    radial-gradient(700px 520px at 2% 18%, oklch(0.9 0.05 60 / 0.85), transparent 64%),
+    radial-gradient(1000px 680px at 52% 108%, oklch(0.85 0.04 250 / 0.6), transparent 66%);
+}
+
+/* El canvas del rastro del cursor. El recorte de 6px arriba y abajo lo
+   mantiene fuera de la zona que Safari muestrea. */
+.lasso {
+  position: fixed;
+  top: 6px;
+  left: 0;
+  right: 0;
+  bottom: auto;
+  width: 100%;
+  height: calc(100% - 12px);
+  pointer-events: none;
+  z-index: 60;
+}
+
+.page {
+  color: var(--fg);
+  font-family: var(--font);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/*
+ * Fila de lista que se desliza al pasar por encima. La usan la lista de apps y
+ * la trayectoria; estaba duplicada con los mismos valores en ambas.
+ *
+ * `will-change` va solo en :hover a propósito. Declararlo en reposo crea una
+ * capa de composición por fila —diez capas vivas para animar una— y ese es
+ * justo el coste que se quería evitar.
+ */
+.slide-row {
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  contain: paint;
+}
+
+.slide-row:hover {
+  transform: translateX(14px);
+  will-change: transform;
+}
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(0) rotate(-8deg); }
+  12% { opacity: 0.85; }
+  100% { opacity: 0; transform: translateY(-108vh) rotate(14deg); }
+}
+
+@keyframes polaroid {
+  0% { opacity: 0; transform: translateY(-70px) rotate(-11deg) scale(0.86); }
+  70% { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) rotate(-2.5deg) scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes spark {
+  0% { opacity: 0; translate: 0 calc(var(--a) * -1); }
+  25% { opacity: 0.75; }
+  100% { opacity: 0; translate: 0 calc(var(--b) * -1); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}

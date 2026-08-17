@@ -1,0 +1,27 @@
+{
+  "name": "leomogiano-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "assets": "node scripts/extract-assets.mjs && node scripts/prepare-assets.mjs",
+    "fonts": "node scripts/subset-fonts.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.2.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@types/node": "^26.2.0",
+    "sharp": "^0.34.4",
+    "subset-font": "^2.4.0",
+    "typescript": "^5.9.2"
+  }
+}

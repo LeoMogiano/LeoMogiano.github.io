@@ -1,0 +1,92 @@
+---
+/**
+ * La píldora que el sitio repite por todos lados: borde redondeado, tipografía
+ * de etiqueta, versalitas y un icono opcional a la izquierda.
+ *
+ * Variantes:
+ *   default  borde tenue, sin fondo — nav inactivo, tags de iOS/Android
+ *   card     con fondo var(--card) — badges de sección, botones, socials
+ *   active   fondo de acento — la entrada actual del nav
+ */
+import Icon from './Icon.astro';
+import type { IconName } from './Icon.astro';
+
+interface Props {
+  as?: 'span' | 'a' | 'button' | 'div';
+  variant?: 'default' | 'card' | 'active';
+  icon?: IconName;
+  iconSize?: string;
+  href?: string;
+  target?: string;
+  title?: string;
+  type?: 'button' | 'submit';
+  class?: string;
+  'aria-label'?: string;
+}
+
+const {
+  as: Tag = 'span',
+  variant = 'default',
+  icon,
+  iconSize = '14px',
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<Tag class:list={['pill', `pill--${variant}`, className]} {...rest}>
+  {icon && <Icon name={icon} size={iconSize} />}
+  <slot />
+</Tag>
+
+<style>
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-family: var(--label);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--dim);
+    background: transparent;
+    transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  }
+
+  .pill--default {
+    border-color: var(--line);
+  }
+
+  .pill--card {
+    border-color: var(--line);
+    background: var(--card);
+  }
+
+  .pill--active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+
+  a.pill,
+  button.pill {
+    cursor: none;
+    color: var(--fg);
+    font: inherit;
+    font-family: var(--label);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  a.pill:hover,
+  button.pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

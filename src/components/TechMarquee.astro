@@ -1,0 +1,84 @@
+---
+import Icon from './ui/Icon.astro';
+import { stack } from '../data/stack';
+---
+<section aria-label="Tecnologías que uso" class="marquee">
+  <div class="marquee__fade marquee__fade--left"></div>
+  <div class="marquee__fade marquee__fade--right"></div>
+  <div class="marquee__track">
+    {(() => {
+      /* fragmento local: un solo template para ambas copias del carrusel */
+      const renderTech = (tech: (typeof stack)[number]) => (
+        <span title={tech.name} class="marquee__item">
+          <Icon name={tech.icon} size="20px" />
+          {tech.name}
+        </span>
+      );
+      return (
+        <>
+          <div class="marquee__group">{stack.map(renderTech)}</div>
+          <div class="marquee__group" aria-hidden="true">{stack.map(renderTech)}</div>
+        </>
+      );
+    })()}
+  </div>
+</section>
+
+<style>
+  .marquee {
+    position: relative;
+    overflow: hidden;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 90px;
+    border-bottom: 1px solid var(--line);
+    padding: 26px 0;
+  }
+
+  .marquee__fade {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 12%;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .marquee__fade--left {
+    background: linear-gradient(to right, var(--bg), transparent);
+  }
+
+  .marquee__fade--right {
+    inset: 0 0 0 auto;
+    background: linear-gradient(to left, var(--bg), transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 52s linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .marquee__track:hover {
+    animation-play-state: paused;
+  }
+
+  .marquee__group {
+    display: flex;
+    gap: 52px;
+    align-items: center;
+    padding-right: 52px;
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--label);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    flex: none;
+  }
+</style>

@@ -1,0 +1,29 @@
+---
+/**
+ * Icono monocromo. El SVG va como máscara sobre currentColor, así que hereda
+ * el color del contexto y sigue al tema sin duplicar assets.
+ *
+ * Los nombres válidos son los archivos de .vendor-assets/icons/, expuestos por
+ * src/styles/icons.css como .icon--<nombre>.
+ */
+export type IconName =
+  | 'android' | 'badge-apps' | 'badge-path' | 'badge-play' | 'briefcase'
+  | 'dart' | 'docker' | 'figma' | 'firebase' | 'flutter' | 'gamepad-2'
+  | 'git' | 'github' | 'github-actions' | 'github-mark' | 'house' | 'ios'
+  | 'kotlin' | 'layout-grid' | 'linkedin' | 'mail' | 'moon' | 'pause'
+  | 'play' | 'postgresql' | 'reset' | 'send' | 'sentry' | 'sun' | 'swift';
+
+interface Props {
+  name: IconName;
+  /** Cualquier unidad CSS. El icono siempre es cuadrado. */
+  size?: string;
+  class?: string;
+}
+
+const { name, size = '1em', class: className } = Astro.props;
+---
+
+<span
+  class:list={['icon', `icon--${name}`, className]}
+  style={`width:${size};height:${size}`}
+  aria-hidden="true"></span>

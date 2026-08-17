@@ -1,0 +1,49 @@
+/* Tokens de diseño. Portados 1:1 del artefacto legacy: los valores no cambian. */
+
+/* Los tokens viven en <html> para que el script bloqueante del <head> pueda
+   fijar el tema antes de que exista <body>. */
+:root {
+  --display: 'Instrument Serif', serif;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --label: 'DM Mono', ui-monospace, monospace;
+
+  /* La tipografía de los nombres de app. applyType() la elegía desde una
+     perilla del builder; el valor por defecto —el publicado— era este. */
+  --appfont: 'Bricolage Grotesque', system-ui, sans-serif;
+  --appstyle: normal;
+  --apptrack: -0.015em;
+  --appcase: none;
+
+  --bg: #0a0a0a;
+  --fg: #f2f1ee;
+  --dim: rgba(242, 241, 238, 0.52);
+  /* --faint sube del .3 del original a .5: con .3 el contraste sobre --bg era
+     2.43:1 y este token se usa para texto real (reloj, badges, duraciones,
+     pie), no para adorno. Con .5 queda en 4.84:1 y pasa AA. */
+  --faint: rgba(242, 241, 238, 0.5);
+  --line: rgba(242, 241, 238, 0.13);
+  --card: rgba(255, 255, 255, 0.035);
+  --accent: oklch(0.88 0.19 122);
+  --glass: rgba(255, 255, 255, 0.06);
+}
+
+html[data-t='light'] {
+  --bg: #e9e4da;
+  --fg: #1b1a16;
+  --dim: rgba(27, 26, 22, 0.62);
+  /* En claro hace falta .64 para el mismo 4.5:1: el fondo #e9e4da es más
+     claro que oscuro el #0a0a0a, así que el texto tiene menos margen. */
+  --faint: rgba(27, 26, 22, 0.64);
+  --line: rgba(27, 26, 22, 0.16);
+  --card: rgba(27, 26, 22, 0.045);
+  --accent: oklch(0.48 0.13 145);
+  --glass: rgba(255, 255, 255, 0.5);
+}
+
+/* En japonés se añaden las Noto JP como respaldo para los kanji. La regla la
+   activa <html lang="ja">, así ES y EN ni mencionan las familias JP. */
+html[lang='ja'] {
+  --display: 'Instrument Serif', 'Noto Serif JP', serif;
+  --font: 'DM Sans', 'Noto Sans JP', system-ui, sans-serif;
+  --label: 'DM Mono', 'Noto Sans JP', ui-monospace, monospace;
+}

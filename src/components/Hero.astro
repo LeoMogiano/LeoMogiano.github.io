@@ -1,0 +1,373 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../assets/portrait.webp';
+import Icon from './ui/Icon.astro';
+import Pill from './ui/Pill.astro';
+import type { Dict } from '../i18n';
+import { socials } from '../data/socials';
+
+interface Props { t: Dict }
+const { t } = Astro.props;
+
+// Ángulo y delay de cada chispa del anillo (pares 0s, impares 0.035s).
+const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
+---
+
+<section id="top" class="hero">
+  <figure class="hero__figure">
+    <span class="hero__portrait-frame">
+      <Image
+        data-portrait
+        src={portrait}
+        alt={t.photoAlt}
+        width={168}
+        height={168}
+        decoding="async"
+        class="hero__portrait"
+      />
+      <span class="hero__sparks" data-sparks aria-hidden="true">
+        {sparkAngles.map((deg, i) => (
+          <span class="hero__spark" style={`--rot:${deg}deg;--delay:${i % 2 === 0 ? 0 : 0.035}s`}></span>
+        ))}
+      </span>
+      <span class="hero__status" aria-label={t.statusAria} title={t.statusTitle}>😺</span>
+    </span>
+    <figcaption class="hero__caption">{t.role}</figcaption>
+  </figure>
+
+  <div class="hero__greet">
+    <span class="hero__dot"></span>
+    <span class="hero__greet-text">{t.greetA}<em class="hero__em">Leo Mogiano</em>{t.greetB} <span class="hero__wave">👋</span></span>
+    <span class="hero__pills">
+      <Pill as="span" variant="default" icon="ios">iOS</Pill>
+      <Pill as="span" variant="default" icon="android">Android</Pill>
+    </span>
+  </div>
+
+  <h1 class="hero__title">Mobile<br /><em class="hero__em">Developer</em><span class="hero__sup"> ／ iOS · Android · Flutter</span></h1>
+
+  <div class="hero__grid">
+    <p class="hero__bio">{t.bio}</p>
+
+    <div class="hero__socials">
+      {socials.map((s) => (
+        <Pill
+          as="a"
+          variant="card"
+          icon={s.icon}
+          href={s.href}
+          target={s.external ? '_blank' : undefined}
+          rel={s.external ? 'noopener noreferrer' : undefined}
+        >
+          {s.label}
+        </Pill>
+      ))}
+    </div>
+
+    <div class="hero__player" data-player>
+      <div class="hero__scrubber">
+        <div class="hero__disc" data-disc>
+          <span class="hero__disc-dot"></span>
+        </div>
+        <div class="hero__now">
+          <div class="hero__now-title">now playing — infinity_repeating.loop</div>
+          <div class="hero__progress">
+            <span class="hero__progress-bar" data-progress></span>
+          </div>
+        </div>
+        <button class="hero__play" data-play-toggle aria-label={t.playAria}>
+          <span class="hero__play-icon hero__play-icon--play"><Icon name="play" size="14px" /></span>
+          <span class="hero__play-icon hero__play-icon--pause"><Icon name="pause" size="14px" /></span>
+        </button>
+      </div>
+      <iframe
+        class="hero__iframe"
+        data-sc
+        title="SoundCloud"
+        width="100%"
+        height="20"
+        scrolling="no"
+        frameborder="no"
+        allow="autoplay"
+        loading="lazy"
+        src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fraven_sounddoll%2Finfinity-repeating-daft-punk-feat-julian-casablancas-the-voidz-bootleg-by-raven-sounddoll&color=%23c8ff4d&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding: 11vh 5vw 8vh;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Retrato */
+  .hero__figure {
+    margin: 0;
+    position: absolute;
+    top: 9vh;
+    right: 5vw;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero__portrait-frame {
+    position: relative;
+    display: block;
+    line-height: 0;
+  }
+  .hero__portrait {
+    flex: none;
+    width: clamp(96px, 13vw, 168px);
+    height: clamp(96px, 13vw, 168px);
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: 50% 22%;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    filter: grayscale(1) contrast(1.05);
+    transition: filter .5s ease, transform .5s ease;
+    cursor: none;
+  }
+  .hero__portrait:hover {
+    filter: none;
+    transform: scale(1.04);
+  }
+
+  /* Anillo de chispas: arranca apagado, el script lo dispara por tap */
+  .hero__sparks {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(96px, 13vw, 168px);
+    height: clamp(96px, 13vw, 168px);
+    pointer-events: none;
+    z-index: 5;
+  }
+  .hero__spark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 14px;
+    margin: -7px 0 0 -1px;
+    border-radius: 2px;
+    background: var(--accent);
+    opacity: 0;
+    transform: rotate(var(--rot));
+    transform-origin: 50% 50%;
+    --a: 46px;
+    --b: 74px;
+    animation-name: spark;
+    animation-duration: .58s;
+    animation-timing-function: cubic-bezier(.25, .85, .35, 1);
+    animation-delay: var(--delay);
+    animation-play-state: paused;
+  }
+  .hero__sparks.is-playing .hero__spark {
+    animation-play-state: running;
+  }
+
+  .hero__status {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: clamp(26px, 3vw, 34px);
+    height: clamp(26px, 3vw, 34px);
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    display: grid;
+    place-items: center;
+    font-size: clamp(13px, 1.6vw, 17px);
+    line-height: 1;
+    padding-top: 1px;
+    z-index: 6;
+  }
+
+  .hero__caption {
+    font-family: var(--label);
+    font-size: 9px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--faint);
+    text-align: center;
+  }
+
+  /* Saludo */
+  .hero__greet {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 30px;
+    max-width: min(100%, calc(95vw - 200px));
+  }
+  .hero__dot {
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: blink 2.4s ease-in-out infinite;
+    align-self: center;
+  }
+  .hero__greet-text {
+    font-family: var(--display);
+    font-size: clamp(24px, 3vw, 38px);
+    letter-spacing: .02em;
+    line-height: 1.1;
+    color: var(--fg);
+  }
+  .hero__em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero__wave {
+    font-style: normal;
+  }
+  .hero__pills {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 4px;
+  }
+
+  /* Título */
+  .hero__title {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(50px, 12vw, 148px);
+    line-height: .86;
+    letter-spacing: -.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .hero__sup {
+    font-family: var(--font);
+    font-size: clamp(11px, 1.1vw, 15px);
+    letter-spacing: .1em;
+    vertical-align: super;
+    color: var(--dim);
+  }
+
+  /* Bloque inferior */
+  .hero__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 32px;
+    margin-top: 56px;
+    align-items: end;
+  }
+  .hero__bio {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--dim);
+    max-width: 44ch;
+    text-wrap: pretty;
+  }
+  .hero__socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* Reproductor */
+  .hero__player {
+    justify-self: end;
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hero__scrubber {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 16px 9px 9px;
+    background: var(--card);
+  }
+  .hero__disc {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--fg), var(--bg), var(--fg));
+    position: relative;
+    flex: none;
+    animation: spin 6s linear infinite;
+    animation-play-state: paused;
+  }
+  .hero__player.is-playing .hero__disc {
+    animation-play-state: running;
+  }
+  .hero__disc-dot {
+    position: absolute;
+    inset: 42%;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .hero__now {
+    flex: 1;
+    min-width: 0;
+  }
+  .hero__now-title {
+    font-size: 10px;
+    letter-spacing: .1em;
+    color: var(--dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .hero__progress {
+    height: 3px;
+    background: var(--line);
+    border-radius: 2px;
+    margin-top: 7px;
+    overflow: hidden;
+  }
+  .hero__progress-bar {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    transition: width .25s linear;
+  }
+  .hero__play {
+    cursor: none;
+    border: none;
+    background: none;
+    color: var(--fg);
+    font: inherit;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+  .hero__play:hover {
+    color: var(--accent);
+  }
+  .hero__play-icon {
+    display: block;
+  }
+  .hero__play-icon--pause {
+    display: none;
+  }
+  .hero__player.is-playing .hero__play-icon--play {
+    display: none;
+  }
+  .hero__player.is-playing .hero__play-icon--pause {
+    display: block;
+  }
+  .hero__iframe {
+    display: block;
+    border: 0;
+    opacity: .45;
+  }
+</style>

@@ -1,0 +1,257 @@
+---
+import { Image } from 'astro:assets';
+import SectionHeader from './ui/SectionHeader.astro';
+import { jobs } from '../data/jobs';
+import type { Dict } from '../i18n';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+---
+
+<section id="path" class="path">
+  <SectionHeader icon="badge-path" badge={t.pathBadge}>
+    <h2>{t.pathA}<em>{t.pathEm}</em>{t.pathB}</h2>
+  </SectionHeader>
+
+  <div class="path__list">
+    {
+      jobs.map((job) => (
+        <div class={`slide-row path__row ${job.roles.length > 1 ? 'path__row--multi' : 'path__row--single'}`}>
+          {job.roles.length > 1 && (
+            <div class="path__dur path__dur--floating">{t[job.durKey as keyof Dict] as string}</div>
+          )}
+          <Image src={job.logo} alt={job.company} width={60} height={60} class="path__logo" />
+          {job.roles.length > 1 ? (
+            <div class="path__body">
+              <span class="path__company">{job.company}</span>
+              <div class="path__roles">
+                {job.roles.map((role, ri) => (
+                  <>
+                    <span class="path__dot-cell">
+                      {ri === 0 && <span class="path__line" />}
+                      <span class={`path__dot ${ri === 0 ? 'path__dot--accent' : 'path__dot--line'}`} />
+                    </span>
+                    <div class="path__role-row">
+                      <span class={`path__role-name ${ri === 0 ? 'path__role-name--accent' : 'path__role-name--dim'}`}>
+                        {t[role.roleKey as keyof Dict] as string}
+                      </span>
+                      <span class={`path__role-date ${ri === 0 ? 'path__role-date--dim' : 'path__role-date--faint'}`}>
+                        {t[role.dateKey as keyof Dict] as string}
+                      </span>
+                    </div>
+                  </>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div class="path__body">
+              <div class="path__role-name path__role-name--accent path__role-name--single">
+                {t[job.roles[0].roleKey as keyof Dict] as string}
+              </div>
+              <div class="path__at">@ {job.company}</div>
+            </div>
+          )}
+          {job.roles.length === 1 && (
+            <div class="path__aside">
+              <div class="path__role-date path__role-date--dim path__role-date--single">
+                {t[job.roles[0].dateKey as keyof Dict] as string}
+              </div>
+              <div class="path__dur">{t[job.durKey as keyof Dict] as string}</div>
+            </div>
+          )}
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .path {
+    position: relative;
+    padding: 9vh 5vw;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .path__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .path__row {
+    position: relative;
+    display: flex;
+    gap: clamp(16px, 2.4vw, 28px);
+    border-top: 1px solid var(--line);
+    padding: 20px clamp(10px, 1.6vw, 20px);
+  }
+
+  .path__list > .path__row:nth-child(odd) {
+    background: var(--card);
+  }
+
+  .path__list > .path__row:nth-child(even) {
+    background: transparent;
+  }
+
+  .path__list > .path__row:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .path__row--multi {
+    align-items: flex-start;
+    padding: 24px clamp(10px, 1.6vw, 20px);
+  }
+
+  .path__row--single {
+    align-items: center;
+  }
+
+  .path__dur {
+    font-family: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+
+  .path__dur--floating {
+    position: absolute;
+    top: 24px;
+    right: clamp(10px, 1.6vw, 20px);
+  }
+
+  .path__dur:not(.path__dur--floating) {
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  :global(.path__logo) {
+    width: clamp(46px, 5vw, 60px);
+    height: clamp(46px, 5vw, 60px);
+    flex: none;
+    border-radius: 14px;
+  }
+
+  .path__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .path__company {
+    font-size: clamp(17px, 2.2vw, 24px);
+    letter-spacing: 0.015em;
+    line-height: 1.3;
+  }
+
+  .path__roles {
+    margin: 18px 0 0;
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    row-gap: 16px;
+    font-size: clamp(15px, 1.8vw, 20px);
+  }
+
+  .path__dot-cell {
+    position: relative;
+    display: block;
+  }
+
+  /*
+   * El punto se ancla en `em` (no en px) para seguir el centro de la
+   * primera línea del rol cuando este se parte en dos líneas en móvil.
+   */
+  .path__dot {
+    position: absolute;
+    left: 0;
+    top: 0.32em;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+
+  .path__dot--accent {
+    background: var(--accent);
+  }
+
+  .path__dot--line {
+    background: var(--line);
+  }
+
+  .path__line {
+    position: absolute;
+    left: 3.5px;
+    top: calc(0.32em + 4.5px);
+    width: 2px;
+    height: calc(100% + 16px);
+    border-radius: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--line));
+    pointer-events: none;
+  }
+
+  .path__role-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    align-items: baseline;
+  }
+
+  .path__role-name {
+    flex: 1;
+    min-width: 0;
+    font-size: 1em;
+    letter-spacing: 0.015em;
+  }
+
+  .path__role-name--single {
+    font-size: clamp(17px, 2.2vw, 24px);
+    line-height: 1.3;
+  }
+
+  .path__role-name--accent {
+    color: var(--accent);
+  }
+
+  .path__role-name--dim {
+    color: var(--dim);
+  }
+
+  .path__at {
+    color: var(--dim);
+    font-size: 13px;
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .path__role-date {
+    flex: none;
+    text-align: right;
+    font-size: 13px;
+    letter-spacing: 0.09em;
+    white-space: nowrap;
+  }
+
+  .path__role-date--single {
+    font-size: 13px;
+  }
+
+  .path__role-date--dim {
+    color: var(--dim);
+  }
+
+  .path__role-date--faint {
+    color: var(--faint);
+  }
+
+  .path__aside {
+    text-align: right;
+    flex: none;
+  }
+</style>

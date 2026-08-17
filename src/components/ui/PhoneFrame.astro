@@ -8,8 +8,8 @@ interface Props {
   aspect: string;
   radius: string;
   innerRadius: string;
-  /** El pong necesita fondo negro; la vitrina de apps, el fondo del tema. */
-  screen?: 'card' | 'black';
+  /** El pong pinta sobre el fondo del tema; la vitrina de apps usa la tarjeta. */
+  screen?: 'card' | 'solid';
   class?: string;
 }
 
@@ -57,7 +57,9 @@ const {
     background: var(--card);
   }
 
-  .phone__screen--black {
-    background: #000;
+  /* Sigue al tema: el canvas dibuja con --fg y --accent encima, y si el fondo
+     fuera negro fijo, en modo claro la paleta desaparecería. */
+  .phone__screen--solid {
+    background: var(--bg);
   }
 </style>

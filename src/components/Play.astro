@@ -29,7 +29,7 @@ const { t } = Astro.props;
     <Pill as="button" variant="card" icon="reset" class="play__reset" type="button" data-pong-reset>{t.resetBtn}</Pill>
   </div>
   <div class="play__phone">
-    <PhoneFrame width="min(280px,80vw)" aspect="280/575" radius="48px" innerRadius="39px" screen="black">
+    <PhoneFrame width="min(280px,80vw)" aspect="280/575" radius="48px" innerRadius="39px" screen="solid">
       <canvas
           class="pong"
           data-pong
@@ -118,7 +118,8 @@ const { t } = Astro.props;
     width: 80px;
     height: 22px;
     border-radius: 999px;
-    background: #000;
+    /* El notch tapa el canvas, así que va del color del fondo, no negro fijo. */
+    background: var(--bg);
     z-index: 3;
   }
 
@@ -130,7 +131,7 @@ const { t } = Astro.props;
     width: 100px;
     height: 5px;
     border-radius: 3px;
-    background: rgba(255, 255, 255, .45);
+    background: color-mix(in oklab, var(--fg) 45%, transparent);
     z-index: 3;
     pointer-events: none;
   }

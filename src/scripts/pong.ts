@@ -102,6 +102,7 @@ if (canvas && ctx) {
 
     const accent = token('--accent', '#c8ff4d');
     const fg = token('--fg', '#f2f1ee');
+    const bg = token('--bg', '#0a0a0a');
 
     const now = performance.now();
     accumulator += Math.min(50, now - lastTime);
@@ -174,7 +175,7 @@ if (canvas && ctx) {
     const by = state.prevY + (state.by - state.prevY) * alpha;
     const paddle = Math.max(state.pw / 2, Math.min(W - state.pw / 2, state.px));
 
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
 
     ctx.globalAlpha = 0.18;

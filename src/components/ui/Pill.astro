@@ -7,14 +7,13 @@
  *   default  borde tenue, sin fondo — nav inactivo, tags de iOS/Android
  *   card     con fondo var(--card) — badges de sección, botones, socials
  *   active   fondo de acento — la entrada actual del nav
- *   bare     sin borde ni fondo — duraciones y metadatos
  */
 import Icon from './Icon.astro';
 import type { IconName } from './Icon.astro';
 
 interface Props {
   as?: 'span' | 'a' | 'button' | 'div';
-  variant?: 'default' | 'card' | 'active' | 'bare';
+  variant?: 'default' | 'card' | 'active';
   icon?: IconName;
   iconSize?: string;
   href?: string;
@@ -73,13 +72,6 @@ const {
     color: var(--bg);
   }
 
-  .pill--bare {
-    padding: 4px 10px;
-    border-color: var(--line);
-    font-size: 10px;
-    color: var(--faint);
-    white-space: nowrap;
-  }
 
   a.pill,
   button.pill {

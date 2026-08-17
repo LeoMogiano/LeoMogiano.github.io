@@ -102,6 +102,24 @@ html[data-t='light'] body::before {
   }
 }
 
+/*
+ * Fila de lista que se desliza al pasar por encima. La usan la lista de apps y
+ * la trayectoria; estaba duplicada con los mismos valores en ambas.
+ *
+ * `will-change` va solo en :hover a propósito. Declararlo en reposo crea una
+ * capa de composición por fila —diez capas vivas para animar una— y ese es
+ * justo el coste que se quería evitar.
+ */
+.slide-row {
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  contain: paint;
+}
+
+.slide-row:hover {
+  transform: translateX(14px);
+  will-change: transform;
+}
+
 @keyframes marquee {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }

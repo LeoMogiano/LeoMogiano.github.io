@@ -2,6 +2,8 @@
  * El rastro que sigue al cursor. No es decoración opcional: el sitio va con
  * `cursor: none`, así que este trazo *es* el cursor.
  */
+import { token } from './tokens';
+
 const canvas = document.querySelector<HTMLCanvasElement>('.lasso');
 const ctx = canvas?.getContext('2d');
 
@@ -48,16 +50,21 @@ if (canvas && ctx && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
         w: Math.min(MAX_WIDTH, 1.6 + speed * 3.2),
       });
       if (points.length > 90) points.shift();
+      wake();
     },
     { passive: true },
   );
 
-  const accent = () =>
-    getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#c8ff4d';
+  // El bucle solo corre mientras haya rastro que dibujar. Sin esto seguía
+  // pidiendo frames para siempre: en una pantalla de 120 Hz son 120 llamadas
+  // por segundo para no pintar nada.
+  let running = false;
 
   const loop = () => {
-    requestAnimationFrame(loop);
-    if (document.hidden) return;
+    if (document.hidden) {
+      running = false;
+      return;
+    }
 
     const now = performance.now();
     const previous = points;
@@ -84,9 +91,14 @@ if (canvas && ctx && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       );
     }
 
-    if (points.length < 3) return;
+    if (points.length < 3) {
+      running = points.length > 0;
+      if (running) requestAnimationFrame(loop);
+      return;
+    }
 
-    const color = accent();
+    requestAnimationFrame(loop);
+    const color = token('--accent', '#c8ff4d');
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.strokeStyle = color;
@@ -113,7 +125,17 @@ if (canvas && ctx && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     ctx.fill();
   };
 
-  loop();
+  function wake() {
+    if (running || document.hidden) return;
+    running = true;
+    requestAnimationFrame(loop);
+  }
+
+  // Al volver de otra pestaña el rastro sigue en memoria: hay que retomar el
+  // bucle para que se apague solo, o queda un trazo congelado en pantalla.
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && points.length) wake();
+  });
 }
 
 export {};

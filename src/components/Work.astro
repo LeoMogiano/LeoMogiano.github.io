@@ -67,7 +67,7 @@ const defaultApp = apps[0].num;
       {apps.map((app) => {
         const copy = appCopy[lang][app.num];
         return (
-          <button type="button" data-app-pick={app.num} class="work__item">
+          <button type="button" data-app-pick={app.num} class="slide-row work__item">
             <span class="work__num">{app.num}</span>
             <span>
               <span class="work__name">{app.name}</span>
@@ -257,14 +257,7 @@ const defaultApp = apps[0].num;
     gap: 18px;
     align-items: baseline;
     opacity: 0.42;
-    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform;
-    contain: paint;
-  }
-
-  .work__item:hover {
-    transform: translateX(14px);
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   [data-app-current='01'] .work__item[data-app-pick='01'],

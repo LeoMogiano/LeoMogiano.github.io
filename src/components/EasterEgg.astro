@@ -19,7 +19,8 @@ const floaters = [
 ];
 ---
 
-<div data-egg hidden class="egg" role="dialog" aria-modal="true" aria-label={t.eggCaption}>
+<div data-egg hidden class="egg" tabindex="-1"
+  role="dialog" aria-modal="true" aria-label={t.eggCaption}>
   <div class="egg__floaters">
     {floaters.map((f) => (
       <span

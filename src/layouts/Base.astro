@@ -51,6 +51,7 @@ const canonical = new URL(`${langPrefix(lang)}/`, Astro.site).href;
     {/* Lo lee el script de tema para teñir la barra de Safari. */}
     <meta id="tc" name="theme-color" content="#0a0a0a" />
 
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonical} />
     {
       langs.map((l) => (

@@ -5,6 +5,8 @@
  * idéntica a 60, 90 o 120 Hz. Un `dt` variable haría que la pelota fuera más
  * rápida en una pantalla de 120 Hz.
  */
+import { token } from './tokens';
+
 const canvas = document.querySelector<HTMLCanvasElement>('[data-pong]');
 const ctx = canvas?.getContext('2d', { alpha: false });
 
@@ -50,10 +52,19 @@ if (canvas && ctx) {
 
   document.querySelector('[data-pong-reset]')?.addEventListener('click', reset);
 
+  // El rect se cachea: leerlo en cada pointermove fuerza al navegador a
+  // recalcular layout justo cuando más eventos llegan.
+  let rectLeft = canvas.getBoundingClientRect().left;
+  const trackRect = () => {
+    rectLeft = canvas.getBoundingClientRect().left;
+  };
+  window.addEventListener('scroll', trackRect, { passive: true });
+  window.addEventListener('resize', trackRect, { passive: true });
+
   canvas.addEventListener(
     'pointermove',
     (event) => {
-      state.px = event.clientX - canvas.getBoundingClientRect().left;
+      state.px = event.clientX - rectLeft;
     },
     { passive: true },
   );
@@ -80,9 +91,6 @@ if (canvas && ctx) {
       { threshold: 0 },
     ).observe(canvas);
   }
-
-  const token = (name: string, fallback: string) =>
-    getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
 
   const STEP = 4;
   let lastTime = performance.now();

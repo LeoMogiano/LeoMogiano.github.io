@@ -19,7 +19,7 @@ const { t } = Astro.props;
   <div class="path__list">
     {
       jobs.map((job) => (
-        <div class={`path__row ${job.roles.length > 1 ? 'path__row--multi' : 'path__row--single'}`}>
+        <div class={`slide-row path__row ${job.roles.length > 1 ? 'path__row--multi' : 'path__row--single'}`}>
           {job.roles.length > 1 && (
             <div class="path__dur path__dur--floating">{t[job.durKey as keyof Dict] as string}</div>
           )}
@@ -86,13 +86,6 @@ const { t } = Astro.props;
     gap: clamp(16px, 2.4vw, 28px);
     border-top: 1px solid var(--line);
     padding: 20px clamp(10px, 1.6vw, 20px);
-    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform;
-    contain: paint;
-  }
-
-  .path__row:hover {
-    transform: translateX(14px);
   }
 
   .path__list > .path__row:nth-child(odd) {

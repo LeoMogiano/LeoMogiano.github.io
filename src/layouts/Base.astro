@@ -1,0 +1,100 @@
+---
+import type { Dict, Lang } from '../i18n';
+import { langs, langPrefix } from '../i18n';
+import '../styles/tokens.css';
+import '../styles/fonts.css';
+import '../styles/icons.css';
+import '../styles/global.css';
+
+interface Props {
+  lang: Lang;
+  t: Dict;
+}
+
+const { lang, t } = Astro.props;
+
+const META: Record<Lang, { title: string; description: string; ogDescription: string }> = {
+  es: {
+    title: 'Leo Mogiano — Tech Lead Mobile · iOS, Android y Flutter',
+    description:
+      'Portafolio de Leo Mogiano, Tech Lead Mobile en Datec Corp. Apps en producción con Flutter, Swift y Kotlin: EGX One, ValidMe, EGX Staff, Presto Latam y SkeletonPDF.',
+    ogDescription:
+      'Seis años construyendo apps móviles entre banca, fintech y herramientas internas.',
+  },
+  en: {
+    title: 'Leo Mogiano — Mobile Tech Lead · iOS, Android and Flutter',
+    description:
+      "Leo Mogiano's portfolio, Mobile Tech Lead at Datec Corp. Apps in production with Flutter, Swift and Kotlin: EGX One, ValidMe, EGX Staff, Presto Latam and SkeletonPDF.",
+    ogDescription: 'Six years building mobile apps across banking, fintech and internal tools.',
+  },
+  ja: {
+    title: 'Leo Mogiano — モバイル・テックリード · iOS、Android、Flutter',
+    description:
+      'Datec Corp のモバイル・テックリード、Leo Mogiano のポートフォリオ。Flutter、Swift、Kotlin による本番アプリ：EGX One、ValidMe、EGX Staff、Presto Latam、SkeletonPDF。',
+    ogDescription: '銀行、フィンテック、社内ツールを渡り歩いた6年間のモバイルアプリ開発。',
+  },
+};
+
+const meta = META[lang];
+const canonical = new URL(`${langPrefix(lang)}/`, Astro.site).href;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <meta name="author" content="Leo Mogiano" />
+
+    {/* Lo lee el script de tema para teñir la barra de Safari. */}
+    <meta id="tc" name="theme-color" content="#0a0a0a" />
+
+    <link rel="canonical" href={canonical} />
+    {
+      langs.map((l) => (
+        <link rel="alternate" hreflang={l} href={new URL(`${langPrefix(l)}/`, Astro.site).href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).href} />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={meta.title} />
+    <meta property="og:description" content={meta.ogDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={t.code.replace('-', '_')} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {/* Las dos caras visibles en el primer viewport. El resto va con swap. */}
+    <link
+      rel="preload"
+      href="/fonts/instrument-serif-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="preload" href="/fonts/dm-sans-var.woff2" as="font" type="font/woff2" crossorigin />
+
+    {/*
+      Bloqueante a propósito: pinta el tema guardado antes del primer frame.
+      Diferirlo significa un flash blanco al recargar en modo claro.
+    */}
+    <script is:inline>
+      (() => {
+        let theme = 'dark';
+        try {
+          const saved = localStorage.getItem('lm-theme');
+          if (saved === 'light' || saved === 'dark') theme = saved;
+        } catch {}
+        document.documentElement.dataset.t = theme;
+        if (theme === 'light') document.querySelector('#tc')?.setAttribute('content', '#e9e4da');
+      })();
+    </script>
+
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

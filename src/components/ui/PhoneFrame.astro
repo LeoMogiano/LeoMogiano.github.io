@@ -1,0 +1,63 @@
+---
+/**
+ * El marco de teléfono. Work lo usa a 300px con notch y barra de estado;
+ * Play, a 280px con la pantalla en negro para el canvas del pong.
+ */
+interface Props {
+  width: string;
+  aspect: string;
+  radius: string;
+  innerRadius: string;
+  /** El pong necesita fondo negro; la vitrina de apps, el fondo del tema. */
+  screen?: 'card' | 'black';
+  class?: string;
+}
+
+const {
+  width,
+  aspect,
+  radius,
+  innerRadius,
+  screen = 'card',
+  class: className,
+} = Astro.props;
+---
+
+<div
+  class:list={['phone', className]}
+  style={`width:${width};aspect-ratio:${aspect};border-radius:${radius}`}
+>
+  <div
+    class:list={['phone__screen', `phone__screen--${screen}`]}
+    style={`border-radius:${innerRadius}`}
+  >
+    <slot />
+  </div>
+</div>
+
+<style>
+  .phone {
+    padding: 11px;
+    background: linear-gradient(150deg, var(--glass), transparent);
+    border: 1px solid var(--line);
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.7);
+  }
+
+  .phone__screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .phone__screen--card {
+    background: var(--card);
+  }
+
+  .phone__screen--black {
+    background: #000;
+  }
+</style>

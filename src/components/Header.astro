@@ -1,0 +1,258 @@
+---
+import Icon from './ui/Icon.astro';
+import Pill from './ui/Pill.astro';
+import { nav } from '../data/nav';
+import { nextLang, langPrefix } from '../i18n';
+import type { Lang, Dict } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  t: Dict;
+}
+
+const { lang, t } = Astro.props;
+const langHref = langPrefix(nextLang(lang)) + '/';
+---
+
+<header class="header">
+  <div class="header__brand">
+    <span class="header__name">Leo Mogiano</span>
+    <span class="header__meta">
+      <span class="header__role">{t.role}</span>
+      <span class="header__clock" title={t.clockTitle}>
+        <span class="header__flag">🇧🇴</span><time class="clock" datetime="">--:--</time>
+      </span>
+    </span>
+  </div>
+  <nav class="header__nav">
+    {nav.map((item, i) => (
+      <Pill
+        as="a"
+        variant="default"
+        class="nav__link"
+        href={'#' + item.id}
+        data-nav-link
+        data-section={item.id}
+      >
+        <Icon name={item.icon} size="14px" />
+        <span class="nav__label">{t.nav[i]}</span>
+      </Pill>
+    ))}
+    <a
+      class="header__lang"
+      href={langHref}
+      aria-label={t.langAria}
+      title={t.langNext}
+      data-lang-link
+    >
+      {t.langLabel}
+    </a>
+    <button
+      type="button"
+      class="header__theme"
+      data-theme-toggle
+      aria-label={t.themeAria}
+      title={t.themeAria}
+    >
+      <span class="header__theme-icon header__theme-icon--sun"><Icon name="sun" size="17px" /></span>
+      <span class="header__theme-icon header__theme-icon--moon"><Icon name="moon" size="17px" /></span>
+    </button>
+  </nav>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 5vw;
+    /* El legacy declaraba el safe-area ANTES del atajo `padding`, así que el
+       atajo lo pisaba y el notch nunca se respetaba. Aquí se suma. */
+    padding-top: calc(16px + env(safe-area-inset-top));
+    background: transparent;
+    border-bottom: 1px solid var(--line);
+    isolation: isolate;
+  }
+
+  /* El fondo va en un pseudo-elemento: Safari tiñe la barra de estado
+     muestreando el borde del viewport, y un header con blur real ahí
+     produce ese tinte. Con el blur en un ::before que no toca el borde
+     se evita. */
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: color-mix(in oklab, var(--bg) 78%, transparent);
+  }
+
+  .header__brand {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+
+  .header__name {
+    font-family: var(--display);
+    font-size: 23px;
+    letter-spacing: 0.045em;
+    line-height: 1.1;
+    word-spacing: 0.06em;
+  }
+
+  .header__meta {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 3px;
+  }
+
+  .header__role {
+    font-family: var(--label);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .header__clock {
+    font-family: var(--label);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--faint);
+    border-left: 1px solid var(--line);
+    padding-left: 9px;
+  }
+
+  .header__flag {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .clock {
+    min-width: 5ch;
+  }
+
+  .header__nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  /* El scrollspy en cliente añade/quita esta clase sobre el <a> del nav. */
+  .nav__link.is-active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .header__lang {
+    cursor: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    width: 38px;
+    flex: none;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--fg);
+    font-family: var(--label);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+
+  .header__lang:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .header__theme {
+    cursor: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--card);
+    color: var(--fg);
+    padding: 0;
+    font: inherit;
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+
+  .header__theme:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Sol por defecto (tema oscuro), luna cuando html[data-t="light"]. */
+  .header__theme-icon {
+    display: flex;
+  }
+
+  .header__theme-icon--moon {
+    display: none;
+  }
+
+  :global(html[data-t='light']) .header__theme-icon--sun {
+    display: none;
+  }
+
+  :global(html[data-t='light']) .header__theme-icon--moon {
+    display: flex;
+  }
+
+  @media (max-width: 1040px) {
+    .header {
+      padding: 12px 5vw;
+      padding-top: calc(12px + env(safe-area-inset-top));
+    }
+
+    .header__nav {
+      gap: 4px;
+    }
+
+    /* El rol ya aparece bajo el retrato. En pantallas estrechas ocupaba hasta
+       tres líneas en japonés y estiraba la cabecera; se queda solo el reloj. */
+    .header__role {
+      display: none;
+    }
+
+    .header__clock {
+      border-left: 0;
+      padding-left: 0;
+    }
+
+    :global(.nav__link.pill) {
+      padding: 9px 11px;
+    }
+
+    .nav__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+</style>

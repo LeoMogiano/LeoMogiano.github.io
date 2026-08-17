@@ -1,0 +1,44 @@
+/* Tokens de diseño. Portados 1:1 del artefacto legacy: los valores no cambian. */
+
+/* Los tokens viven en <html> para que el script bloqueante del <head> pueda
+   fijar el tema antes de que exista <body>. */
+:root {
+  --display: 'Instrument Serif', serif;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --label: 'DM Mono', ui-monospace, monospace;
+
+  /* La tipografía de los nombres de app. applyType() la elegía desde una
+     perilla del builder; el valor por defecto —el publicado— era este. */
+  --appfont: 'Bricolage Grotesque', system-ui, sans-serif;
+  --appstyle: normal;
+  --apptrack: -0.015em;
+  --appcase: none;
+
+  --bg: #0a0a0a;
+  --fg: #f2f1ee;
+  --dim: rgba(242, 241, 238, 0.52);
+  --faint: rgba(242, 241, 238, 0.3);
+  --line: rgba(242, 241, 238, 0.13);
+  --card: rgba(255, 255, 255, 0.035);
+  --accent: oklch(0.88 0.19 122);
+  --glass: rgba(255, 255, 255, 0.06);
+}
+
+html[data-t='light'] {
+  --bg: #e9e4da;
+  --fg: #1b1a16;
+  --dim: rgba(27, 26, 22, 0.62);
+  --faint: rgba(27, 26, 22, 0.38);
+  --line: rgba(27, 26, 22, 0.16);
+  --card: rgba(27, 26, 22, 0.045);
+  --accent: oklch(0.48 0.13 145);
+  --glass: rgba(255, 255, 255, 0.5);
+}
+
+/* En japonés se añaden las Noto JP como respaldo para los kanji. La regla la
+   activa <html lang="ja">, así ES y EN ni mencionan las familias JP. */
+html[lang='ja'] {
+  --display: 'Instrument Serif', 'Noto Serif JP', serif;
+  --font: 'DM Sans', 'Noto Sans JP', system-ui, sans-serif;
+  --label: 'DM Mono', 'Noto Sans JP', ui-monospace, monospace;
+}

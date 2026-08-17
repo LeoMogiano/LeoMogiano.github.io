@@ -1,0 +1,49 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un push nuevo cancela el anterior: no tiene sentido publicar un commit viejo.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # La action cachea node_modules/.astro, que es a la vez el cacheDir de
+      # incrementalBuild y el caché de assets. Es lo único que hace falta
+      # persistir entre builds.
+      - uses: withastro/action@v3
+
+  # Los tipos no bloquean la publicación: si fallan, el sitio ya está arriba y
+  # el fallo se ve igual en el PR.
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

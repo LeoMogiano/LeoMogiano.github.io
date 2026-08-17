@@ -1,0 +1,45 @@
+---
+import type { Dict } from '../i18n';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+---
+<section id="tiempo" class="boat">
+  <p class="boat__title">In the same boat, <em class="boat__em">time happens differently</em> ⛵</p>
+  <p class="boat__sub">{t.boatSub}</p>
+</section>
+
+<style>
+  .boat {
+    padding: 16vh 5vw;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .boat__title {
+    font-family: var(--display);
+    font-size: clamp(30px, 5.2vw, 72px);
+    line-height: 1.2;
+    letter-spacing: 0.005em;
+    margin: 0 auto;
+    max-width: 22ch;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .boat__em {
+    color: var(--accent);
+  }
+
+  .boat__sub {
+    font-family: var(--label);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint);
+    text-align: center;
+    margin: 26px 0 0;
+  }
+</style>

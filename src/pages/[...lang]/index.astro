@@ -1,0 +1,56 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { langs, getDict } from '../../i18n';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Hero from '../../components/Hero.astro';
+import TechMarquee from '../../components/TechMarquee.astro';
+import Work from '../../components/Work.astro';
+import Path from '../../components/Path.astro';
+import Play from '../../components/Play.astro';
+import Boat from '../../components/Boat.astro';
+import Contact from '../../components/Contact.astro';
+import EasterEgg from '../../components/EasterEgg.astro';
+
+/** Los tres idiomas salen de una sola ruta: una composición, tres diccionarios. */
+export const getStaticPaths = (() =>
+  langs.map((lang) => ({
+    params: { lang: lang === 'es' ? undefined : lang },
+    props: { lang },
+  }))) satisfies GetStaticPaths;
+
+const { lang } = Astro.props;
+const t = getDict(lang);
+---
+
+<Base lang={lang} t={t}>
+  {lang === 'ja' && <link slot="head" rel="stylesheet" href="/fonts-ja.css" />}
+
+  <canvas class="lasso" aria-hidden="true"></canvas>
+
+  <div class="page">
+    <Header lang={lang} t={t} />
+    <main>
+      <Hero t={t} />
+      <TechMarquee />
+      <Work lang={lang} t={t} />
+      <Path t={t} />
+      <Play t={t} />
+      <Boat t={t} />
+      <Contact t={t} />
+    </main>
+    <EasterEgg t={t} />
+  </div>
+</Base>
+
+<script>
+  import '../../scripts/theme';
+  import '../../scripts/clock';
+  import '../../scripts/scrollspy';
+  import '../../scripts/lasso';
+  import '../../scripts/pong';
+  import '../../scripts/app-picker';
+  import '../../scripts/easter-egg';
+  import '../../scripts/haptic';
+  import '../../scripts/soundcloud';
+</script>

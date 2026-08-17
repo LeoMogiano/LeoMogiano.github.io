@@ -1,1 +1,8 @@
 .DS_Store
+node_modules/
+dist/
+.astro/
+
+# Fuentes originales de Google Fonts, descargadas para el subset.
+# Regenerables con `npm run fonts`.
+.vendor-fonts/

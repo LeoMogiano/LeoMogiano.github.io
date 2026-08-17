@@ -1,0 +1,97 @@
+---
+import Icon from './ui/Icon.astro';
+import type { Dict } from '../i18n';
+import { socials } from '../data/socials';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
+---
+<section id="hello" class="contact">
+  <div class="contact__cta-wrap">
+    <a href="mailto:leomogiano@outlook.com" class="contact__cta">{t.ctaA}<em class="contact__cta-em">{t.ctaEm}</em>{t.ctaB}</a>
+    <span class="contact__email">leomogiano@outlook.com</span>
+  </div>
+  <div class="contact__foot">
+    <span>© 2026 Leo Mogiano</span>
+    <span class="contact__socials">
+      {socials.map((social) => (
+        <a
+          href={social.href}
+          class="contact__social"
+          target={social.external ? '_blank' : undefined}
+          rel={social.external ? 'noopener noreferrer' : undefined}
+        >
+          <Icon name={social.icon} size="13px" />
+          {social.label}
+        </a>
+      ))}
+    </span>
+    <span>{t.fromBolivia}</span>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding: 5vh 5vw calc(7vh + env(safe-area-inset-bottom));
+  }
+
+  .contact__cta-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    padding: 2vh 0 3vh;
+  }
+
+  .contact__cta {
+    font-family: var(--display);
+    font-size: clamp(32px, 6.4vw, 88px);
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    max-width: 16ch;
+  }
+
+  .contact__cta-em {
+    color: var(--accent);
+  }
+
+  .contact__email {
+    font-family: var(--label);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .contact__foot {
+    font-family: var(--label);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 30px;
+    justify-content: space-between;
+    border-top: 1px solid var(--line);
+    margin-top: 70px;
+    padding-top: 22px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .contact__socials {
+    display: flex;
+    gap: 24px;
+  }
+
+  .contact__social {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--dim);
+  }
+</style>

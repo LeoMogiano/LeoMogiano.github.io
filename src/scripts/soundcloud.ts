@@ -33,6 +33,12 @@ const progress = document.querySelector<HTMLElement>('[data-progress]');
 const toggle = document.querySelector<HTMLButtonElement>('[data-play-toggle]');
 
 let widget: SCWidget | null = null;
+/*
+ * El widget existe desde que se crea, pero no acepta órdenes hasta READY: las
+ * de antes las descarta sin avisar. Solo esta referencia, que se rellena tras
+ * el evento, habilita el camino síncrono del botón.
+ */
+let listo: SCWidget | null = null;
 let loading: Promise<void> | null = null;
 /*
  * La conexión se cachea como promesa, no como resultado. Dos clicks seguidos
@@ -97,22 +103,46 @@ async function createWidget(): Promise<SCWidget | null> {
   });
 
   await ready;
+  listo = w;
   return w;
 }
 
-// Mientras el widget arranca, el botón queda deshabilitado: pulsarlo otra vez
-// solo encolaría un toggle que llega justo después y lo deja al revés.
-toggle?.addEventListener('click', async () => {
+/*
+ * El widget se prepara en cuanto alguien se acerca al reproductor: el cursor
+ * encima, el dedo bajando o el foco en el botón. Solo ahí, no en cualquier
+ * interacción de la página: quien nunca se acerca al reproductor no le hace
+ * una sola petición a SoundCloud.
+ *
+ * Con esto el click encuentra el widget listo y llama a toggle() de forma
+ * síncrona, dentro del gesto, que es lo que exigen las políticas de autoplay.
+ */
+function warm() {
+  void connect().catch(() => {});
+}
+
+for (const evento of ['pointerenter', 'pointerdown', 'focusin'] as const) {
+  player?.addEventListener(evento, warm, { once: true, passive: true });
+}
+
+toggle?.addEventListener('click', () => {
   if (!toggle) return;
-  const primeraVez = !widget;
-  if (primeraVez) toggle.disabled = true;
-  try {
-    (await connect())?.toggle();
-  } catch {
-    // Sin red o con el widget bloqueado: el botón no hace nada y ya está.
-  } finally {
-    if (primeraVez) toggle.disabled = false;
+
+  // Camino normal: ya está listo, así que esto ocurre dentro del gesto.
+  if (listo) {
+    listo.toggle();
+    return;
   }
+
+  // Primer uso sin haber podido calentar antes. Se conecta y se reproduce en
+  // cuanto esté; en Safari puede que este primer intento no suene, y para eso
+  // está el calentamiento de arriba.
+  toggle.disabled = true;
+  connect()
+    .then((w) => w?.toggle())
+    .catch(() => {})
+    .finally(() => {
+      toggle.disabled = false;
+    });
 });
 
 export {};

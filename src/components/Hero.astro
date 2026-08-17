@@ -163,14 +163,20 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     transform-origin: 50% 50%;
     --a: 46px;
     --b: 74px;
-    animation-name: spark;
-    animation-duration: .58s;
-    animation-timing-function: cubic-bezier(.25, .85, .35, 1);
-    animation-delay: var(--delay);
-    animation-play-state: paused;
   }
+
+  /*
+   * La animación se asigna solo con la clase, no se deja puesta en pausa.
+   * Pausada, la primera vez corre y al terminar queda terminada: cambiar
+   * animation-play-state ya no la reinicia. Quitar y volver a poner
+   * animation-name sí, y es lo que hace el script en cada toque.
+   */
   .hero__sparks.is-playing .hero__spark {
-    animation-play-state: running;
+    animation-name: spark;
+    animation-duration: 0.58s;
+    animation-timing-function: cubic-bezier(0.25, 0.85, 0.35, 1);
+    animation-delay: var(--delay);
+    animation-fill-mode: both;
   }
 
   .hero__status {

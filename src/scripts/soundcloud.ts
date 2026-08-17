@@ -38,7 +38,7 @@ let widget: SCWidget | null = null;
  * de antes las descarta sin avisar. Solo esta referencia, que se rellena tras
  * el evento, habilita el camino síncrono del botón.
  */
-let listo: SCWidget | null = null;
+let readyWidget: SCWidget | null = null;
 let loading: Promise<void> | null = null;
 /*
  * La conexión se cachea como promesa, no como resultado. Dos clicks seguidos
@@ -85,7 +85,7 @@ async function createWidget(): Promise<SCWidget | null> {
    * descarta en silencio: el primer click en play no hacía absolutamente nada,
    * y el segundo sí. Aquí se espera al evento antes de devolver el control.
    */
-  const ready = new Promise<void>((resolve) => {
+  const whenReady = new Promise<void>((resolve) => {
     w.bind(api.Widget.Events.READY, () => resolve());
     // Si el evento no llega (bloqueado por red o por el navegador), no se deja
     // el botón muerto para siempre.
@@ -102,8 +102,8 @@ async function createWidget(): Promise<SCWidget | null> {
     if (progress) progress.style.width = `${Math.round((event.relativePosition ?? 0) * 100)}%`;
   });
 
-  await ready;
-  listo = w;
+  await whenReady;
+  readyWidget = w;
   return w;
 }
 
@@ -120,16 +120,16 @@ function warm() {
   void connect().catch(() => {});
 }
 
-for (const evento of ['pointerenter', 'pointerdown', 'focusin'] as const) {
-  player?.addEventListener(evento, warm, { once: true, passive: true });
+for (const event of ['pointerenter', 'pointerdown', 'focusin'] as const) {
+  player?.addEventListener(event, warm, { once: true, passive: true });
 }
 
 toggle?.addEventListener('click', () => {
   if (!toggle) return;
 
   // Camino normal: ya está listo, así que esto ocurre dentro del gesto.
-  if (listo) {
-    listo.toggle();
+  if (readyWidget) {
+    readyWidget.toggle();
     return;
   }
 

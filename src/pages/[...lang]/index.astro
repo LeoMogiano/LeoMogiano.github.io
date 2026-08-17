@@ -30,9 +30,9 @@ const t = getDict(lang);
 
   <div class="page">
     <Header lang={lang} t={t} />
-    <main>
+    <main id="main" tabindex="-1">
       <Hero t={t} />
-      <TechMarquee />
+      <TechMarquee t={t} />
       <Work lang={lang} t={t} />
       <Path t={t} />
       <Play t={t} />
@@ -48,6 +48,7 @@ const t = getDict(lang);
   import '../../scripts/clock';
   import '../../scripts/scrollspy';
   import '../../scripts/lasso';
+  import '../../scripts/marquee';
   import '../../scripts/pong';
   import '../../scripts/app-picker';
   import '../../scripts/easter-egg';

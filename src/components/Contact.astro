@@ -14,7 +14,7 @@ const { t } = Astro.props;
     <a href="mailto:leomogiano@outlook.com" class="contact__cta">{t.ctaA}<em class="contact__cta-em">{t.ctaEm}</em>{t.ctaB}</a>
     <span class="contact__email">leomogiano@outlook.com</span>
   </div>
-  <div class="contact__foot">
+  <footer class="contact__foot">
     <span>© 2026 Leo Mogiano</span>
     <span class="contact__socials">
       {socials.map((social) => (
@@ -30,7 +30,7 @@ const { t } = Astro.props;
       ))}
     </span>
     <span>{t.fromBolivia}</span>
-  </div>
+  </footer>
 </section>
 
 <style>

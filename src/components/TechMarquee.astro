@@ -1,8 +1,26 @@
 ---
 import Icon from './ui/Icon.astro';
 import { stack } from '../data/stack';
+import type { Dict } from '../i18n';
+
+interface Props {
+  t: Dict;
+}
+
+const { t } = Astro.props;
 ---
 <section aria-label="Tecnologías que uso" class="marquee">
+  <button
+    type="button"
+    class="marquee__toggle"
+    data-marquee-toggle
+    aria-pressed="false"
+    aria-label={t.marqueePause}
+    title={t.marqueePause}
+    data-label-play={t.marqueePlay}
+  >
+    <span class="marquee__toggle-icon" aria-hidden="true"></span>
+  </button>
   <div class="marquee__fade marquee__fade--left"></div>
   <div class="marquee__fade marquee__fade--right"></div>
   <div class="marquee__track">
@@ -59,8 +77,51 @@ import { stack } from '../data/stack';
     backface-visibility: hidden;
   }
 
-  .marquee__track:hover {
+  .marquee__track:hover,
+  .marquee:focus-within .marquee__track,
+  .marquee.is-paused .marquee__track {
     animation-play-state: paused;
+  }
+
+  /* El control vive sobre el degradado derecho, discreto hasta que se enfoca
+     o se pasa por encima. Nunca se oculta del todo: si no se puede alcanzar,
+     no es un control. */
+  .marquee__toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--bg) 82%, transparent);
+    color: var(--faint);
+    opacity: 0.45;
+    transition: opacity 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .marquee:hover .marquee__toggle,
+  .marquee__toggle:focus-visible {
+    opacity: 1;
+    color: var(--fg);
+    border-color: var(--accent);
+  }
+
+  /* Dos barras (pausa) que se vuelven un triángulo (reproducir) al pausar. */
+  .marquee__toggle-icon {
+    width: 10px;
+    height: 11px;
+    background: currentColor;
+    clip-path: polygon(0 0, 35% 0, 35% 100%, 0 100%, 0 0, 65% 0, 100% 0, 100% 100%, 65% 100%, 65% 0);
+  }
+
+  .marquee.is-paused .marquee__toggle-icon {
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
   }
 
   .marquee__group {

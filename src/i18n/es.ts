@@ -54,4 +54,9 @@ export const es: Dict = {
   fromBolivia: "🇧🇴 Desde Bolivia, para el mundo",
   eggCaption: "Para ti, siempre ❤️",
   eggClose: "Toca para cerrar",
+  skipToContent: "Saltar al contenido",
+  marqueePause: "Pausar la cinta",
+  marqueePlay: "Reanudar la cinta",
+  appSelected: "Mostrando",
+  pongHelp: "Usa las flechas izquierda y derecha para mover tu paleta.",
 };

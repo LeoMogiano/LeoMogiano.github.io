@@ -54,4 +54,9 @@ export const en: Dict = {
   fromBolivia: "🇧🇴 From Bolivia, for the world",
   eggCaption: "For you, always ❤️",
   eggClose: "Tap to close",
+  skipToContent: "Skip to content",
+  marqueePause: "Pause the marquee",
+  marqueePlay: "Resume the marquee",
+  appSelected: "Showing",
+  pongHelp: "Use the left and right arrow keys to move your paddle.",
 };

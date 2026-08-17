@@ -30,7 +30,7 @@
 html[data-t='light'] {
   --bg: #e9e4da;
   --fg: #1b1a16;
-  --dim: rgba(27, 26, 22, 0.62);
+  --dim: rgba(27, 26, 22, 0.66);
   /* En claro hace falta .64 para el mismo 4.5:1: el fondo #e9e4da es más
      claro que oscuro el #0a0a0a, así que el texto tiene menos margen. */
   --faint: rgba(27, 26, 22, 0.64);

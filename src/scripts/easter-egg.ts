@@ -24,6 +24,27 @@ function closeEgg() {
   portrait?.focus();
 }
 
+/**
+ * Mantiene el foco dentro del diálogo mientras está abierto. Declarar
+ * aria-modal sin esto le dice al lector de pantalla que el resto de la página
+ * es inerte cuando en realidad el Tab se escapa a los enlaces de atrás.
+ */
+function trapFocus(event: KeyboardEvent) {
+  if (event.key !== 'Tab' || !egg || egg.hidden) return;
+  const focusable = egg.querySelectorAll<HTMLElement>(
+    'a[href], button, input, [tabindex]:not([tabindex="-1"])',
+  );
+  const first = focusable[0] ?? egg;
+  const last = focusable[focusable.length - 1] ?? egg;
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
 portrait?.addEventListener('click', () => {
   playSparks();
   taps++;
@@ -38,6 +59,7 @@ egg?.addEventListener('click', closeEgg);
 
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && egg && !egg.hidden) closeEgg();
+  trapFocus(event);
 });
 
 export {};

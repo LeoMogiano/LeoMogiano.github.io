@@ -96,6 +96,7 @@ const canonical = new URL(`${langPrefix(lang)}/`, Astro.site).href;
     <slot name="head" />
   </head>
   <body>
+    <a class="skip" href="#main">{t.skipToContent}</a>
     <slot />
   </body>
 </html>

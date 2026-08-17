@@ -73,6 +73,28 @@ const {
   }
 
 
+  /*
+   * Área táctil de 44px sin engordar la píldora. El pseudo-elemento se centra
+   * sobre el control y captura el toque; el diseño no cambia.
+   */
+  a.pill,
+  button.pill {
+    position: relative;
+  }
+
+  a.pill::after,
+  button.pill::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
   a.pill,
   button.pill {
     cursor: none;

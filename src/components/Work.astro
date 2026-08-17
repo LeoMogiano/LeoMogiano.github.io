@@ -67,10 +67,10 @@ const defaultApp = apps[0].num;
       {apps.map((app) => {
         const copy = appCopy[lang][app.num];
         return (
-          <button type="button" data-app-pick={app.num} class="slide-row work__item">
+          <button type="button" data-app-pick={app.num} aria-pressed={app.num === apps[0]?.num} class="slide-row work__item">
             <span class="work__num">{app.num}</span>
             <span>
-              <span class="work__name">{app.name}</span>
+              <span class="work__name" data-app-name>{app.name}</span>
               <span class="work__short">{copy.short}</span>
             </span>
             <span class="work__tag">{copy.tag}</span>
@@ -78,6 +78,7 @@ const defaultApp = apps[0].num;
         );
       })}
       <p class="work__note">{t.workNote}</p>
+    <p class="sr-only" role="status" aria-live="polite" data-app-status data-app-status-label={t.appSelected}></p>
     </div>
   </div>
 </section>
@@ -256,16 +257,25 @@ const defaultApp = apps[0].num;
     grid-template-columns: 34px 1fr auto;
     gap: 18px;
     align-items: baseline;
-    opacity: 0.42;
-    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    /*
+     * La app no seleccionada NO se atenúa con opacity: al multiplicar el alfa
+     * del texto lo dejaba en 2.9:1. La diferencia la marca el color del
+     * nombre —var(--dim) contra var(--fg)—, y ambos pasan contraste.
+     */
+    transition: color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  [data-app-current='01'] .work__item[data-app-pick='01'],
-  [data-app-current='02'] .work__item[data-app-pick='02'],
-  [data-app-current='03'] .work__item[data-app-pick='03'],
-  [data-app-current='04'] .work__item[data-app-pick='04'],
-  [data-app-current='05'] .work__item[data-app-pick='05'] {
-    opacity: 1;
+  .work__name {
+    color: var(--dim);
+    transition: color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  [data-app-current='01'] .work__item[data-app-pick='01'] .work__name,
+  [data-app-current='02'] .work__item[data-app-pick='02'] .work__name,
+  [data-app-current='03'] .work__item[data-app-pick='03'] .work__name,
+  [data-app-current='04'] .work__item[data-app-pick='04'] .work__name,
+  [data-app-current='05'] .work__item[data-app-pick='05'] .work__name {
+    color: var(--fg);
   }
 
   .work__num {

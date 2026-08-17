@@ -16,15 +16,17 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
 <section id="top" class="hero">
   <figure class="hero__figure">
     <span class="hero__portrait-frame">
-      <Image
-        data-portrait
-        src={portrait}
-        alt={t.photoAlt}
-        width={168}
-        height={168}
-        decoding="async"
-        class="hero__portrait"
-      />
+      <button type="button" class="hero__portrait-btn" data-portrait aria-label={t.photoAlt}>
+        <Image
+          src={portrait}
+          alt=""
+          width={168}
+          height={168}
+          decoding="async"
+          fetchpriority="high"
+          class="hero__portrait"
+        />
+      </button>
       <span class="hero__sparks" data-sparks aria-hidden="true">
         {sparkAngles.map((deg, i) => (
           <span class="hero__spark" style={`--rot:${deg}deg;--delay:${i % 2 === 0 ? 0 : 0.035}s`}></span>
@@ -120,6 +122,16 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     display: block;
     line-height: 0;
   }
+  .hero__portrait-btn {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    cursor: none;
+    border-radius: 50%;
+  }
+
   .hero__portrait {
     flex: none;
     width: clamp(96px, 13vw, 168px);

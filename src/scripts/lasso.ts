@@ -15,6 +15,9 @@ interface Point {
 }
 
 if (canvas && ctx && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  // Marca el documento: el CSS solo oculta el puntero si este bucle existe.
+  document.documentElement.classList.add('has-lasso');
+
   const LIFE = 416; // ms que vive cada punto
   const MAX_WIDTH = 9;
 

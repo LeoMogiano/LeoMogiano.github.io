@@ -7,13 +7,34 @@
  */
 const section = document.querySelector<HTMLElement>('[data-app-current]');
 
+const status = document.querySelector<HTMLElement>('[data-app-status]');
+
 if (section) {
-  for (const button of section.querySelectorAll<HTMLButtonElement>('[data-app-pick]')) {
+  const buttons = [...section.querySelectorAll<HTMLButtonElement>('[data-app-pick]')];
+
+  const sync = (current: string) => {
+    for (const button of buttons) {
+      button.setAttribute('aria-pressed', String(button.dataset.appPick === current));
+    }
+    // Sin esto la pantalla del teléfono cambia en silencio: quien usa lector
+    // pulsa el botón y no recibe ninguna señal de que pasó algo.
+    if (status) {
+      const active = buttons.find((b) => b.dataset.appPick === current);
+      const name = active?.querySelector('[data-app-name]')?.textContent?.trim();
+      if (name) status.textContent = `${status.dataset.appStatusLabel ?? ''} ${name}`.trim();
+    }
+  };
+
+  for (const button of buttons) {
     button.addEventListener('click', () => {
       const num = button.dataset.appPick;
-      if (num) section.dataset.appCurrent = num;
+      if (!num) return;
+      section.dataset.appCurrent = num;
+      sync(num);
     });
   }
+
+  sync(section.dataset.appCurrent ?? '');
 }
 
 export {};

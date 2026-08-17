@@ -67,6 +67,68 @@ html[data-t='light'] body::before {
     radial-gradient(1000px 680px at 52% 108%, oklch(0.85 0.04 250 / 0.6), transparent 66%);
 }
 
+/* Visible para lectores de pantalla, fuera de la pantalla para el resto. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * Saltar al contenido. Sin esto, quien navega con teclado atraviesa las cinco
+ * píldoras del nav y los dos botones antes de llegar al texto, en cada carga.
+ * Fuera de pantalla hasta que recibe foco.
+ */
+.skip {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  transform: translateY(-200%);
+  padding: 12px 20px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--label);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: transform 0.2s ease;
+}
+
+.skip:focus {
+  transform: translateY(0);
+}
+
+/*
+ * El puntero se oculta porque el rastro del canvas hace de cursor. Si ese
+ * rastro no existe —reduced-motion, o JS caído— hay que devolverlo: sin
+ * puntero y sin rastro, el sitio es inusable.
+ *
+ * La clase la pone lasso.ts solo cuando arranca a dibujar de verdad, y ese
+ * script ya se rinde con reduced-motion: los dos casos quedan cubiertos por
+ * la misma regla.
+ */
+html:not(.has-lasso) :is(a, button, input, canvas, [role='button']) {
+  /* !important a conciencia: los `cursor: none` viven en estilos scoped de
+     componente y el atributo de scope que añade Astro les da más
+     especificidad. Esto es una garantía de acceso, no una preferencia. */
+  cursor: pointer !important;
+}
+
+/* El destino del salto no debe dibujar un anillo de foco: no es un control,
+   solo el sitio donde aterriza el foco. */
+main:focus {
+  outline: none;
+}
+
 /* El canvas del rastro del cursor. El recorte de 6px arriba y abajo lo
    mantiene fuera de la zona que Safari muestrea. */
 .lasso {

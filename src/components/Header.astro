@@ -41,7 +41,7 @@ const langHref = langPrefix(nextLang(lang)) + '/';
     <a
       class="header__lang"
       href={langHref}
-      aria-label={t.langAria}
+      aria-label={`${t.langAria}: ${t.langNext}`}
       title={t.langNext}
       data-lang-link
     >
@@ -158,6 +158,7 @@ const langHref = langPrefix(nextLang(lang)) + '/';
   }
 
   .header__lang {
+    position: relative;
     cursor: none;
     display: inline-flex;
     align-items: center;
@@ -178,12 +179,25 @@ const langHref = langPrefix(nextLang(lang)) + '/';
     transition: border-color 0.3s ease, color 0.3s ease;
   }
 
+  .header__lang::after,
+  .header__theme::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+  }
+
   .header__lang:hover {
     border-color: var(--accent);
     color: var(--accent);
   }
 
   .header__theme {
+    position: relative;
     cursor: none;
     display: inline-flex;
     align-items: center;

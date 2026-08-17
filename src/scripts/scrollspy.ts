@@ -38,7 +38,11 @@ if (links.length) {
     }
 
     for (const link of links) {
-      link.classList.toggle('is-active', link.dataset.section === current);
+      const active = link.dataset.section === current;
+      link.classList.toggle('is-active', active);
+      // El color no es información para quien no lo ve: hace falta el estado.
+      if (active) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
     }
   };
 

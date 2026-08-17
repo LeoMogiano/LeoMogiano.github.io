@@ -25,11 +25,18 @@ const { t } = Astro.props;
         <Icon name="android" size="14px" />{t.cpuAndroid}
       </span>
     </div>
+    <p id="pong-help" class="sr-only">{t.pongHelp}</p>
     <Pill as="button" variant="card" icon="reset" class="play__reset" type="button" data-pong-reset>{t.resetBtn}</Pill>
   </div>
   <div class="play__phone">
     <PhoneFrame width="min(280px,80vw)" aspect="280/575" radius="48px" innerRadius="39px" screen="black">
-      <canvas class="pong" data-pong tabindex="0" role="img" aria-label={t.pongAria}></canvas>
+      <canvas
+          class="pong"
+          data-pong
+          tabindex="0"
+          role="application"
+          aria-label={t.pongAria}
+          aria-describedby="pong-help"></canvas>
       <div class="play__notch"></div>
       <div class="play__gesture-bar"></div>
     </PhoneFrame>

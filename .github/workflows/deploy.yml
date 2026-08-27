@@ -20,12 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      # v6 es la primera que usa Node 24 por defecto; v3 traía Node 20 y Astro 7
-      # exige >=22.12. Igual se fija explícito: el default de la action no es
-      # contrato, y si cambia el build vuelve a romperse sin avisar.
+      # La action detecta bun por `bun.lock`, pero con versión «latest». Se fija
+      # explícito por lo mismo que el node-version: el default de la action no es
+      # contrato, y si cambia el build vuelve a romperse sin avisar. Node sigue
+      # ahí porque Astro corre sobre él; bun solo instala y lanza los scripts.
       - uses: withastro/action@v6
         with:
           node-version: 24
+          package-manager: bun@1.4.0
 
   # Los tipos no bloquean la publicación: si fallan, el sitio ya está arriba y
   # el fallo se ve igual en el PR.
@@ -33,12 +35,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npm run check
+          bun-version: 1.4.0
+      - run: bun install --frozen-lockfile
+      - run: bun run check
 
   deploy:
     needs: build

@@ -153,8 +153,9 @@ for (const shots of document.querySelectorAll<HTMLElement>('[data-app-shots]')) 
    * esperan al primer gesto sobre el carrusel. Después de eso no hace falta
    * volver a mirar: los listeners se quitan solos.
    */
-  const load = () => {
-    for (const img of track.querySelectorAll<HTMLImageElement>('[data-shot-src]')) {
+  const load = (only = 0) => {
+    const pending = [...track.querySelectorAll<HTMLImageElement>('[data-shot-src]')];
+    for (const img of only ? pending.slice(0, only) : pending) {
       img.srcset = img.dataset.shotSrcset ?? '';
       img.src = img.dataset.shotSrc ?? '';
       delete img.dataset.shotSrc;
@@ -162,12 +163,34 @@ for (const shots of document.querySelectorAll<HTMLElement>('[data-app-shots]')) 
     }
   };
 
+  // Envuelto a propósito: pasar `load` directo le entrega el Event como primer
+  // argumento, que es justo el que dice cuántas cargar.
+  const loadAll = () => load();
+
   for (const type of ['pointerenter', 'pointerdown', 'focusin'] as const) {
-    shots.addEventListener(type, load, { once: true, passive: true });
+    shots.addEventListener(type, loadAll, { once: true, passive: true });
   }
   // El scroll no burbujea, así que va en el propio carrusel: cubre el dedo y
   // el trackpad, que no disparan pointerenter.
-  track.addEventListener('scroll', load, { once: true, passive: true });
+  track.addEventListener('scroll', loadAll, { once: true, passive: true });
+
+  /*
+   * Las capturas de las apps que no se están mostrando ni siquiera tienen la
+   * primera: el teléfono arranca en una sola app y las otras pueden no mirarse
+   * nunca. Se piden cuando el selector las elige.
+   */
+  const section = shots.closest<HTMLElement>('[data-app-current]');
+  const mine = shots.dataset.appShots;
+  if (section && section.dataset.appCurrent !== mine) {
+    const watch = new MutationObserver(() => {
+      if (section.dataset.appCurrent !== mine) return;
+      watch.disconnect();
+      // Solo la primera: entra en pantalla al elegir la app. Las demás siguen
+      // esperando a que alguien toque el carrusel, igual que en la de partida.
+      load(1);
+    });
+    watch.observe(section, { attributeFilter: ['data-app-current'] });
+  }
 
   // --- arrastre con el mouse ---
 

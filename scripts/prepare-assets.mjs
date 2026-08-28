@@ -50,12 +50,18 @@ const JOBS = [
   { in: 'apps/presto.png', out: 'apps/presto.webp', mode: 'lossless', width: 192 },
   { in: 'apps/skeletonpdf.png', out: 'apps/skeletonpdf.webp', mode: 'lossless', width: 192 },
   // Capturas de EGX One — la pantalla del teléfono mide ~282 px CSS
-  ...[1, 2, 3, 4, 5].map((n) => ({
-    in: `apps/shots/egx-one-${n}.png`,
-    out: `apps/shots/egx-one-${n}.webp`,
-    mode: 'shot',
-    width: 564,
-  })),
+  ...[
+    ['egx-one', 5],
+    ['validme', 4],
+    ['skeletonpdf', 3],
+  ].flatMap(([app, count]) =>
+    Array.from({ length: count }, (_, i) => ({
+      in: `apps/shots/${app}-${i + 1}.png`,
+      out: `apps/shots/${app}-${i + 1}.webp`,
+      mode: 'shot',
+      width: 564,
+    })),
+  ),
   // Logos — se muestran a 60px y la fuente ya viene a 120
   { in: 'logos/datec.png', out: 'logos/datec.webp', mode: 'lossless', width: null },
   { in: 'logos/validme.png', out: 'logos/validme.webp', mode: 'lossless', width: null },

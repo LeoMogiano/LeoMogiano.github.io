@@ -5,6 +5,13 @@ import egxOneShot2 from '../assets/apps/shots/egx-one-2.webp';
 import egxOneShot3 from '../assets/apps/shots/egx-one-3.webp';
 import egxOneShot4 from '../assets/apps/shots/egx-one-4.webp';
 import egxOneShot5 from '../assets/apps/shots/egx-one-5.webp';
+import validmeShot1 from '../assets/apps/shots/validme-1.webp';
+import validmeShot2 from '../assets/apps/shots/validme-2.webp';
+import validmeShot3 from '../assets/apps/shots/validme-3.webp';
+import validmeShot4 from '../assets/apps/shots/validme-4.webp';
+import skeletonShot1 from '../assets/apps/shots/skeletonpdf-1.webp';
+import skeletonShot2 from '../assets/apps/shots/skeletonpdf-2.webp';
+import skeletonShot3 from '../assets/apps/shots/skeletonpdf-3.webp';
 import validme from '../assets/apps/validme.webp';
 import egxStaff from '../assets/apps/egx-staff.webp';
 import presto from '../assets/apps/presto.webp';
@@ -30,8 +37,22 @@ export const apps: readonly App[] = [
     icon: egxOne,
     shots: [egxOneShot1, egxOneShot2, egxOneShot3, egxOneShot4, egxOneShot5],
   },
-  { num: '02', name: 'ValidMe', year: '2024 — 2025', icon: validme },
+  {
+    num: '02',
+    name: 'ValidMe',
+    year: '2024 — 2025',
+    icon: validme,
+    shots: [validmeShot1, validmeShot2, validmeShot3, validmeShot4],
+  },
   { num: '03', name: 'EGX Staff', year: '2025', icon: egxStaff },
   { num: '04', name: 'Presto Latam', year: '2024', icon: presto },
-  { num: '05', name: 'SkeletonPDF', year: '2024', icon: skeletonpdf },
+  {
+    num: '05',
+    name: 'SkeletonPDF',
+    year: '2024',
+    icon: skeletonpdf,
+    // Android: la captura es de un Pixel, no de un iPhone, pero el formato
+    // (1440 x 3120) cae a menos de medio punto porcentual del panel de 6,5".
+    shots: [skeletonShot1, skeletonShot2, skeletonShot3],
+  },
 ];

@@ -25,8 +25,9 @@ const defaultApp = apps[0].num;
  * del inicio, así que cuatro de las cinco se descargaban —250 KB— en la carga
  * de la portada, para alguien que quizá nunca baja hasta aquí.
  *
- * La primera se pide igual al entrar en pantalla; las demás, al primer gesto
- * sobre el carrusel. Lo hace src/scripts/app-shots.ts.
+ * Solo viaja en el HTML la primera captura de la app que el teléfono muestra
+ * al cargar. Las demás las pide src/scripts/app-shots.ts: las de la misma app,
+ * al primer gesto sobre el carrusel; las de las otras, cuando se las elige.
  */
 const shotSources = await Promise.all(
   apps
@@ -39,7 +40,11 @@ const shotSources = await Promise.all(
             getImage({ src: shot, width: 300 }),
             getImage({ src: shot, width: 600 }),
           ]);
-          return { src: small.src, srcset: `${small.src} 300w, ${large.src} 600w` };
+          return {
+            src: small.src,
+            srcset: `${small.src} 300w, ${large.src} 600w`,
+            height: Math.round((300 * shot.height) / shot.width),
+          };
         }),
       ),
     ] as const),
@@ -106,13 +111,13 @@ const shotsByApp = new Map(shotSources);
               {(shotsByApp.get(app.num) ?? []).map((shot, i) => (
                 <div class="phone__slide" data-shots-slide>
                   <img
-                    src={i === 0 ? shot.src : undefined}
-                    srcset={i === 0 ? shot.srcset : undefined}
-                    data-shot-src={i === 0 ? undefined : shot.src}
-                    data-shot-srcset={i === 0 ? undefined : shot.srcset}
+                    src={i === 0 && app.num === defaultApp ? shot.src : undefined}
+                    srcset={i === 0 && app.num === defaultApp ? shot.srcset : undefined}
+                    data-shot-src={i === 0 && app.num === defaultApp ? undefined : shot.src}
+                    data-shot-srcset={i === 0 && app.num === defaultApp ? undefined : shot.srcset}
                     sizes="300px"
                     width="300"
-                    height="649"
+                    height={shot.height}
                     alt={t.shotAlt.replace('{app}', app.name).replace('{n}', String(i + 1))}
                     loading="lazy"
                     decoding="async"
@@ -193,8 +198,11 @@ const shotsByApp = new Map(shotSources);
   }
 
   /* La captura trae su propia barra de estado, con su reloj y sus iconos. Dos
-     barras a la vez delatan el montaje, así que manda la de la app. */
-  [data-app-current='01'] .phone__status {
+     barras a la vez delatan el montaje, así que manda la de la app. La lista
+     se enumera igual que el resto: son cinco apps, no un caso general. */
+  [data-app-current='01'] .phone__status,
+  [data-app-current='02'] .phone__status,
+  [data-app-current='05'] .phone__status {
     visibility: hidden;
   }
 
@@ -324,7 +332,11 @@ const shotsByApp = new Map(shotSources);
     transition: opacity 0.3s ease;
   }
 
-  [data-app-current='01'] .phone__shots[data-app-shots='01'] {
+  [data-app-current='01'] .phone__shots[data-app-shots='01'],
+  [data-app-current='02'] .phone__shots[data-app-shots='02'],
+  [data-app-current='03'] .phone__shots[data-app-shots='03'],
+  [data-app-current='04'] .phone__shots[data-app-shots='04'],
+  [data-app-current='05'] .phone__shots[data-app-shots='05'] {
     opacity: 1;
     visibility: visible;
   }

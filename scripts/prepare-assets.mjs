@@ -53,6 +53,7 @@ const JOBS = [
   ...[
     ['egx-one', 5],
     ['validme', 4],
+    ['presto', 4],
     ['skeletonpdf', 3],
   ].flatMap(([app, count]) =>
     Array.from({ length: count }, (_, i) => ({

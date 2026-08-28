@@ -9,6 +9,10 @@ import validmeShot1 from '../assets/apps/shots/validme-1.webp';
 import validmeShot2 from '../assets/apps/shots/validme-2.webp';
 import validmeShot3 from '../assets/apps/shots/validme-3.webp';
 import validmeShot4 from '../assets/apps/shots/validme-4.webp';
+import prestoShot1 from '../assets/apps/shots/presto-1.webp';
+import prestoShot2 from '../assets/apps/shots/presto-2.webp';
+import prestoShot3 from '../assets/apps/shots/presto-3.webp';
+import prestoShot4 from '../assets/apps/shots/presto-4.webp';
 import skeletonShot1 from '../assets/apps/shots/skeletonpdf-1.webp';
 import skeletonShot2 from '../assets/apps/shots/skeletonpdf-2.webp';
 import skeletonShot3 from '../assets/apps/shots/skeletonpdf-3.webp';
@@ -45,7 +49,16 @@ export const apps: readonly App[] = [
     shots: [validmeShot1, validmeShot2, validmeShot3, validmeShot4],
   },
   { num: '03', name: 'EGX Staff', year: '2025', icon: egxStaff },
-  { num: '04', name: 'Presto Latam', year: '2024', icon: presto },
+  {
+    num: '04',
+    name: 'Presto Latam',
+    year: '2024',
+    icon: presto,
+    // La app ya no está en ninguna tienda: estas son capturas propias, en
+    // orden de recorrido —portada, ingreso, verificación, cuenta—. Al número
+    // de teléfono de la tercera se le pasó un desenfoque antes de entrar aquí.
+    shots: [prestoShot1, prestoShot2, prestoShot3, prestoShot4],
+  },
   {
     num: '05',
     name: 'SkeletonPDF',

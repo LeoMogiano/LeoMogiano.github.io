@@ -10,6 +10,7 @@
  */
 import Icon from './Icon.astro';
 import type { IconName } from './Icon.astro';
+import type { HTMLAttributes } from 'astro/types';
 
 interface Props {
   as?: 'span' | 'a' | 'button' | 'div';
@@ -20,8 +21,14 @@ interface Props {
   target?: string;
   title?: string;
   type?: 'button' | 'submit';
+  rel?: string;
+  /* El tipo lo pone Astro: `role` es una lista cerrada, no cualquier string. */
+  role?: HTMLAttributes<'div'>['role'];
+  tabindex?: string | number;
   class?: string;
   'aria-label'?: string;
+  /* Los data-* van al elemento tal cual: quién los lee es cosa de cada script. */
+  [key: `data-${string}`]: unknown;
 }
 
 const {
@@ -31,7 +38,7 @@ const {
   iconSize = '14px',
   class: className,
   ...rest
-} = Astro.props;
+}: Props = Astro.props;
 ---
 
 <Tag class:list={['pill', `pill--${variant}`, className]} {...rest}>

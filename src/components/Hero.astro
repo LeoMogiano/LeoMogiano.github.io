@@ -88,8 +88,6 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
         title="SoundCloud"
         width="100%"
         height="20"
-        scrolling="no"
-        frameborder="no"
         allow="autoplay"
         data-src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fraven_sounddoll%2Finfinity-repeating-daft-punk-feat-julian-casablancas-the-voidz-bootleg-by-raven-sounddoll&color=%23c8ff4d&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
       ></iframe>
@@ -395,6 +393,7 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     left: 0;
     width: 100%;
     height: 20px;
+    /* Reemplaza al frameborder="no" de HTML4, que además está deprecado. */
     border: 0;
     opacity: 0;
     pointer-events: none;

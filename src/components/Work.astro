@@ -209,6 +209,21 @@ const shotsByApp = new Map(shotSources);
     visibility: hidden;
   }
 
+  /*
+   * El home indicator del marco se apaga donde la captura trae el suyo, o se
+   * verían dos barras juntas. No es toda app con capturas: `cover` recorta
+   * unos pocos píxeles por abajo y algunas pantallas —la portada de EGX One,
+   * el ingreso de EGX Staff— nunca lo tuvieron dibujado. Ahí lo pone el marco,
+   * que para eso es un teléfono.
+   *
+   * La variable la lee PhoneFrame; viaja por herencia desde aquí.
+   */
+  [data-app-current='02'] .work__phone-slot,
+  [data-app-current='04'] .work__phone-slot,
+  [data-app-current='05'] .work__phone-slot {
+    --indicator: 0;
+  }
+
   /* Cobertura, wifi y batería son iconos, no glifos: el subset latin de DM Sans
      no trae ▮ ni ᯤ, así que caían al font del sistema y en Windows y Android
      salían como cuadros vacíos. */

@@ -213,8 +213,11 @@ const {
 
   /* --- home indicator --- */
 
-  /* 140 × 5 pt, a 8 pt del borde. Va sobre el contenido pero no lo bloquea. */
+  /* 140 × 5 pt, a 8 pt del borde. Va sobre el contenido pero no lo bloquea.
+     Quien use el marco puede apagarlo con --indicator: 0 — las capturas de un
+     teléfono ya traen el suyo, y dos barras juntas se ven mal. */
   .phone__indicator {
+    opacity: var(--indicator, 1);
     position: absolute;
     left: 50%;
     bottom: calc(var(--pw) * 0.023);

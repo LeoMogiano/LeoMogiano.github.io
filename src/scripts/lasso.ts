@@ -24,6 +24,25 @@ if (canvas && ctx && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   let points: Point[] = [];
   let last: { x: number; y: number; t: number } | null = null;
 
+  /*
+   * Lo que hay que borrar en el próximo frame. No se puede deducir de los
+   * puntos vivos: los que se descartan por el tope de 90 ya se pintaron y
+   * desaparecen de la lista sin que nadie limpie su trazo. Así quedaban
+   * manchas de látigo cuando el cursor se movía mucho en poco espacio.
+   */
+  let dirty: { x0: number; y0: number; x1: number; y1: number } | null = null;
+
+  const mark = (p: Point) => {
+    if (!dirty) {
+      dirty = { x0: p.x, y0: p.y, x1: p.x, y1: p.y };
+      return;
+    }
+    if (p.x < dirty.x0) dirty.x0 = p.x;
+    if (p.y < dirty.y0) dirty.y0 = p.y;
+    if (p.x > dirty.x1) dirty.x1 = p.x;
+    if (p.y > dirty.y1) dirty.y1 = p.y;
+  };
+
   const size = () => {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = window.innerWidth * dpr;
@@ -46,12 +65,14 @@ if (canvas && ctx && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       }
       last = { x: event.clientX, y: event.clientY, t: now };
       // Cuanto más rápido va el cursor, más grueso el trazo.
-      points.push({
+      const point = {
         x: event.clientX,
         y: event.clientY,
         t: now,
         w: Math.min(MAX_WIDTH, 1.6 + speed * 3.2),
-      });
+      };
+      points.push(point);
+      mark(point);
       if (points.length > 90) points.shift();
       wake();
     },
@@ -70,29 +91,22 @@ if (canvas && ctx && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     }
 
     const now = performance.now();
-    const previous = points;
     points = points.filter((p) => now - p.t < LIFE);
 
-    // Solo se limpia el rectángulo que ocupaba el trazo anterior, no el canvas
-    // entero: a pantalla completa esa diferencia se nota en el frame budget.
-    if (previous.length) {
-      let x0 = Infinity;
-      let y0 = Infinity;
-      let x1 = -Infinity;
-      let y1 = -Infinity;
-      for (const p of previous) {
-        if (p.x < x0) x0 = p.x;
-        if (p.y < y0) y0 = p.y;
-        if (p.x > x1) x1 = p.x;
-        if (p.y > y1) y1 = p.y;
-      }
+    // Solo se limpia el rectángulo que ocupó el trazo, no el canvas entero: a
+    // pantalla completa esa diferencia se nota en el frame budget.
+    if (dirty) {
       ctx.clearRect(
-        x0 - MAX_WIDTH - 6,
-        y0 - MAX_WIDTH - 6,
-        x1 - x0 + MAX_WIDTH * 2 + 12,
-        y1 - y0 + MAX_WIDTH * 2 + 12,
+        dirty.x0 - MAX_WIDTH - 6,
+        dirty.y0 - MAX_WIDTH - 6,
+        dirty.x1 - dirty.x0 + MAX_WIDTH * 2 + 12,
+        dirty.y1 - dirty.y0 + MAX_WIDTH * 2 + 12,
       );
+      dirty = null;
     }
+
+    // Lo que se va a pintar ahora es lo que habrá que borrar después.
+    for (const p of points) mark(p);
 
     if (points.length < 3) {
       running = points.length > 0;

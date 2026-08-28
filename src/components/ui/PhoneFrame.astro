@@ -1,46 +1,140 @@
 ---
 /**
- * El marco de teléfono. Work lo usa a 300px con notch y barra de estado;
- * Play, a 280px con la pantalla en negro para el canvas del pong.
+ * El marco de teléfono. Un solo dispositivo para todo el sitio: la vitrina de
+ * apps (Work) y el pong (Play) solo cambian el fondo de la pantalla.
+ *
+ * Las medidas no son inventadas. La pantalla lleva el formato exacto del panel
+ * de 6,5" —1284 × 2778 px, que es también el tamaño en que el App Store pide
+ * las capturas—, y de ahí sale el chasis sumándole el canto y el bisel. Todo se
+ * deriva de --pw, el ancho del dispositivo, para que el aparato escale como un
+ * objeto rígido: cambiar el ancho no deforma ni el bisel ni la isla.
+ *
+ * Que el formato sea exacto no es cosmético: la captura entra sin que
+ * `object-fit: cover` recorte un solo píxel, y la barra de estado que trae cae
+ * donde tiene que caer respecto a la isla.
+ *
+ * Nada de esto usa imágenes: es CSS y se ve igual a cualquier tamaño.
  */
 interface Props {
+  /** Ancho del chasis. Todo lo demás se calcula a partir de esto. */
   width: string;
-  aspect: string;
-  radius: string;
-  innerRadius: string;
   /** El pong pinta sobre el fondo del tema; la vitrina de apps usa la tarjeta. */
   screen?: 'card' | 'solid';
+  /** La isla tapa contenido; el pong y la vitrina la quieren, un render suelto quizá no. */
+  island?: boolean;
+  indicator?: boolean;
   class?: string;
 }
 
 const {
   width,
-  aspect,
-  radius,
-  innerRadius,
   screen = 'card',
+  island = true,
+  indicator = true,
   class: className,
 } = Astro.props;
 ---
 
-<div
-  class:list={['phone', className]}
-  style={`width:${width};aspect-ratio:${aspect};border-radius:${radius}`}
->
-  <div
-    class:list={['phone__screen', `phone__screen--${screen}`]}
-    style={`border-radius:${innerRadius}`}
-  >
-    <slot />
+<div class:list={['phone', className]} style={`--pw:${width}`}>
+  <div class="phone__bezel">
+    <div class:list={['phone__screen', `phone__screen--${screen}`]}>
+      <slot />
+      {island && (
+        <div class="phone__island" aria-hidden="true">
+          <span class="phone__lens"></span>
+        </div>
+      )}
+      {indicator && <div class="phone__indicator" aria-hidden="true"></div>}
+    </div>
   </div>
+
+  {/* Botones. Van fuera del bisel para que sobresalgan del canto, como en el
+      aparato real: acción y volumen a la izquierda, encendido y control de
+      cámara a la derecha. */}
+  <span class="phone__btn phone__btn--action" aria-hidden="true"></span>
+  <span class="phone__btn phone__btn--vol-up" aria-hidden="true"></span>
+  <span class="phone__btn phone__btn--vol-down" aria-hidden="true"></span>
+  <span class="phone__btn phone__btn--power" aria-hidden="true"></span>
+  <span class="phone__btn phone__btn--camera" aria-hidden="true"></span>
 </div>
 
 <style>
   .phone {
-    padding: 11px;
-    background: linear-gradient(150deg, var(--glass), transparent);
-    border: 1px solid var(--line);
-    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.7);
+    /*
+     * Chasis = pantalla + canto + bisel:
+     *   ancho útil  = 1 - 2 × (rail + border) = 0.94
+     *   alto pantalla = 0.94 × (2778 / 1284)  = 2.0337
+     *   alto chasis   = 2.0337 + 0.06         = 2.0937
+     */
+    position: relative;
+    /* El sitio no tiene un reset de box-sizing, y aquí importa: --pw es el
+       ancho del chasis, no el del hueco de adentro. Sin esto cada padding se
+       sumaba por fuera y la pantalla terminaba con otro formato. */
+    box-sizing: border-box;
+    width: var(--pw);
+    aspect-ratio: 1000 / 2094;
+
+    /* El canto de aluminio: 2.3 mm sobre 77.6 de ancho. El bisel negro de la
+       pantalla sale de restarle esto al radio exterior, así los tres radios
+       (canto, bisel, display) quedan concéntricos y no se ven "pegados". */
+    --rail: calc(var(--pw) * 0.019);
+    --border: calc(var(--pw) * 0.011);
+    --radius: calc(var(--pw) * 0.148);
+
+    padding: var(--rail);
+    border-radius: var(--radius);
+
+    /* Space Gray. La banda del canto es lo único que se ve del degradado —el
+       bisel tapa el centro—, así que los topes van cargados a los extremos:
+       sombra en los cantos, luz justo antes del borde. El aluminio anodizado
+       refleja bastante menos que el titanio: el brillo no llega a blanco. */
+    background: linear-gradient(
+      95deg,
+      #16181a 0%,
+      #43464a 3%,
+      #6d7175 6%,
+      #3c3f43 12%,
+      #303336 50%,
+      #3c3f43 88%,
+      #6d7175 94%,
+      #43464a 97%,
+      #16181a 100%
+    );
+
+    /* Dos líneas de 1px hacen casi todo el realismo: la interior es el brillo
+       del bisel del canto, la exterior separa el aparato del fondo. */
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+      0 0 0 1px rgba(0, 0, 0, 0.45),
+      0 30px 60px -30px rgba(0, 0, 0, 0.55);
+  }
+
+  /* Reflejo del canto superior e inferior: el degradado de arriba corre en
+     horizontal y deja los extremos verticales planos. */
+  .phone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.22) 0,
+      rgba(255, 255, 255, 0) calc(var(--rail) * 1.6),
+      rgba(255, 255, 255, 0) calc(100% - var(--rail) * 1.6),
+      rgba(0, 0, 0, 0.38) 100%
+    );
+  }
+
+  .phone__bezel {
+    position: relative;
+    box-sizing: border-box;
+    height: 100%;
+    padding: var(--border);
+    border-radius: calc(var(--radius) - var(--rail));
+    background: #08080a;
+    /* El vidrio no arranca en el borde del bisel: hay un filo que capta luz. */
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
   }
 
   .phone__screen {
@@ -48,18 +142,130 @@ const {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) - var(--rail) - var(--border));
     display: flex;
     flex-direction: column;
+    isolation: isolate;
   }
 
+  /* --card es translúcido y detrás tiene el bisel negro, no el fondo de la
+     página: hay que componerlo sobre --bg o en tema claro la pantalla se va a
+     negro y el texto de la app desaparece. */
   .phone__screen--card {
-    background: var(--card);
+    background: linear-gradient(var(--card), var(--card)), var(--bg);
   }
 
   /* Sigue al tema: el canvas dibuja con --fg y --accent encima, y si el fondo
      fuera negro fijo, en modo claro la paleta desaparecería. */
   .phone__screen--solid {
     background: var(--bg);
+  }
+
+  /* --- Dynamic Island --- */
+
+  /* 125 × 37 pt sobre un display de 440. Es negro real, no var(--bg): en el
+     aparato la isla es display apagado, y en tema claro un hueco beige la
+     delataría como dibujo.
+     El margen superior no es el del aparato sino el que deja la isla centrada
+     con la barra de estado que traen las capturas, que es contra lo que se
+     compara a simple vista. */
+  .phone__island {
+    position: absolute;
+    top: calc(var(--pw) * 0.018);
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(var(--pw) * 0.267);
+    height: calc(var(--pw) * 0.079);
+    border-radius: 999px;
+    background: #000;
+    z-index: 3;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: calc(var(--pw) * 0.021);
+  }
+
+  /* La cámara frontal: un punto apenas más claro que el negro, con el iris
+     azulado que se le ve al lente en las fotos de producto. */
+  .phone__lens {
+    width: calc(var(--pw) * 0.026);
+    height: calc(var(--pw) * 0.026);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 35% 30%,
+      #2b3a4a 0%,
+      #10151b 55%,
+      #05070a 100%
+    );
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+  }
+
+  /* --- home indicator --- */
+
+  /* 140 × 5 pt, a 8 pt del borde. Va sobre el contenido pero no lo bloquea. */
+  .phone__indicator {
+    position: absolute;
+    left: 50%;
+    bottom: calc(var(--pw) * 0.023);
+    transform: translateX(-50%);
+    width: calc(var(--pw) * 0.3);
+    height: max(3px, calc(var(--pw) * 0.011));
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--fg) 45%, transparent);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* --- botones --- */
+
+  .phone__btn {
+    position: absolute;
+    width: calc(var(--pw) * 0.012);
+    border-radius: calc(var(--pw) * 0.006);
+    /* Mismo anodizado que el canto, girado: la cara del botón mira hacia afuera. */
+    background: linear-gradient(to right, #232527, #5e6266 45%, #34373a);
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.35);
+  }
+
+  .phone__btn--action,
+  .phone__btn--vol-up,
+  .phone__btn--vol-down {
+    left: calc(var(--pw) * -0.006);
+  }
+
+  .phone__btn--power,
+  .phone__btn--camera {
+    right: calc(var(--pw) * -0.006);
+    background: linear-gradient(to left, #232527, #5e6266 45%, #34373a);
+  }
+
+  /* Alturas y posiciones en % del chasis, medidas sobre el aparato real. */
+  .phone__btn--action {
+    top: 15.5%;
+    height: 3.6%;
+  }
+
+  .phone__btn--vol-up {
+    top: 21.5%;
+    height: 6.4%;
+  }
+
+  .phone__btn--vol-down {
+    top: 29.5%;
+    height: 6.4%;
+  }
+
+  .phone__btn--power {
+    top: 23%;
+    height: 9.2%;
+  }
+
+  /* El control de cámara está a ras del canto, casi sin relieve. */
+  .phone__btn--camera {
+    top: 36%;
+    height: 4.6%;
+    width: calc(var(--pw) * 0.009);
+    right: calc(var(--pw) * -0.003);
   }
 </style>

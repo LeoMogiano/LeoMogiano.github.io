@@ -59,4 +59,7 @@ export const ja: Dict = {
   marqueePlay: "スクロールを再開",
   appSelected: "表示中",
   pongHelp: "左右の矢印キーでパドルを操作します。",
+  shotsAria: "{app} のスクリーンショット",
+  shotAlt: "{app} のスクリーンショット {n}",
+  shotGo: "{app} のスクリーンショット {n} を表示",
 };

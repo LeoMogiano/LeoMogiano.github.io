@@ -59,4 +59,7 @@ export const es: Dict = {
   marqueePlay: "Reanudar la cinta",
   appSelected: "Mostrando",
   pongHelp: "Usa las flechas izquierda y derecha para mover tu paleta.",
+  shotsAria: "Capturas de {app}",
+  shotAlt: "Captura {n} de {app}",
+  shotGo: "Ver la captura {n} de {app}",
 };

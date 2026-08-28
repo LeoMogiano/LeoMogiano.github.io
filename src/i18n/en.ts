@@ -59,4 +59,7 @@ export const en: Dict = {
   marqueePlay: "Resume the marquee",
   appSelected: "Showing",
   pongHelp: "Use the left and right arrow keys to move your paddle.",
+  shotsAria: "{app} screenshots",
+  shotAlt: "{app} screenshot {n}",
+  shotGo: "Show {app} screenshot {n}",
 };

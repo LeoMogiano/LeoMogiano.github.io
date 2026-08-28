@@ -2,6 +2,7 @@
 import type { Lang, Dict } from '../i18n';
 import { Image } from 'astro:assets';
 import SectionHeader from './ui/SectionHeader.astro';
+import Icon from './ui/Icon.astro';
 import PhoneFrame from './ui/PhoneFrame.astro';
 import { apps } from '../data/apps';
 import { appCopy } from '../i18n/apps';
@@ -25,10 +26,15 @@ const defaultApp = apps[0].num;
 
   <div class="work__grid">
     <div class="work__phone-slot">
-      <PhoneFrame width="min(300px,84vw)" aspect="300/610" radius="52px" innerRadius="42px" screen="card">
-        <div class="phone__notch"></div>
+      <PhoneFrame width="min(300px,84vw)" screen="card">
         <div class="phone__status">
-          <span>9:41</span><span>▮▮▮ ᯤ 100</span>
+          <span>9:41</span>
+          <span class="phone__signals">
+            <Icon name="signal" size="11px" />
+            <Icon name="wifi" size="11px" />
+            100
+            <Icon name="battery" size="17px" />
+          </span>
         </div>
         <div class="phone__body">
           <span class="phone__icons">
@@ -59,7 +65,42 @@ const defaultApp = apps[0].num;
             );
           })}
         </div>
-        <div class="phone__home"></div>
+
+        {apps.filter((app) => app.shots?.length).map((app) => (
+          <div class="phone__shots" data-app-shots={app.num}>
+            <div
+              class="phone__track"
+              data-shots-track
+              role="region"
+              aria-label={t.shotsAria.replace('{app}', app.name)}
+              tabindex="0"
+            >
+              {app.shots!.map((shot, i) => (
+                <div class="phone__slide" data-shots-slide>
+                  <Image
+                    src={shot}
+                    alt={t.shotAlt.replace('{app}', app.name).replace('{n}', String(i + 1))}
+                    widths={[300, 600]}
+                    sizes="300px"
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    class="phone__shot"
+                  />
+                </div>
+              ))}
+            </div>
+            <div class="phone__dots">
+              {app.shots!.map((_, i) => (
+                <button
+                  type="button"
+                  class="phone__dot"
+                  data-shots-dot={i}
+                  aria-label={t.shotGo.replace('{app}', app.name).replace('{n}', String(i + 1))}
+                  aria-current={i === 0 ? 'true' : 'false'}></button>
+              ))}
+            </div>
+          </div>
+        ))}
       </PhoneFrame>
     </div>
 
@@ -104,27 +145,36 @@ const defaultApp = apps[0].num;
 
   /* --- pantalla del teléfono --- */
 
-  .phone__notch {
-    position: absolute;
-    top: 9px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 86px;
-    height: 24px;
-    border-radius: 999px;
-    background: var(--bg);
-    z-index: 3;
-  }
-
   .phone__status {
     display: flex;
     justify-content: space-between;
-    padding: 13px 22px 0;
+    align-items: center;
+    /* Centrada con la isla, igual que la barra que traen las capturas. */
+    padding: 11px 22px 0;
     font-size: 10px;
     letter-spacing: 0.05em;
     color: var(--dim);
-    z-index: 2;
+    /* Encima de las capturas: la barra de estado es del aparato, no de la app.
+       A las capturas se les recortó la suya en prepare-assets. */
+    position: relative;
+    z-index: 4;
   }
+
+  /* La captura trae su propia barra de estado, con su reloj y sus iconos. Dos
+     barras a la vez delatan el montaje, así que manda la de la app. */
+  [data-app-current='01'] .phone__status {
+    visibility: hidden;
+  }
+
+  /* Cobertura, wifi y batería son iconos, no glifos: el subset latin de DM Sans
+     no trae ▮ ni ᯤ, así que caían al font del sistema y en Windows y Android
+     salían como cuadros vacíos. */
+  .phone__signals {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
 
   .phone__body {
     flex: 1;
@@ -228,13 +278,104 @@ const defaultApp = apps[0].num;
     color: var(--faint);
   }
 
-  .phone__home {
-    height: 5px;
-    width: 110px;
-    border-radius: 3px;
-    background: var(--fg);
-    opacity: 0.5;
-    margin: 0 auto 10px;
+  /* --- capturas reales dentro de la pantalla --- */
+
+  /* Van encima de la ficha, tapando también la barra de estado: la captura
+     trae la suya, y dos barras a la vez delatarían el montaje. La isla y el
+     home indicator del marco quedan por encima (z-index 3). */
+  .phone__shots {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+  }
+
+  [data-app-current='01'] .phone__shots[data-app-shots='01'] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* El carrusel es un scroller nativo con scroll-snap: el gesto táctil, el
+     scroll horizontal del trackpad y las flechas del teclado ya funcionan sin
+     una línea de JS. El script solo lo avanza solo y sincroniza los puntos. */
+  .phone__track {
+    display: flex;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    /* Al llegar al final del carrusel el gesto no debe seguir de largo y
+       arrastrar la página. */
+    overscroll-behavior-x: contain;
+  }
+
+  .phone__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .phone__track:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+
+  .phone__slide {
+    flex: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    scroll-snap-align: center;
+  }
+
+  /*
+   * Ancho exacto y anclada arriba. Hubo una versión con la imagen al 104% para
+   * hacer parallax, y se veía mal: `cover` paga ese ancho de más recortando 14
+   * px por arriba, y la barra de estado de la captura terminaba pisando la
+   * Dynamic Island. La sensación de carrusel la dan la curva y la inercia del
+   * script, que no tocan la geometría.
+   */
+  .phone__shot {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    /* Sin esto, arrastrar el carrusel con el mouse arranca el drag&drop del
+       navegador: aparece el fantasma de la imagen y el gesto se pierde. */
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .phone__dots {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    /* Justo encima del home indicator del marco, sin pisarlo. */
+    bottom: 16px;
+    display: flex;
+    gap: 6px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    /* La captura de abajo es impredecible: sin este fondo los puntos
+       desaparecen sobre un fondo claro. */
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+  }
+
+  .phone__dot {
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    cursor: none;
+    background: rgba(255, 255, 255, 0.4);
+    transition: background 0.25s ease;
+  }
+
+  .phone__dot[aria-current='true'] {
+    background: #fff;
   }
 
   /* --- lista de apps --- */

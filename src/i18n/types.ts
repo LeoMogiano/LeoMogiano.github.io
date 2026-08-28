@@ -59,4 +59,8 @@ export interface Dict {
   marqueePlay: string;
   appSelected: string;
   pongHelp: string;
+  /** {app} y {n} se sustituyen al renderizar. */
+  shotsAria: string;
+  shotAlt: string;
+  shotGo: string;
 }

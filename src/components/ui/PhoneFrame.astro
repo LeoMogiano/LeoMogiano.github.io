@@ -84,6 +84,16 @@ const {
     padding: var(--rail);
     border-radius: var(--radius);
 
+    /*
+     * Nada dentro del aparato se selecciona. Un teléfono es un objeto, no un
+     * texto, y al arrastrar sobre él —o al pasar por encima con una selección
+     * que arrancó fuera— la pantalla entera se teñía del color de acento.
+     * `user-select` se hereda, así que esto alcanza para todo lo que entre por
+     * el slot: ficha, capturas y canvas del pong.
+     */
+    user-select: none;
+    -webkit-user-select: none;
+
     /* Space Gray. La banda del canto es lo único que se ve del degradado —el
        bisel tapa el centro—, así que los topes van cargados a los extremos:
        sombra en los cantos, luz justo antes del borde. El aluminio anodizado
@@ -259,6 +269,13 @@ const {
   .phone__btn--power {
     top: 23%;
     height: 9.2%;
+  }
+
+  /* Las imágenes además se pueden arrastrar solas: sin esto el navegador
+     arranca su drag&drop y aparece el fantasma del icono o de la captura.
+     Van con :global porque las pinta quien use el marco, no el marco. */
+  .phone :global(img) {
+    -webkit-user-drag: none;
   }
 
   /* El control de cámara está a ras del canto, casi sin relieve. */

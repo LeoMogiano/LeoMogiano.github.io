@@ -372,6 +372,9 @@ const shotsByApp = new Map(shotSources);
     height: 100%;
     overflow: hidden;
     scroll-snap-align: center;
+    /* Red de seguridad del mismo problema: si algún día vuelve a faltar un
+       subpíxel, que lo que asome sea negro de bisel y no fondo de página. */
+    background: #08080a;
   }
 
   /*
@@ -382,8 +385,14 @@ const shotsByApp = new Map(shotSources);
    * script, que no tocan la geometría.
    */
   .phone__shot {
-    width: 100%;
-    height: 100%;
+    /*
+     * Un píxel de más por la derecha y por abajo, que el slide recorta. La
+     * pantalla mide 293.4 x 628.2 y el navegador redondea la imagen a enteros:
+     * quedaba una fracción de píxel sin cubrir por la que asomaba el fondo de
+     * la pantalla, blanco en el tema claro. Se veía como una raya.
+     */
+    width: calc(100% + 1px);
+    height: calc(100% + 1px);
     object-fit: cover;
     object-position: top;
     /* Sin esto, arrastrar el carrusel con el mouse arranca el drag&drop del

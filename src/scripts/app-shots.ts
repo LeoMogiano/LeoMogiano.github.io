@@ -21,6 +21,9 @@
 /** Cuánto sigue corriendo el impulso, en ms. Es la constante de tiempo del roce. */
 const DECAY_MS = 280;
 
+/** Cuánto siguen a la vista los puntos después de la última señal de vida. */
+const DOTS_MS = 1500;
+
 /** Rango de duración del acomodo. Un tramo corto no puede durar lo mismo que uno largo. */
 const GLIDE_MIN = 260;
 const GLIDE_MAX = 620;
@@ -32,8 +35,9 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
 for (const shots of document.querySelectorAll<HTMLElement>('[data-app-shots]')) {
   const track = shots.querySelector<HTMLElement>('[data-shots-track]');
+  const dotsBox = shots.querySelector<HTMLElement>('[data-shots-dots]');
   const dots = [...shots.querySelectorAll<HTMLButtonElement>('[data-shots-dot]')];
-  if (!track || dots.length < 2) continue;
+  if (!track || !dotsBox || dots.length < 2) continue;
 
   const index = () => Math.round(track.scrollLeft / track.clientWidth);
 
@@ -92,8 +96,31 @@ for (const shots of document.querySelectorAll<HTMLElement>('[data-app-shots]')) 
 
   // --- puntos ---
 
+  /*
+   * Los puntos viven escondidos y asoman cuando hay algo que contar. El
+   * temporizador se reinicia con cada señal, así que mientras se arrastra no
+   * se van; se van 1.5 s después de la última.
+   */
+  let hide = 0;
+
+  const reveal = () => {
+    // Escribir el atributo que ya está puesto ensucia el estilo para nada, y
+    // esto se llama desde pointermove.
+    if (!dotsBox.hasAttribute('data-visible')) dotsBox.setAttribute('data-visible', '');
+    clearTimeout(hide);
+    hide = window.setTimeout(() => dotsBox.removeAttribute('data-visible'), DOTS_MS);
+  };
+
+  let painted = index();
+
+  // Solo se toca el DOM cuando la captura cambia de verdad. Esto corre en cada
+  // frame de scroll: reescribir cinco aria-current por frame es recalcular
+  // estilo sesenta veces por segundo para dejar todo igual.
   const paint = () => {
     const current = index();
+    if (current === painted) return;
+    painted = current;
+    reveal();
     for (const [i, dot] of dots.entries()) {
       dot.setAttribute('aria-current', String(i === current));
     }
@@ -109,11 +136,38 @@ for (const shots of document.querySelectorAll<HTMLElement>('[data-app-shots]')) 
       paint();
     });
   });
-  paint();
-
   for (const [i, dot] of dots.entries()) {
+    dot.setAttribute('aria-current', String(i === painted));
     dot.addEventListener('click', () => go(i));
   }
+
+  // Basta acercarse o empezar a arrastrar para que aparezcan.
+  shots.addEventListener('pointerenter', reveal);
+  shots.addEventListener('pointermove', reveal, { passive: true });
+
+  // --- carga de las capturas que no son la primera ---
+
+  /*
+   * Solo la primera captura viaja en el HTML. Las otras cuatro pesan 250 KB y
+   * no le sirven de nada a quien mira la pantalla y sigue de largo, así que
+   * esperan al primer gesto sobre el carrusel. Después de eso no hace falta
+   * volver a mirar: los listeners se quitan solos.
+   */
+  const load = () => {
+    for (const img of track.querySelectorAll<HTMLImageElement>('[data-shot-src]')) {
+      img.srcset = img.dataset.shotSrcset ?? '';
+      img.src = img.dataset.shotSrc ?? '';
+      delete img.dataset.shotSrc;
+      delete img.dataset.shotSrcset;
+    }
+  };
+
+  for (const type of ['pointerenter', 'pointerdown', 'focusin'] as const) {
+    shots.addEventListener(type, load, { once: true, passive: true });
+  }
+  // El scroll no burbujea, así que va en el propio carrusel: cubre el dedo y
+  // el trackpad, que no disparan pointerenter.
+  track.addEventListener('scroll', load, { once: true, passive: true });
 
   // --- arrastre con el mouse ---
 

@@ -1,6 +1,6 @@
 ---
 import type { Lang, Dict } from '../i18n';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import SectionHeader from './ui/SectionHeader.astro';
 import Icon from './ui/Icon.astro';
 import PhoneFrame from './ui/PhoneFrame.astro';
@@ -17,6 +17,34 @@ const { lang, t } = Astro.props;
 // El teléfono arranca mostrando la primera app; el resto de estados
 // vive en el DOM desde el inicio y el CSS decide cuál se ve.
 const defaultApp = apps[0].num;
+
+/*
+ * Las capturas no pasan por <Image> sino por getImage(), para poder guardarlas
+ * en data-src y decidir nosotros cuándo se piden. Con loading="lazy" no
+ * alcanza: el umbral de Chrome llega a unos 3000 px y el teléfono está a 1900
+ * del inicio, así que cuatro de las cinco se descargaban —250 KB— en la carga
+ * de la portada, para alguien que quizá nunca baja hasta aquí.
+ *
+ * La primera se pide igual al entrar en pantalla; las demás, al primer gesto
+ * sobre el carrusel. Lo hace src/scripts/app-shots.ts.
+ */
+const shotSources = await Promise.all(
+  apps
+    .filter((app) => app.shots?.length)
+    .map(async (app) => [
+      app.num,
+      await Promise.all(
+        app.shots!.map(async (shot) => {
+          const [small, large] = await Promise.all([
+            getImage({ src: shot, width: 300 }),
+            getImage({ src: shot, width: 600 }),
+          ]);
+          return { src: small.src, srcset: `${small.src} 300w, ${large.src} 600w` };
+        }),
+      ),
+    ] as const),
+);
+const shotsByApp = new Map(shotSources);
 ---
 
 <section id="work" data-app-current={defaultApp}>
@@ -75,21 +103,25 @@ const defaultApp = apps[0].num;
               aria-label={t.shotsAria.replace('{app}', app.name)}
               tabindex="0"
             >
-              {app.shots!.map((shot, i) => (
+              {(shotsByApp.get(app.num) ?? []).map((shot, i) => (
                 <div class="phone__slide" data-shots-slide>
-                  <Image
-                    src={shot}
-                    alt={t.shotAlt.replace('{app}', app.name).replace('{n}', String(i + 1))}
-                    widths={[300, 600]}
+                  <img
+                    src={i === 0 ? shot.src : undefined}
+                    srcset={i === 0 ? shot.srcset : undefined}
+                    data-shot-src={i === 0 ? undefined : shot.src}
+                    data-shot-srcset={i === 0 ? undefined : shot.srcset}
                     sizes="300px"
-                    loading={i === 0 ? 'eager' : 'lazy'}
+                    width="300"
+                    height="649"
+                    alt={t.shotAlt.replace('{app}', app.name).replace('{n}', String(i + 1))}
+                    loading="lazy"
                     decoding="async"
                     class="phone__shot"
                   />
                 </div>
               ))}
             </div>
-            <div class="phone__dots">
+            <div class="phone__dots" data-shots-dots>
               {app.shots!.map((_, i) => (
                 <button
                   type="button"
@@ -347,7 +379,18 @@ const defaultApp = apps[0].num;
     -webkit-user-drag: none;
   }
 
+  /*
+   * Escondidos salvo cuando dicen algo. Sobre la captura, cinco puntos fijos
+   * son un adorno que tapa la app; aparecen al cambiar de captura, al
+   * arrastrar, al pasar por encima y al recibir foco, y se van solos.
+   *
+   * pointer-events se apaga con ellos: un botón invisible que igual se puede
+   * pulsar es peor que no tenerlo.
+   */
   .phone__dots {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -360,7 +403,22 @@ const defaultApp = apps[0].num;
     /* La captura de abajo es impredecible: sin este fondo los puntos
        desaparecen sobre un fondo claro. */
     background: rgba(0, 0, 0, 0.35);
+  }
+
+  /* El desenfoque va solo mientras se ven: un backdrop-filter permanente
+     obliga a componer el fondo en cada frame del carrusel, incluso con los
+     puntos invisibles. */
+  .phone__dots[data-visible],
+  .phone__dots:focus-within {
+    opacity: 1;
+    pointer-events: auto;
     backdrop-filter: blur(6px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .phone__dots {
+      transition: none;
+    }
   }
 
   .phone__dot {

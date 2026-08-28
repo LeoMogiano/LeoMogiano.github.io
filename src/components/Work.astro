@@ -198,10 +198,12 @@ const shotsByApp = new Map(shotSources);
   }
 
   /* La captura trae su propia barra de estado, con su reloj y sus iconos. Dos
-     barras a la vez delatan el montaje, así que manda la de la app. La lista
-     se enumera igual que el resto: son cinco apps, no un caso general. */
+     barras a la vez delatan el montaje, así que manda la de la app. Hoy las
+     cinco tienen capturas; se enumeran igual que el resto de reglas del
+     archivo, para que quitarle las capturas a una sea borrar su línea. */
   [data-app-current='01'] .phone__status,
   [data-app-current='02'] .phone__status,
+  [data-app-current='03'] .phone__status,
   [data-app-current='04'] .phone__status,
   [data-app-current='05'] .phone__status {
     visibility: hidden;

@@ -9,6 +9,11 @@ import validmeShot1 from '../assets/apps/shots/validme-1.webp';
 import validmeShot2 from '../assets/apps/shots/validme-2.webp';
 import validmeShot3 from '../assets/apps/shots/validme-3.webp';
 import validmeShot4 from '../assets/apps/shots/validme-4.webp';
+import staffShot1 from '../assets/apps/shots/egx-staff-1.webp';
+import staffShot2 from '../assets/apps/shots/egx-staff-2.webp';
+import staffShot3 from '../assets/apps/shots/egx-staff-3.webp';
+import staffShot4 from '../assets/apps/shots/egx-staff-4.webp';
+import staffShot5 from '../assets/apps/shots/egx-staff-5.webp';
 import prestoShot1 from '../assets/apps/shots/presto-1.webp';
 import prestoShot2 from '../assets/apps/shots/presto-2.webp';
 import prestoShot3 from '../assets/apps/shots/presto-3.webp';
@@ -48,7 +53,15 @@ export const apps: readonly App[] = [
     icon: validme,
     shots: [validmeShot1, validmeShot2, validmeShot3, validmeShot4],
   },
-  { num: '03', name: 'EGX Staff', year: '2025', icon: egxStaff },
+  {
+    num: '03',
+    name: 'EGX Staff',
+    year: '2025',
+    icon: egxStaff,
+    // Ingreso, eventos, sesiones y las dos respuestas del escáner. Las últimas
+    // dos son fotos del lector en un evento real, no capturas de simulador.
+    shots: [staffShot1, staffShot2, staffShot3, staffShot4, staffShot5],
+  },
   {
     num: '04',
     name: 'Presto Latam',

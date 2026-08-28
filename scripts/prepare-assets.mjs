@@ -50,14 +50,17 @@ const JOBS = [
   { in: 'apps/presto.png', out: 'apps/presto.webp', mode: 'lossless', width: 192 },
   { in: 'apps/skeletonpdf.png', out: 'apps/skeletonpdf.webp', mode: 'lossless', width: 192 },
   // Capturas de EGX One — la pantalla del teléfono mide ~282 px CSS
+  // La extensión va por captura: las dos últimas de EGX Staff son fotos del
+  // escáner, y llegaron en JPEG.
   ...[
-    ['egx-one', 5],
-    ['validme', 4],
-    ['presto', 4],
-    ['skeletonpdf', 3],
-  ].flatMap(([app, count]) =>
-    Array.from({ length: count }, (_, i) => ({
-      in: `apps/shots/${app}-${i + 1}.png`,
+    ['egx-one', ['png', 'png', 'png', 'png', 'png']],
+    ['validme', ['png', 'png', 'png', 'png']],
+    ['egx-staff', ['png', 'png', 'png', 'jpeg', 'jpeg']],
+    ['presto', ['png', 'png', 'png', 'png']],
+    ['skeletonpdf', ['png', 'png', 'png']],
+  ].flatMap(([app, exts]) =>
+    exts.map((ext, i) => ({
+      in: `apps/shots/${app}-${i + 1}.${ext}`,
       out: `apps/shots/${app}-${i + 1}.webp`,
       mode: 'shot',
       width: 564,

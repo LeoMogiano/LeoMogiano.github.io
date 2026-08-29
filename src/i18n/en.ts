@@ -17,7 +17,7 @@ export const en: Dict = {
   greetA: "Hi, I'm ",
   greetB: "",
   bio: "A good app is used without anyone explaining it; a serious app, when it fails, tells you why. Nearly three years between those two rules — fintech, digital identity, payments, five apps in production. Today I lead the mobile team at Datec Corp.",
-  cvLabel: "CV as PDF",
+  cvLabel: "Résumé",
   cvAria: "Download Leo Mogiano's CV as a PDF",
   descDatecLead: "I run the Flutter team across concurrent projects: I set the code standard, make the architecture calls and answer for the releases. I still write code every day.",
   descDatecMob: "Four products in a year: the EGX One beta with Firebase and Sentry, a cashless vending machine in Kotlin, NFC wristbands and a payments demo. Almost all of it talked to a device.",

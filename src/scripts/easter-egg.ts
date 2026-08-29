@@ -62,4 +62,42 @@ document.addEventListener('keydown', (event) => {
   trapFocus(event);
 });
 
+/*
+ * Precalentado de la polaroid.
+ *
+ * La imagen vive dentro de un contenedor con `hidden`, así que el navegador no
+ * la pide nunca: al quinto toque empezaban a bajar 120 KB con el diálogo ya
+ * abierto y la foto aparecía tarde. Pedirla desde un `new Image()` la mete en
+ * la caché HTTP aunque su <img> siga oculto, y al abrir ya está.
+ *
+ * No se usa <link rel="preload">, que competiría con lo que sí se ve en el
+ * primer pintado, ni rel="prefetch", que Safari no implementa —y este sitio se
+ * mira sobre todo desde un iPhone—. Va en tiempo ocioso: cuando el navegador
+ * no tiene nada mejor que hacer.
+ */
+function warmEgg() {
+  const img = egg?.querySelector<HTMLImageElement>('img');
+  const src = img?.currentSrc || img?.src;
+  if (!src) return;
+
+  const pre = new Image();
+  pre.src = src;
+  /* Decodificar aquí evita el tirón de decodificación en el frame en el que se
+     abre el diálogo. Si falla, la imagen igual quedó en caché. */
+  void pre.decode?.().catch(() => {});
+}
+
+/* `saveData` lo activa quien pide al sistema ahorrar datos. Gastar 120 KB en
+   un huevo de pascua que quizá nunca abra es justo lo que pidió evitar. */
+const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+
+if (egg && !conn?.saveData) {
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(warmEgg, { timeout: 4000 });
+  } else {
+    /* Safari no tuvo requestIdleCallback hasta 16.4. */
+    setTimeout(warmEgg, 2500);
+  }
+}
+
 export {};

@@ -45,6 +45,7 @@ const spanOf = (job: (typeof jobs)[number]) => ({
                     <div class="path__role-row">
                       <span class={`path__role-name ${ri === 0 ? 'path__role-name--accent' : 'path__role-name--dim'}`}>
                         {t[role.roleKey as keyof Dict] as string}
+                        <span class="path__desc">{t[role.descKey as keyof Dict] as string}</span>
                       </span>
                       <span class={`path__role-date ${ri === 0 ? 'path__role-date--primary' : 'path__role-date--secondary'}`}>
                         <time datetime={rangeParts(role, t).from.iso}>{rangeParts(role, t).from.label}</time>
@@ -64,6 +65,7 @@ const spanOf = (job: (typeof jobs)[number]) => ({
                 {t[job.roles[0].roleKey as keyof Dict] as string}
               </div>
               <div class="path__at">@ {job.company}</div>
+              <p class="path__desc">{t[job.roles[0].descKey as keyof Dict] as string}</p>
             </div>
           )}
           {job.roles.length === 1 && (
@@ -101,7 +103,7 @@ const spanOf = (job: (typeof jobs)[number]) => ({
     display: flex;
     gap: clamp(16px, 2.4vw, 28px);
     border-top: 1px solid var(--line);
-    padding: 20px clamp(10px, 1.6vw, 20px);
+    padding: 28px clamp(10px, 1.6vw, 20px);
   }
 
   .path__list > .path__row:last-child {
@@ -110,7 +112,7 @@ const spanOf = (job: (typeof jobs)[number]) => ({
 
   .path__row--multi {
     align-items: flex-start;
-    padding: 24px clamp(10px, 1.6vw, 20px);
+    padding: 30px clamp(10px, 1.6vw, 20px);
   }
 
   .path__row--single {
@@ -229,6 +231,32 @@ const spanOf = (job: (typeof jobs)[number]) => ({
 
   .path__role-name--dim {
     color: var(--dim);
+  }
+
+  /*
+   * Una línea por puesto. Es el texto más largo de la sección, así que se
+   * limita a la medida de lectura: pasada de ~68 caracteres el ojo pierde el
+   * renglón al volver, y aquí las filas ya son anchas de por sí.
+   */
+  .path__desc {
+    display: block;
+    margin: 12px 0 0;
+    /* La caja manda sobre el texto: se ensancha hasta que las frases caben en
+       dos renglones, en vez de recortar las frases para que quepan en una caja
+       estrecha. A 12.5px son ~700px, y la fila da de sobra. */
+    max-width: 96ch;
+    font-family: var(--font);
+    /* Más chica que el nombre de la empresa: es un pie de foto, no un párrafo.
+       A este tamaño una sola frase se lee como anotación y no compite con el
+       cargo, que es lo que se escanea. */
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    color: var(--faint);
+    /* El nombre del puesto va en color de acento y esto cuelga de él: sin
+       reiniciar el color heredaría el verde. */
+    text-transform: none;
   }
 
   .path__at {

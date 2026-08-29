@@ -16,7 +16,16 @@ export interface Dict {
   playAria: string;
   greetA: string;
   greetB: string;
+  /** Una línea por puesto en Trayectoria. */
+  descDatecLead: string;
+  descDatecMob: string;
+  descValidme: string;
+  descPresto: string;
+  descGetserver: string;
+  descBanco: string;
   bio: string;
+  cvLabel: string;
+  cvAria: string;
   workBadge: string;
   sectionAria: string;
   workA: string;

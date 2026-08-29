@@ -36,13 +36,20 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
           <span class="hero__spark" style={`--rot:${deg}deg;--delay:${i % 2 === 0 ? 0 : 0.035}s`}></span>
         ))}
       </span>
-      <span class="hero__status" aria-label={t.statusAria} title={t.statusTitle}>😺</span>
+      <span class="hero__status" role="img" aria-label={t.statusAria} title={t.statusTitle}>😺</span>
     </span>
     <figcaption class="hero__caption">{t.role}</figcaption>
+    {/*
+      role="img" no es decoración: sin él estas pills son <span> con rol
+      `generic`, que no admite nombre accesible, y el icono de adentro va
+      aria-hidden. El lector de pantalla no anunciaba nada —ni el nombre de la
+      plataforma ni que hubiera algo ahí—. Con role="img" el aria-label es
+      legal y la pill se anuncia como la imagen que en la práctica es.
+    */}
     <span class="hero__pills hero__pills--wide">
-      <Pill as="span" icon="android" iconSize="14px" class="hero__brand" aria-label="Android" />
-      <Pill as="span" icon="ios" iconSize="14px" class="hero__brand" aria-label="Apple" />
-      <Pill as="span" icon="flutter" iconSize="15px" class="hero__brand" aria-label="Flutter" />
+      <Pill as="span" role="img" icon="android" iconSize="14px" class="hero__brand" aria-label="Android" />
+      <Pill as="span" role="img" icon="ios" iconSize="14px" class="hero__brand" aria-label="Apple" />
+      <Pill as="span" role="img" icon="flutter" iconSize="15px" class="hero__brand" aria-label="Flutter" />
     </span>
   </figure>
 
@@ -50,9 +57,9 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
     <span class="hero__dot"></span>
     <span class="hero__greet-text">{t.greetA}<em class="hero__em">Leo Mogiano</em>{t.greetB} <span class="hero__wave">👋</span></span>
     <span class="hero__pills hero__pills--narrow">
-      <Pill as="span" icon="android" iconSize="17px" class="hero__brand" aria-label="Android" />
-      <Pill as="span" icon="ios" iconSize="17px" class="hero__brand" aria-label="Apple" />
-      <Pill as="span" icon="flutter" iconSize="19px" class="hero__brand" aria-label="Flutter" />
+      <Pill as="span" role="img" icon="android" iconSize="17px" class="hero__brand" aria-label="Android" />
+      <Pill as="span" role="img" icon="ios" iconSize="17px" class="hero__brand" aria-label="Apple" />
+      <Pill as="span" role="img" icon="flutter" iconSize="19px" class="hero__brand" aria-label="Flutter" />
     </span>
   </div>
 

@@ -81,3 +81,43 @@ test('el 404 le da a un agente por dónde seguir', () => {
   assert.ok(html.includes('href="/sitemap.xml"'), 'apunta al sitemap');
   assert.ok(html.includes('404 Not Found'), 'dice en texto que la ruta no existe');
 });
+
+/* --- Accesibilidad y entrega, contra lo que sale del build --- */
+
+test('ningún <span> lleva aria-label sin un rol que lo admita', () => {
+  /* `generic` —el rol de un <span> pelado— tiene aria-label prohibido: el
+     nombre no se anuncia y axe lo marca como error. Cada aria-label sobre un
+     span tiene que venir con un role que sí acepte nombre accesible. */
+  const ROLES_CON_NOMBRE = new Set(['img', 'button', 'link', 'dialog', 'group', 'status', 'region']);
+  for (const page of ['index.html', 'en/index.html', 'ja/index.html', '404.html']) {
+    const html = read(page);
+    for (const [tag] of html.matchAll(/<span\b[^>]*\baria-label=[^>]*>/g)) {
+      const role = tag.match(/\brole="([^"]+)"/)?.[1];
+      assert.ok(
+        role && ROLES_CON_NOMBRE.has(role),
+        `${page}: span con aria-label y role=${role ?? 'ninguno'} — ${tag.slice(0, 110)}`,
+      );
+    }
+  }
+});
+
+test('las pills de plataforma se anuncian con nombre', () => {
+  const html = read('index.html');
+  for (const label of ['Android', 'Apple', 'Flutter']) {
+    const re = new RegExp(`<span[^>]*role="img"[^>]*aria-label="${label}"|<span[^>]*aria-label="${label}"[^>]*role="img"`);
+    assert.match(html, re, `la pill de ${label} tiene que ser role="img" con nombre`);
+  }
+});
+
+test('el CSS va inline: cero hojas que bloqueen el primer pintado', () => {
+  for (const page of ['index.html', 'en/index.html', 'ja/index.html', '404.html']) {
+    const html = read(page);
+    /* fonts-ja.css queda fuera a propósito: es una hoja escrita a mano en
+       public/, no un bundle de Astro, y solo la carga el japonés. */
+    const externas = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)]
+      .map(([tag]) => tag)
+      .filter((tag) => !tag.includes('/fonts-ja.css'));
+    assert.deepEqual(externas, [], `${page} todavía pide una hoja externa`);
+    assert.ok(/<style>/.test(html), `${page} no tiene el CSS inline`);
+  }
+});

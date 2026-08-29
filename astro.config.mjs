@@ -9,8 +9,15 @@ export default defineConfig({
   site: 'https://leomogiano.github.io',
   trailingSlash: 'always',
   build: {
-    // El CSS del sitio es pequeño y crítico: inline evita un round-trip.
-    inlineStylesheets: 'auto',
+    /*
+     * 'always', no 'auto'. Con 'auto' Astro deja fuera cualquier hoja de más de
+     * 4 kB, y las dos del sitio pesan 12 y 7 kB: quedaban como dos <link>
+     * bloqueantes delante del primer pintado. Inline sale gratis aquí porque
+     * GitHub Pages sirve todo con Cache-Control de 10 minutos —el CSS no se
+     * cachea entre visitas de todos modos— y porque no hay navegación entre
+     * páginas que reuse la hoja: cada idioma es una sola página.
+     */
+    inlineStylesheets: 'always',
   },
   image: {
     // Las imágenes ya vienen convertidas a WebP por scripts/prepare-assets.mjs.

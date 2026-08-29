@@ -23,6 +23,12 @@ export default defineConfig({
   // Astro invalida por el grafo de módulos y por el cacheKey de getStaticPaths,
   // pero un cambio de hash en el CSS no dispara ninguno de los dos.
   // A cambio ahorraba nada: el build completo son ~250 ms para 3 páginas.
+  // Escucha en todas las interfaces, no solo en localhost. Es lo que permite
+  // abrir el dev desde el iPhone por wifi —la vitrina de apps y el visor de
+  // capturas a pantalla completa solo existen bajo 705 px— sin acordarse del
+  // flag `--host` cada vez. En un sitio estático que se compila a HTML no
+  // expone nada: el servidor de desarrollo solo vive mientras alguien lo corre.
+  server: { host: true },
   vite: {
     server: {
       // legacy/index.html pesa 21 MB: que Vite ni lo mire.

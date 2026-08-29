@@ -16,7 +16,7 @@ export const es: Dict = {
   playAria: "Reproducir",
   greetA: "Hola, soy ",
   greetB: "",
-  bio: "Seis años entre banca, fintech y herramientas internas. Hoy lidero el equipo mobile en Datec Corp. Me obsesionan las transiciones que se sienten inevitables y los binarios que pesan poco.",
+  bio: "Una app buena se usa sin que nadie te la explique; una app seria, cuando falla, te dice por qué. Casi tres años entre esas dos reglas — fintech, identidad digital, pagos, cinco apps en producción. Hoy lidero el equipo mobile en Datec Corp.",
   workBadge: "Apps",
   sectionAria: "Sección {n} de {total}: {label}",
   workA: "Cosas en las que ",

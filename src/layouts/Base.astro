@@ -50,9 +50,14 @@ const personLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Leo Mogiano',
+  /* `description` es lo que un agente cita cuando resume quién es la persona.
+     Sale del mismo META que la meta description: una sola fuente, traducida. */
+  description: meta.description,
   url: canonical,
   image: ogImage,
   jobTitle: t.role,
+  knowsLanguage: ['es', 'en', 'ja'],
+  address: { '@type': 'PostalAddress', addressLocality: 'La Paz', addressCountry: 'BO' },
   worksFor: { '@type': 'Organization', name: 'Datec Corp' },
   knowsAbout: ['Flutter', 'Swift', 'Kotlin', 'iOS', 'Android'],
   /* Derivado de socials.ts, no repetido: escrito a mano ya divergía —le
@@ -89,6 +94,11 @@ const personLd = {
       ))
     }
     <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).href} />
+
+    {/* Rutas de descubrimiento para agentes: el sitemap y el llms.txt, que es
+        la misma información en markdown y sin HTML alrededor. */}
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="alternate" type="text/markdown" href="/llms.txt" title="llms.txt" />
 
     <meta property="og:type" content="profile" />
     <meta property="og:title" content={meta.title} />

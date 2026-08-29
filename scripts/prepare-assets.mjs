@@ -62,9 +62,23 @@ const JOBS = [
     crop: { left: 27, top: 47, width: 496, height: 496 },
   },
   { in: 'apps/skeletonpdf.png', out: 'apps/skeletonpdf.webp', mode: 'lossless', width: 192 },
-  // Capturas de EGX One — la pantalla del teléfono mide ~282 px CSS
-  // La extensión va por captura: las dos últimas de EGX Staff son fotos del
-  // escáner, y llegaron en JPEG.
+  /*
+   * Capturas. Salen dos veces de la misma fuente:
+   *
+   *   564 px  la que va dentro del teléfono, 2x sobre los ~282 px CSS de la
+   *           pantalla del marco.
+   *  1170 px  la de pantalla completa en móvil, 3x sobre un viewport de 390.
+   *           Solo se pide al abrir el visor: en la carga de la portada no
+   *           viaja ni un byte de estas.
+   *
+   * La calidad de la grande baja a 82. A 564 px cada artefacto cae sobre un
+   * píxel que la pantalla del teléfono ya está encogiendo; a 1170 se ve tal
+   * cual, pero también hay tres veces más píxeles donde repartir el error. En
+   * la comparación a ojo 82 y 92 no se distinguen, y 82 pesa un tercio menos.
+   *
+   * La extensión va por captura: las dos últimas de EGX Staff son fotos del
+   * escáner, y llegaron en JPEG.
+   */
   ...[
     ['egx-one', ['png', 'png', 'png', 'png', 'png']],
     ['validme', ['png', 'png', 'png', 'png']],
@@ -72,12 +86,21 @@ const JOBS = [
     ['presto', ['png', 'png', 'png', 'png']],
     ['skeletonpdf', ['png', 'png', 'png']],
   ].flatMap(([app, exts]) =>
-    exts.map((ext, i) => ({
-      in: `apps/shots/${app}-${i + 1}.${ext}`,
-      out: `apps/shots/${app}-${i + 1}.webp`,
-      mode: 'shot',
-      width: 564,
-    })),
+    exts.flatMap((ext, i) => [
+      {
+        in: `apps/shots/${app}-${i + 1}.${ext}`,
+        out: `apps/shots/${app}-${i + 1}.webp`,
+        mode: 'shot',
+        width: 564,
+      },
+      {
+        in: `apps/shots/${app}-${i + 1}.${ext}`,
+        out: `apps/shots/${app}-${i + 1}-full.webp`,
+        mode: 'shot',
+        quality: 82,
+        width: 1170,
+      },
+    ]),
   ),
   // Logos — se muestran a 60px y la fuente ya viene a 120
   { in: 'logos/datec.png', out: 'logos/datec.webp', mode: 'lossless', width: null },
@@ -143,7 +166,7 @@ for (const job of JOBS) {
   const opts = job.mode === 'lossless'
     ? { lossless: true, effort: 6 }
     : job.mode === 'shot'
-      ? { quality: 92, effort: 6, smartSubsample: false }
+      ? { quality: job.quality ?? 92, effort: 6, smartSubsample: false }
       : { quality: 95, effort: 6, smartSubsample: false };
 
   await resized.clone().webp(opts).toFile(dest);

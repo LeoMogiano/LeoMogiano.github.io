@@ -69,4 +69,7 @@ export interface Dict {
   shotsAria: string;
   shotAlt: string;
   shotGo: string;
+  shotOpen: string;
+  shotsFullAria: string;
+  shotClose: string;
 }

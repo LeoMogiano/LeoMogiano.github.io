@@ -67,4 +67,7 @@ export const ja: Dict = {
   shotsAria: "{app} のスクリーンショット",
   shotAlt: "{app} のスクリーンショット {n}",
   shotGo: "{app} のスクリーンショット {n} を表示",
+  shotOpen: "{app} のスクリーンショットを全画面で表示",
+  shotsFullAria: "{app} のスクリーンショット、全画面",
+  shotClose: "閉じる",
 };

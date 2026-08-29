@@ -45,9 +45,15 @@ const shotSources = apps
     (app) =>
       [
         app.num,
-        app.shots!.map((shot) => ({
+        app.shots!.map((shot, i) => ({
           src: shot.src,
           height: Math.round((300 * shot.height) / shot.width),
+          /*
+           * La de 1170 px no se pide aquí: su URL viaja en un data- y el visor
+           * a pantalla completa la usa al abrirse. Son 30–190 KB por captura y
+           * en el teléfono no se distinguirían de la chica.
+           */
+          full: app.shotsFull?.[i]?.src,
         })),
       ] as const,
   );
@@ -102,7 +108,7 @@ const shotsByApp = new Map(shotSources);
         </div>
 
         {apps.filter((app) => app.shots?.length).map((app) => (
-          <div class="phone__shots" data-app-shots={app.num}>
+          <div class="phone__shots" data-app-shots={app.num} data-app-label={app.name}>
             <div
               class="phone__track"
               data-shots-track
@@ -115,6 +121,7 @@ const shotsByApp = new Map(shotSources);
                   <img
                     src={i === 0 && app.num === defaultApp ? shot.src : undefined}
                     data-shot-src={i === 0 && app.num === defaultApp ? undefined : shot.src}
+                    data-shot-full={shot.full}
                     width="300"
                     height={shot.height}
                     alt={t.shotAlt.replace('{app}', app.name).replace('{n}', String(i + 1))}
@@ -136,6 +143,19 @@ const shotsByApp = new Map(shotSources);
                   aria-current={i === 0 ? 'true' : 'false'}></button>
               ))}
             </div>
+
+            {/* Solo en móvil. En escritorio la pantalla del teléfono ya es tan
+                grande como la ventana permite y el botón sería un adorno; en un
+                viewport de 390 px la captura mide 282 y se lee a medias. */}
+            <button
+              type="button"
+              class="phone__expand"
+              data-shots-open
+              data-haptic
+              aria-label={t.shotOpen.replace('{app}', app.name)}
+            >
+              <Icon name="expand" size="14px" />
+            </button>
           </div>
         ))}
       </PhoneFrame>
@@ -186,6 +206,37 @@ const shotsByApp = new Map(shotSources);
     <p class="sr-only" role="status" aria-live="polite" data-app-status data-app-status-label={t.appSelected}></p>
     </div>
   </div>
+
+  {/*
+   * El visor a pantalla completa. Uno solo para las cinco apps: las diapositivas
+   * las arma shots-fullscreen.ts al abrirlo, leyendo las capturas de la app que
+   * el teléfono esté mostrando. Cinco visores en el HTML serían 21 <img> que en
+   * escritorio no se abren nunca.
+   *
+   * No usa la Fullscreen API. En iPhone no existió para elementos que no fueran
+   * <video> hasta Safari 26, y aun donde existe el navegador pinta su propia
+   * barra de salir encima y se queda con el gesto de cierre. Un <dialog> modal
+   * ocupa el mismo viewport, y el swipe hacia abajo y la transición siguen
+   * siendo nuestros. De regalo trae foco atrapado y Escape.
+   */}
+  <dialog
+    class="shotsfs"
+    data-shots-full
+    data-label={t.shotsFullAria}
+    data-go={t.shotGo}
+  >
+    <div class="shotsfs__track" data-shotsfs-track></div>
+    <div class="shotsfs__dots" data-shotsfs-dots></div>
+    <button
+      type="button"
+      class="shotsfs__close"
+      data-shotsfs-close
+      data-haptic
+      aria-label={t.shotClose}
+    >
+      <Icon name="x" size="17px" />
+    </button>
+  </dialog>
 </section>
 
 <style>
@@ -591,6 +642,228 @@ const shotsByApp = new Map(shotSources);
 
   .phone__dot[aria-current='true'] {
     background: #fff;
+  }
+
+  /* --- botón de pantalla completa --- */
+
+  /*
+   * Solo bajo 705px, el mismo corte donde aparece el selector de iconos. Arriba
+   * de eso el teléfono ya está a su tamaño máximo y el botón sería un adorno
+   * que tapa la captura.
+   *
+   * A diferencia de los puntos, este no se esconde: en táctil no hay hover que
+   * lo revele, y un control que solo aparece después de arrastrar no lo
+   * encuentra nadie.
+   */
+  .phone__expand {
+    display: none;
+  }
+
+  @media (max-width: 705px) {
+    .phone__expand {
+      /* La caja es de 44 para el dedo; el círculo que se ve lo pinta ::before a
+         30. Agrandar el botón entero taparía media captura. */
+      position: absolute;
+      right: 3px;
+      bottom: 8px;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: #fff;
+      cursor: none;
+    }
+  }
+
+  .phone__expand::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    /* La captura de abajo es impredecible: sin fondo el icono desaparece sobre
+       una pantalla clara. Mismo par que los puntos. */
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+  }
+
+  .phone__expand :global(.icon) {
+    position: relative;
+  }
+
+  /* --- visor a pantalla completa --- */
+
+  /*
+   * Un <dialog> trae borde, padding y un max-width/height de su propio antojo.
+   * Se lo quita todo: aquí el visor es el viewport.
+   */
+  .shotsfs {
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background: #08080a;
+    color: #fff;
+    /* El arrastre hacia abajo lo escribe el script. Sin gesto es 0. */
+    --drag: 0px;
+    translate: 0 var(--drag);
+  }
+
+  /* Al soltar vuelve a su sitio, pero durante el gesto va pegado al dedo: una
+     transición mientras se arrastra se siente como lag. */
+  .shotsfs:not([data-dragging]) {
+    transition: translate 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .shotsfs::backdrop {
+    background: #000;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shotsfs:not([data-dragging]) {
+      transition: none;
+    }
+  }
+
+  .shotsfs__track {
+    display: flex;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior: contain;
+    /*
+     * Clave para que el swipe de cierre conviva con el carrusel: el navegador
+     * se queda con los gestos horizontales —y ahí nos manda pointercancel— y
+     * nos deja los verticales, que aquí no tienen nada que desplazar.
+     */
+    touch-action: pan-x;
+  }
+
+  .shotsfs__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shotsfs :global(.shotsfs__slide) {
+    flex: none;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: center;
+    display: grid;
+    place-items: center;
+    /* La captura chica, la que ya está decodificada en el teléfono, mientras
+       viaja la grande. El navegador la escala y se ve borrosa: es justo lo que
+       se quiere, un rectángulo negro se ve peor. */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  /*
+   * `contain` y no `cover`: aquí la captura es el contenido, no un fondo, y
+   * recortarle la barra de navegación de la app para llenar el hueco sería
+   * romper lo único que el visor existe para mostrar. En un iPhone el formato
+   * de la captura y el del viewport coinciden casi al píxel, así que la banda
+   * que deja es de unos pocos.
+   */
+  .shotsfs :global(.shotsfs__shot) {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .shotsfs :global(.shotsfs__shot[data-ready]) {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shotsfs :global(.shotsfs__shot) {
+      transition: none;
+    }
+  }
+
+  /* Sobre la muesca en horizontal y sobre la barra de estado en vertical. */
+  .shotsfs__close {
+    position: absolute;
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #fff;
+    cursor: none;
+  }
+
+  .shotsfs__close::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+  }
+
+  .shotsfs__close :global(.icon) {
+    position: relative;
+  }
+
+  /* Aquí sí van fijos, al revés que en el teléfono: son la única señal de que
+     hay más capturas, y el visor no tiene otro sitio donde decirlo. */
+  .shotsfs__dots {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    z-index: 2;
+    display: flex;
+    gap: 7px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+  }
+
+  .shotsfs :global(.shotsfs__dot) {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    cursor: none;
+    background: rgba(255, 255, 255, 0.4);
+    transition: background 0.25s ease;
+  }
+
+  .shotsfs :global(.shotsfs__dot[aria-current='true']) {
+    background: #fff;
+  }
+
+  /* El visor es de móvil. Si alguien lo tiene abierto y agranda la ventana, el
+     script lo cierra; esto es la red por si el <dialog> sobrevive. */
+  @media (min-width: 706px) {
+    .shotsfs {
+      display: none;
+    }
   }
 
   /* --- lista de apps --- */

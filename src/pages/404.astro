@@ -24,6 +24,20 @@ const t = getDict('es');
       <a href="/en/">English</a>
       <a href="/ja/">日本語</a>
     </nav>
+
+    {/*
+      Salida para agentes. Un rastreador que cae aquí ve el 404 real que manda
+      GitHub Pages, pero no tiene de dónde seguir: los tres enlaces de arriba
+      son páginas, no índices. Esto le da el mapa en una línea, sin tocar lo que
+      ve una persona.
+    */}
+    <p class="sr-only">
+      404 Not Found. This page does not exist on leomogiano.github.io. The full
+      site index in markdown is at <a href="/llms.txt">/llms.txt</a>; the XML
+      sitemap is at <a href="/sitemap.xml">/sitemap.xml</a>. The site is a
+      three-language single page: <a href="/">/</a> (es), <a href="/en/">/en/</a>
+      and <a href="/ja/">/ja/</a>.
+    </p>
   </main>
 
   <script>

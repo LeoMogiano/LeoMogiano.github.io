@@ -683,6 +683,14 @@ const shotsByApp = new Map(shotSources);
     white-space: nowrap;
   }
 
+  /* Bajo 705px las filas llevan `pointer-events: none`, así que la nota
+     invitaría a un gesto que no hace nada. Ahí manda el selector de iconos. */
+  @media (max-width: 705px) {
+    .work__note {
+      display: none;
+    }
+  }
+
   .work__note {
     border-top: 1px solid var(--line);
     margin: 0;

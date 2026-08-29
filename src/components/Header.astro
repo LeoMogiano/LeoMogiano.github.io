@@ -61,21 +61,22 @@ const langHref = langPrefix(nextLang(lang)) + '/';
 </header>
 
 <style>
+  /* Deliberadamente NO sticky. Safari 26 dejó de leer <meta theme-color> y
+     ahora saca el color de su barra del fondo de html/body, salvo que haya un
+     elemento fijo pegado al borde superior del viewport: entonces usa ese. Un
+     header sticky era justo ese elemento, y por eso pintaba la franja. Sin
+     fijarlo, la cabecera es una sección más que se va con el scroll.
+
+     Tampoco lleva env(safe-area-inset-top): en una pestaña normal de Safari el
+     contentInset ya arranca por debajo de la barra de estado, así que sumarlo
+     solo abría un hueco muerto. Haría falta si esto se instalara como PWA
+     standalone, y no lo es. */
   .header {
-    position: sticky;
-    top: 0;
-    z-index: 40;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
     padding: 16px 5vw;
-    /* El legacy declaraba el safe-area ANTES del atajo `padding`, así que el
-       atajo lo pisaba y el notch nunca se respetaba. Aquí se suma. */
-    padding-top: calc(16px + env(safe-area-inset-top));
-    /* Sin fondo ni blur a propósito. Safari iOS tiñe su barra de estado
-       muestreando el borde del viewport: cualquier relleno aquí reaparece
-       arriba como una franja. Transparente, el contenido pasa por debajo. */
     background: transparent;
   }
 
@@ -225,7 +226,6 @@ const langHref = langPrefix(nextLang(lang)) + '/';
   @media (max-width: 1040px) {
     .header {
       padding: 12px 5vw;
-      padding-top: calc(12px + env(safe-area-inset-top));
     }
 
     .header__nav {

@@ -132,6 +132,7 @@ const shotsByApp = new Map(shotSources);
                   type="button"
                   class="phone__dot"
                   data-shots-dot={i}
+                  data-haptic
                   aria-label={t.shotGo.replace('{app}', app.name).replace('{n}', String(i + 1))}
                   aria-current={i === 0 ? 'true' : 'false'}></button>
               ))}
@@ -139,14 +140,41 @@ const shotsByApp = new Map(shotSources);
           </div>
         ))}
       </PhoneFrame>
+
+      {/* Selector compacto, solo cuando la rejilla se apila. Ahí el teléfono
+          mide 628 px de alto y la lista queda debajo: sin esto tocas una fila
+          y el resultado cambia fuera de pantalla. Reusa data-app-pick, que
+          app-picker.ts ya engancha para cualquier botón de la sección. */}
+      <div class="work__picker" role="group" aria-label={t.appPickerAria}>
+        {apps.map((app) => (
+          <button
+            type="button"
+            class="work__pick"
+            data-app-pick={app.num}
+            data-haptic
+            aria-pressed={app.num === defaultApp}
+          >
+            <Image src={app.icon} alt="" width={96} height={96} class="work__pick-icon" />
+            {/* app-picker.ts lee el nombre del primer botón que coincide para
+                anunciar el cambio, y estos van antes que la lista en el DOM. */}
+            <span class="sr-only" data-app-name>{app.name}</span>
+          </button>
+        ))}
+      </div>
     </div>
 
     <div class="work__list">
       {apps.map((app) => {
         const copy = appCopy[lang][app.num];
         return (
-          <button type="button" data-app-pick={app.num} aria-pressed={app.num === apps[0]?.num} class="slide-row work__item">
-            <span class="work__num">{app.num}</span>
+          <button type="button" data-app-pick={app.num} aria-pressed={app.num === apps[0]?.num} class="slide-row work__item" data-haptic>
+            <Image
+              src={app.icon}
+              alt=""
+              width={96}
+              height={96}
+              class="work__icon"
+            />
             <span>
               <span class="work__name" data-app-name>{app.name}</span>
               <span class="work__short">{copy.short}</span>
@@ -178,6 +206,77 @@ const shotsByApp = new Map(shotSources);
   .work__phone-slot {
     justify-self: center;
     max-width: 100%;
+  }
+
+  /*
+   * Oculto mientras la rejilla tiene dos columnas: ahí el teléfono y la lista
+   * se ven a la vez y el selector sobra. El corte sale de la propia rejilla
+   * —minmax(300px, 1fr) con gap de 5vw sobre un ancho de 90vw entran dos
+   * columnas a partir de ~706 px— y no de un breakpoint inventado.
+   */
+  .work__picker {
+    display: none;
+  }
+
+  /*
+   * Apilado, el tag deja de robarle ancho a la descripción. Con `auto` y
+   * `white-space: nowrap` reservaba ~120 px fijos en la misma fila, y a 390 px
+   * de viewport a la descripción le quedaban ~125: partía cada dos palabras
+   * con media pantalla vacía al lado. Bajándolo a su propia línea, el texto
+   * pasa a ~270.
+   */
+  @media (max-width: 705px) {
+    .work__item {
+      grid-template-columns: var(--icon) 1fr;
+      /* `gap: 24px` valía para una sola fila; entre las dos nuevas es demasiado. */
+      row-gap: 10px;
+    }
+
+    /* El icono cruza las dos filas para seguir centrado contra el bloque
+       entero, como estaba, en vez de contra el texto solo. */
+    :global(.work__icon) {
+      grid-row: 1 / -1;
+    }
+
+    .work__tag {
+      grid-column: 2;
+    }
+  }
+
+  @media (max-width: 705px) {
+    .work__picker {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 20px;
+    }
+  }
+
+  /* El padding lleva el área táctil a 44 px sin agrandar el icono. */
+  .work__pick {
+    cursor: none;
+    display: inline-flex;
+    padding: 9px;
+    border: 0;
+    background: none;
+    /*
+     * Aquí la opacidad sí vale: son imágenes, no texto. En .work__item se
+     * evita a propósito porque multiplicar el alfa del texto lo dejaba en
+     * 2.9:1 de contraste.
+     */
+    opacity: 0.32;
+    transition: opacity 0.3s ease;
+  }
+
+  .work__pick[aria-pressed='true'] {
+    opacity: 1;
+  }
+
+  :global(.work__pick-icon) {
+    display: block;
+    width: 34px;
+    height: 34px;
+    border-radius: 25%;
   }
 
   /* --- pantalla del teléfono --- */
@@ -495,10 +594,13 @@ const shotsByApp = new Map(shotSources);
     background: none;
     border: none;
     border-top: 1px solid var(--line);
-    padding: 22px 4px;
+    padding: 28px 4px;
     display: grid;
-    grid-template-columns: 34px 1fr auto;
-    gap: 18px;
+    /* Una sola fuente para el ancho de la columna y el lado del icono: si se
+       tocan por separado, el icono se sale de su celda o deja un hueco. */
+    --icon: clamp(58px, 6.8vw, 78px);
+    grid-template-columns: var(--icon) 1fr auto;
+    gap: 24px;
     align-items: baseline;
     /*
      * La app no seleccionada NO se atenúa con opacity: al multiplicar el alfa
@@ -521,9 +623,21 @@ const shotsByApp = new Map(shotSources);
     color: var(--fg);
   }
 
-  .work__num {
-    font-size: 11px;
-    color: var(--faint);
+  /*
+   * El icono ocupa la columna que antes llevaba el número de orden. La rejilla
+   * alinea por baseline —el nombre y el tag comparten línea base—, y una imagen
+   * no tiene: se alineaba por su borde inferior. Centrarla en la fila la deja a
+   * la altura del bloque de texto.
+   */
+  :global(.work__icon) {
+    width: var(--icon);
+    height: var(--icon);
+    align-self: center;
+    /* 25% del lado, que es el radio que ya usa .phone__icon (24px sobre 96) y
+       la proporción de un icono de iOS. En porcentaje y no en px para que los
+       dos tamaños den la misma curva. Los cinco assets vienen a sangre, así
+       que el recorte los redondea a todos por igual. */
+    border-radius: 25%;
   }
 
   .work__name {

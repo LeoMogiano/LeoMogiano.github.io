@@ -226,6 +226,17 @@ const shotsByApp = new Map(shotSources);
    */
   @media (max-width: 705px) {
     .work__item {
+      /*
+       * La fila deja de responder al dedo. Con el teléfono a 628px de alto
+       * encima de la lista, tocarla cambiaba una app cuyo resultado quedaba
+       * fuera de pantalla, y al recorrer la lista se activaba sin querer. El
+       * selector de iconos bajo el teléfono ya cubre ese trabajo, y ahí sí se
+       * ve lo que cambia.
+       *
+       * Solo puntero: el botón sigue existiendo, así que el teclado y la
+       * activación de VoiceOver lo siguen alcanzando.
+       */
+      pointer-events: none;
       grid-template-columns: var(--icon) 1fr;
       /* `gap: 24px` valía para una sola fila; entre las dos nuevas es demasiado. */
       row-gap: 10px;

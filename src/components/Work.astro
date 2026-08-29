@@ -1,6 +1,6 @@
 ---
 import type { Lang, Dict } from '../i18n';
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import SectionHeader from './ui/SectionHeader.astro';
 import Icon from './ui/Icon.astro';
 import PhoneFrame from './ui/PhoneFrame.astro';
@@ -19,8 +19,8 @@ const { lang, t } = Astro.props;
 const defaultApp = apps[0].num;
 
 /*
- * Las capturas no pasan por <Image> sino por getImage(), para poder guardarlas
- * en data-src y decidir nosotros cuándo se piden. Con loading="lazy" no
+ * Las capturas no pasan por <Image>: sus URLs se guardan en data-src para
+ * decidir nosotros cuándo se piden. Con loading="lazy" no
  * alcanza: el umbral de Chrome llega a unos 3000 px y el teléfono está a 1900
  * del inicio, así que cuatro de las cinco se descargaban —250 KB— en la carga
  * de la portada, para alguien que quizá nunca baja hasta aquí.
@@ -29,26 +29,28 @@ const defaultApp = apps[0].num;
  * al cargar. Las demás las pide src/scripts/app-shots.ts: las de la misma app,
  * al primer gesto sobre el carrusel; las de las otras, cuando se las elige.
  */
-const shotSources = await Promise.all(
-  apps
-    .filter((app) => app.shots?.length)
-    .map(async (app) => [
-      app.num,
-      await Promise.all(
-        app.shots!.map(async (shot) => {
-          const [small, large] = await Promise.all([
-            getImage({ src: shot, width: 300 }),
-            getImage({ src: shot, width: 600 }),
-          ]);
-          return {
-            src: small.src,
-            srcset: `${small.src} 300w, ${large.src} 600w`,
-            height: Math.round((300 * shot.height) / shot.width),
-          };
-        }),
-      ),
-    ] as const),
-);
+/*
+ * Se usa `shot.src` del propio import en vez de getImage(). Con el servicio de
+ * imagen en `noop` las dos rutas devuelven el mismo archivo, pero cada una lo
+ * emite con su hash: quedaban 21 capturas duplicadas —844 KB de los 1949 que
+ * pesaban las imágenes del build— y las del import no las referenciaba nadie.
+ *
+ * Tampoco hace falta srcset: prepare-assets.mjs ya deja las capturas a 564px,
+ * que sobre los ~282px CSS de la pantalla del teléfono es exactamente 2x. El
+ * srcset anterior anunciaba 300w y 600w sobre dos archivos de 564px los dos.
+ */
+const shotSources = apps
+  .filter((app) => app.shots?.length)
+  .map(
+    (app) =>
+      [
+        app.num,
+        app.shots!.map((shot) => ({
+          src: shot.src,
+          height: Math.round((300 * shot.height) / shot.width),
+        })),
+      ] as const,
+  );
 const shotsByApp = new Map(shotSources);
 ---
 
@@ -112,10 +114,7 @@ const shotsByApp = new Map(shotSources);
                 <div class="phone__slide" data-shots-slide>
                   <img
                     src={i === 0 && app.num === defaultApp ? shot.src : undefined}
-                    srcset={i === 0 && app.num === defaultApp ? shot.srcset : undefined}
                     data-shot-src={i === 0 && app.num === defaultApp ? undefined : shot.src}
-                    data-shot-srcset={i === 0 && app.num === defaultApp ? undefined : shot.srcset}
-                    sizes="300px"
                     width="300"
                     height={shot.height}
                     alt={t.shotAlt.replace('{app}', app.name).replace('{n}', String(i + 1))}

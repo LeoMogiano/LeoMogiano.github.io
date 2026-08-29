@@ -156,10 +156,8 @@ for (const shots of document.querySelectorAll<HTMLElement>('[data-app-shots]')) 
   const load = (only = 0) => {
     const pending = [...track.querySelectorAll<HTMLImageElement>('[data-shot-src]')];
     for (const img of only ? pending.slice(0, only) : pending) {
-      img.srcset = img.dataset.shotSrcset ?? '';
       img.src = img.dataset.shotSrc ?? '';
       delete img.dataset.shotSrc;
-      delete img.dataset.shotSrcset;
     }
   };
 

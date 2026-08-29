@@ -276,4 +276,49 @@ const spanOf = (job: (typeof jobs)[number]) => ({
     text-align: right;
     flex: none;
   }
+
+  /*
+   * Móvil. La sección se diseñó a un solo ancho y no tenía ninguna media
+   * query. En un teléfono de 390 px quedan 269 para el cuerpo de la fila, y la
+   * fecha —`flex: none` con `white-space: nowrap`— se llevaba ~125: al nombre
+   * del rol le sobraban ~130, así que "Mobile Developer" se partía en dos
+   * líneas y "Mobile & Web Developer" en tres. La solución no es encoger la
+   * tipografía sino dejar de pelear por la misma línea.
+   */
+  @media (max-width: 640px) {
+    /* El rango baja bajo el nombre del rol en vez de disputarle el ancho. */
+    .path__role-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+    }
+
+    .path__role-date {
+      text-align: left;
+    }
+
+    /* En las filas de un solo puesto, fecha y duración pasan juntas a una
+       línea propia, sangradas hasta el borde del texto para que la columna
+       del logo siga leyéndose como columna. */
+    .path__row--single {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .path__aside {
+      /* `flex: none` impediría encoger, y con el margen la línea desbordaría
+         el ancho de la fila. */
+      flex: 1 1 100%;
+      margin-left: calc(clamp(46px, 5vw, 60px) + clamp(16px, 2.4vw, 28px));
+      margin-top: 12px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .path__dur:not(.path__dur--floating) {
+      margin-top: 0;
+    }
+  }
 </style>

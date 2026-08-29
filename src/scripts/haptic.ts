@@ -1,92 +1,70 @@
 /**
- * Háptica suave en los cambios de estado.
+ * Háptica en iOS, y vibración donde exista `navigator.vibrate`.
  *
- * Safari en iOS no expone `navigator.vibrate`. El único elemento que dispara
- * háptica nativa es un `<input type="checkbox" switch>` (iOS 17.4+), así que se
- * mantiene uno oculto y se pulsa por código desde el gesto del usuario.
+ * Safari nunca implementó `navigator.vibrate`. El único disparador es un
+ * `<input type="checkbox" switch>` (iOS 17.4+), y desde iOS 26.5 Apple cerró la
+ * vía programática que usaban todas las librerías del truco: un `.click()` por
+ * código —sobre el input o sobre su `<label>`— ya no vibra. iOS exige un gesto
+ * real (`isTrusted`) que aterrice sobre el propio control.
  *
- * El retrato conserva su superposición propia: ahí el switch va ENCIMA del
- * elemento y lo toca el dedo de verdad, que es el camino ya probado en
- * dispositivo. El resto de puntos usa el switch compartido, más barato —no hay
- * que superponer nada— pero que depende de que iOS acepte un click sintético
- * dentro de un gesto. Si en un iPhone real resulta que no vibra, el arreglo es
- * pasarlos al mismo patrón del retrato, no volver a `navigator.vibrate`.
+ * Así que el switch no se pulsa: se pone DEBAJO del dedo. A cada elemento con
+ * `data-haptic` se le inyecta uno invisible, estirado sobre su caja. El toque
+ * cae en el switch —iOS vibra— y el click burbujea al botón que lo contiene,
+ * que sigue haciendo lo suyo sin enterarse.
  *
- * Se dispara solo en cambios de estado —elegir app, cambiar de tema, reiniciar
- * el pong—, no en navegación: un golpecito por cada enlace es ruido, no señal.
+ * Nota de validez: `<button>` no admite contenido interactivo, y esto mete un
+ * input dentro. Es la única técnica que funciona tras el parche, y es la que
+ * usan las librerías vivas. El coste se acota con `aria-hidden` y
+ * `tabIndex = -1`: el árbol de accesibilidad y el orden de tabulación quedan
+ * exactamente como estaban.
  */
 const isIOS =
   /iPad|iPhone|iPod/.test(navigator.userAgent) ||
   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-/**
- * Disparador compartido: un `<label>` que envuelve al switch.
- *
- * Pulsar el `<input switch>` por código NO dispara la háptica —probado en
- * dispositivo—. Lo que sí usan las librerías conocidas del truco es pulsar el
- * `<label>` asociado, que activa el control por la vía que iOS considera
- * legítima. El retrato no necesita nada de esto: ahí el switch va encima del
- * elemento y lo toca el dedo de verdad, que es el camino seguro.
- *
- * Se construye al cargar y solo en iOS: insertar un nodo dentro del handler
- * del click mete una invalidación de estilo justo en el gesto.
- */
-let trigger: HTMLLabelElement | null = null;
+/** Switch transparente que cubre el elemento y recibe el toque en su lugar. */
+function overlay(el: HTMLElement, round = false): void {
+  if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
 
-function buildTrigger(): HTMLLabelElement {
-  const label = document.createElement('label');
   const input = document.createElement('input');
   input.type = 'checkbox';
   input.setAttribute('switch', '');
+  input.setAttribute('aria-hidden', 'true');
   input.tabIndex = -1;
-  label.append(input);
-  label.setAttribute('aria-hidden', 'true');
-  /* Ni `display:none` ni `visibility:hidden`: sin caja de render el control no
-     llega a activarse. Se saca de la vista con 1px y opacidad 0. */
-  Object.assign(label.style, {
-    position: 'fixed',
-    bottom: '0',
-    left: '0',
-    width: '1px',
-    height: '1px',
+
+  Object.assign(input.style, {
+    position: 'absolute',
+    inset: '0',
+    width: '100%',
+    height: '100%',
     margin: '0',
     opacity: '0',
-    overflow: 'hidden',
-    pointerEvents: 'none',
+    zIndex: '2',
+    touchAction: 'manipulation',
+    cursor: 'none',
   });
-  document.body.append(label);
-  return label;
+  /* Recorta el área al círculo del retrato en vez de a su cuadrado. */
+  if (round) input.style.clipPath = 'inset(0 round 999px)';
+  input.style.setProperty('-webkit-tap-highlight-color', 'transparent');
+
+  el.append(input);
 }
 
 if (isIOS) {
-  /* `body` ya existe: los scripts de página van con type="module", que difiere
-     hasta después de parsear el documento. */
-  trigger = buildTrigger();
+  for (const el of document.querySelectorAll<HTMLElement>('[data-haptic]')) overlay(el);
+} else {
+  /*
+   * Fuera de iOS sí hay API. Delegado y en fase de captura, para que corra
+   * aunque el handler del elemento llame a stopPropagation().
+   */
+  document.addEventListener(
+    'click',
+    (event) => {
+      if ((event.target as Element | null)?.closest('[data-haptic]')) navigator.vibrate?.(8);
+    },
+    true,
+  );
 }
-
-/** Un golpecito corto. Silencioso donde la plataforma no lo soporta. */
-export function haptic(): void {
-  if (trigger) {
-    trigger.click();
-    return;
-  }
-  navigator.vibrate?.(8);
-}
-
-/*
- * Delegado: cualquier elemento con `data-haptic` vibra al pulsarse. Así los
- * puntos se declaran en el marcado y ningún otro script tiene que importar
- * esto. Va en fase de captura para que corra aunque el handler del elemento
- * llame a stopPropagation().
- */
-document.addEventListener(
-  'click',
-  (event) => {
-    const target = event.target as Element | null;
-    if (target?.closest('[data-haptic]')) haptic();
-  },
-  true,
-);
 
 /* --- retrato: superposición propia, ver cabecera --- */
 

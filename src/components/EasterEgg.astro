@@ -41,13 +41,38 @@ const floaters = [
   .egg {
     display: none;
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 90;
     align-items: center;
     justify-content: center;
     background: rgba(6, 6, 8, .82);
     backdrop-filter: blur(10px);
     animation: fadeIn .5s ease both;
+
+    /*
+     * `inset: 0` medía el viewport grande —el que hay con la barra de Safari
+     * escondida— y ese alto en pantalla no existe mientras la barra está
+     * desplegada: la polaroid se centraba contra 932 px de los que los últimos
+     * 100 estaban tapados, así que quedaba alta y el "toca para cerrar" caía
+     * detrás de la barra.
+     *
+     * svh es el viewport chico: el que queda con la barra puesta, el más
+     * pequeño que el navegador puede dar. dvh no sirve —cambia al esconderse la
+     * barra y el modal saltaría a mitad de gesto—, y vh es el grande otra vez.
+     *
+     * El padding es lo otro: con viewport-fit=cover un fixed en top:0 arranca
+     * DEBAJO de la barra de estado, no después. Las cuatro insets dejan el
+     * contenido dentro de lo que se ve, y en escritorio valen cero.
+     */
+    height: 100svh;
+    box-sizing: border-box;
+    padding:
+      env(safe-area-inset-top)
+      env(safe-area-inset-right)
+      env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
   }
 
   .egg:not([hidden]) {
@@ -100,7 +125,13 @@ const floaters = [
 
   .egg__close {
     position: absolute;
-    bottom: 6vh;
+    /*
+     * Un absolute se posiciona contra la caja de padding, o sea contra el borde
+     * del .egg entero: el padding no lo descuenta. Pero ese borde ya es el
+     * arranque de la barra de Safari, así que estos ~50 px son separación real.
+     * En vh medía contra el viewport grande y el texto se iba detrás de la barra.
+     */
+    bottom: 6svh;
     font-family: var(--label);
     font-size: 10px;
     letter-spacing: .18em;

@@ -705,7 +705,13 @@ const shotsByApp = new Map(shotSources);
   .shotsfs {
     width: 100%;
     max-width: none;
-    height: 100dvh;
+    /*
+     * svh, no dvh: es el viewport con la barra de Safari desplegada, el más
+     * chico que puede dar. Con dvh el visor mide el alto del momento y salta
+     * cuando la barra se esconde o vuelve —justo lo que pasa al arrastrar—, y
+     * con vh mediría el grande y la barra le taparía los puntos.
+     */
+    height: 100svh;
     max-height: none;
     margin: 0;
     padding: 0;

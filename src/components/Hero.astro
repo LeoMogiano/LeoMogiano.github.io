@@ -11,6 +11,10 @@ const { t } = Astro.props;
 
 // Ángulo y delay de cada chispa del anillo (pares 0s, impares 0.035s).
 const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
+
+/* Un CV por idioma. El japonés es un 職務経歴書 —el formato que se espera allá
+   para un perfil con experiencia—, no una traducción del inglés. */
+const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
 ---
 
 <section id="top" class="hero">
@@ -70,6 +74,21 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
           {s.label}
         </Pill>
       ))}
+      {/* Se abre en una pestaña, no se descarga a la fuerza: casi nadie guarda
+          un PDF que no ha visto, y en el teléfono una descarga a ciegas acaba
+          en una carpeta que nadie abre. */}
+      <Pill
+        as="a"
+        variant="card"
+        icon="file-down"
+        class="hero__cv"
+        href={cvHref}
+        target="_blank"
+        rel="noopener"
+        aria-label={t.cvAria}
+      >
+        {t.cvLabel}
+      </Pill>
     </div>
 
     <div class="hero__player" data-player>
@@ -362,6 +381,13 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     max-width: 44ch;
     text-wrap: pretty;
   }
+  /* La única de la fila que no es una red social: lleva el borde en acento
+     para que se lea como acción y no como un enlace más. */
+  :global(.pill.hero__cv) {
+    border-color: color-mix(in oklab, var(--accent) 55%, transparent);
+    color: var(--fg);
+  }
+
   .hero__socials {
     display: flex;
     flex-wrap: wrap;

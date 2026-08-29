@@ -47,7 +47,20 @@ const JOBS = [
   { in: 'apps/egx-one.webp', out: 'apps/egx-one.webp', mode: 'copy' },
   { in: 'apps/validme.webp', out: 'apps/validme.webp', mode: 'copy' },
   { in: 'apps/egx-staff.png', out: 'apps/egx-staff.webp', mode: 'lossless', width: 192 },
-  { in: 'apps/presto.png', out: 'apps/presto.webp', mode: 'lossless', width: 192 },
+  /*
+   * Presto viene con margen blanco pintado dentro del PNG y un lienzo de
+   * 546x578 que no es cuadrado: el icono real son 496x496 en (27,47). Sin
+   * recortar, el asset salía a 192x203 y el margen blanco quedaba dentro de
+   * la imagen, donde ningún border-radius lo alcanza. Los otros cuatro vienen
+   * a sangre y no necesitan recorte.
+   */
+  {
+    in: 'apps/presto.png',
+    out: 'apps/presto.webp',
+    mode: 'lossless',
+    width: 192,
+    crop: { left: 27, top: 47, width: 496, height: 496 },
+  },
   { in: 'apps/skeletonpdf.png', out: 'apps/skeletonpdf.webp', mode: 'lossless', width: 192 },
   // Capturas de EGX One — la pantalla del teléfono mide ~282 px CSS
   // La extensión va por captura: las dos últimas de EGX Staff son fotos del

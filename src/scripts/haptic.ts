@@ -1,14 +1,76 @@
 /**
- * Vibración al tocar el retrato, solo en iOS.
+ * Háptica suave en los cambios de estado.
  *
  * Safari en iOS no expone `navigator.vibrate`. El único elemento que dispara
- * háptica nativa es un `<input type="checkbox" switch>`, así que se superpone
- * uno transparente sobre el retrato: el dedo toca el switch (iOS vibra) y el
- * click se reenvía a la imagen.
+ * háptica nativa es un `<input type="checkbox" switch>` (iOS 17.4+), así que se
+ * mantiene uno oculto y se pulsa por código desde el gesto del usuario.
+ *
+ * El retrato conserva su superposición propia: ahí el switch va ENCIMA del
+ * elemento y lo toca el dedo de verdad, que es el camino ya probado en
+ * dispositivo. El resto de puntos usa el switch compartido, más barato —no hay
+ * que superponer nada— pero que depende de que iOS acepte un click sintético
+ * dentro de un gesto. Si en un iPhone real resulta que no vibra, el arreglo es
+ * pasarlos al mismo patrón del retrato, no volver a `navigator.vibrate`.
+ *
+ * Se dispara solo en cambios de estado —elegir app, cambiar de tema, reiniciar
+ * el pong—, no en navegación: un golpecito por cada enlace es ruido, no señal.
  */
 const isIOS =
   /iPad|iPhone|iPod/.test(navigator.userAgent) ||
   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+/** Switch compartido, fuera de la vista y fuera del árbol de accesibilidad. */
+let shared: HTMLInputElement | null = null;
+
+function sharedSwitch(): HTMLInputElement {
+  if (shared) return shared;
+  const el = document.createElement('input');
+  el.type = 'checkbox';
+  el.setAttribute('switch', '');
+  el.setAttribute('aria-hidden', 'true');
+  el.tabIndex = -1;
+  /* Ni `display:none` ni `visibility:hidden`: un elemento sin caja de render no
+     dispara la háptica. Se saca de la vista con tamaño 1px y opacidad 0. */
+  Object.assign(el.style, {
+    position: 'fixed',
+    bottom: '0',
+    left: '0',
+    width: '1px',
+    height: '1px',
+    margin: '0',
+    opacity: '0',
+    pointerEvents: 'none',
+  });
+  document.body.append(el);
+  shared = el;
+  return el;
+}
+
+/** Un golpecito corto. Silencioso donde la plataforma no lo soporta. */
+export function haptic(): void {
+  if (isIOS) {
+    sharedSwitch().click();
+    return;
+  }
+  navigator.vibrate?.(8);
+}
+
+/*
+ * Delegado: cualquier elemento con `data-haptic` vibra al pulsarse. Así los
+ * puntos se declaran en el marcado y ningún otro script tiene que importar
+ * esto. Va en fase de captura para que corra aunque el handler del elemento
+ * llame a stopPropagation().
+ */
+document.addEventListener(
+  'click',
+  (event) => {
+    const target = event.target as Element | null;
+    if (target?.closest('[data-haptic]')) haptic();
+  },
+  true,
+);
+
+/* --- retrato: superposición propia, ver cabecera --- */
 
 const portrait = document.querySelector<HTMLElement>('[data-portrait]');
 const host = portrait?.parentElement;
@@ -45,5 +107,3 @@ if (isIOS && portrait && host && !host.querySelector('[data-haptic-trigger]')) {
 
   host.append(trigger);
 }
-
-export {};

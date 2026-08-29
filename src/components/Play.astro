@@ -26,7 +26,7 @@ const { t } = Astro.props;
       </span>
     </div>
     <p id="pong-help" class="sr-only">{t.pongHelp}</p>
-    <Pill as="button" variant="card" icon="reset" class="play__reset" type="button" data-pong-reset>{t.resetBtn}</Pill>
+    <Pill as="button" variant="card" icon="reset" class="play__reset" type="button" data-pong-reset data-haptic>{t.resetBtn}</Pill>
   </div>
   <div class="play__phone">
     <PhoneFrame width="min(280px,80vw)" screen="solid">

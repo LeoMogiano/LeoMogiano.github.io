@@ -348,6 +348,11 @@ const shotsByApp = new Map(shotSources);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease;
+    /* Negro de bisel en toda la capa, no solo en cada slide: el hueco de
+       subpíxel puede caer entre dos slides o al final del track, donde el
+       fondo del slide ya no llega y asomaba la pantalla, beige en tema
+       claro. */
+    background: #08080a;
   }
 
   [data-app-current='01'] .phone__shots[data-app-shots='01'],

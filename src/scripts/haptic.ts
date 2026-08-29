@@ -19,11 +19,16 @@ const isIOS =
   /iPad|iPhone|iPod/.test(navigator.userAgent) ||
   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-/** Switch compartido, fuera de la vista y fuera del árbol de accesibilidad. */
+/**
+ * Switch compartido, fuera de la vista y fuera del árbol de accesibilidad.
+ *
+ * Se crea al cargar, no en el primer toque: insertar un nodo dentro del handler
+ * del click mete una invalidación de estilo justo en el gesto, que es donde
+ * menos se puede permitir. Solo se construye en iOS; en el resto no hace falta.
+ */
 let shared: HTMLInputElement | null = null;
 
-function sharedSwitch(): HTMLInputElement {
-  if (shared) return shared;
+function buildSwitch(): HTMLInputElement {
   const el = document.createElement('input');
   el.type = 'checkbox';
   el.setAttribute('switch', '');
@@ -42,14 +47,19 @@ function sharedSwitch(): HTMLInputElement {
     pointerEvents: 'none',
   });
   document.body.append(el);
-  shared = el;
   return el;
+}
+
+if (isIOS) {
+  /* `body` ya existe: los scripts de página van con type="module", que difiere
+     hasta después de parsear el documento. */
+  shared = buildSwitch();
 }
 
 /** Un golpecito corto. Silencioso donde la plataforma no lo soporta. */
 export function haptic(): void {
-  if (isIOS) {
-    sharedSwitch().click();
+  if (shared) {
+    shared.click();
     return;
   }
   navigator.vibrate?.(8);

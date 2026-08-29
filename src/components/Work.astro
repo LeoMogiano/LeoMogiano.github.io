@@ -259,24 +259,28 @@ const shotsByApp = new Map(shotSources);
     padding: 9px;
     border: 0;
     background: none;
-    /*
-     * Aquí la opacidad sí vale: son imágenes, no texto. En .work__item se
-     * evita a propósito porque multiplicar el alfa del texto lo dejaba en
-     * 2.9:1 de contraste.
-     */
-    opacity: 0.32;
-    transition: opacity 0.3s ease;
   }
 
-  .work__pick[aria-pressed='true'] {
-    opacity: 1;
-  }
-
+  /*
+   * La opacidad va en el icono, no en el botón: `opacity` se aplica también al
+   * outline, y con 0.32 en el botón el anillo de :focus-visible se pintaba al
+   * 32% en los cuatro no seleccionados. Un indicador de foco tiene que ser
+   * visible (WCAG 2.4.11).
+   *
+   * Aquí sí vale atenuar porque son imágenes. En .work__item se evita a
+   * propósito: multiplicar el alfa del texto lo dejaba en 2.9:1.
+   */
   :global(.work__pick-icon) {
     display: block;
     width: 34px;
     height: 34px;
     border-radius: 25%;
+    opacity: 0.32;
+    transition: opacity 0.3s ease;
+  }
+
+  .work__pick[aria-pressed='true'] :global(.work__pick-icon) {
+    opacity: 1;
   }
 
   /* --- pantalla del teléfono --- */

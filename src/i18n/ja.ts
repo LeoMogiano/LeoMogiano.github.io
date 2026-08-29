@@ -7,6 +7,7 @@ export const ja: Dict = {
   langAria: "言語を切り替える",
   themeAria: "表示モードを切り替える",
   role: "モバイル・テックリード",
+  ogImageAlt: "Leo Mogiano、モバイル・テックリード — iOS、Android、Flutter",
   clockTitle: "ボリビアの現地時間",
   nav: ["ホーム", "アプリ", "経歴", "プレイ", "連絡"],
   photoAlt: "レオ・モヒアーノのポートレート",

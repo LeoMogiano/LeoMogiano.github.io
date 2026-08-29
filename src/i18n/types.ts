@@ -7,6 +7,7 @@ export interface Dict {
   langAria: string;
   themeAria: string;
   role: string;
+  ogImageAlt: string;
   clockTitle: string;
   nav: readonly [string, string, string, string, string];
   photoAlt: string;

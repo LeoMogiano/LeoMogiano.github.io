@@ -20,23 +20,30 @@ const isIOS =
   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 /**
- * Switch compartido, fuera de la vista y fuera del árbol de accesibilidad.
+ * Disparador compartido: un `<label>` que envuelve al switch.
  *
- * Se crea al cargar, no en el primer toque: insertar un nodo dentro del handler
- * del click mete una invalidación de estilo justo en el gesto, que es donde
- * menos se puede permitir. Solo se construye en iOS; en el resto no hace falta.
+ * Pulsar el `<input switch>` por código NO dispara la háptica —probado en
+ * dispositivo—. Lo que sí usan las librerías conocidas del truco es pulsar el
+ * `<label>` asociado, que activa el control por la vía que iOS considera
+ * legítima. El retrato no necesita nada de esto: ahí el switch va encima del
+ * elemento y lo toca el dedo de verdad, que es el camino seguro.
+ *
+ * Se construye al cargar y solo en iOS: insertar un nodo dentro del handler
+ * del click mete una invalidación de estilo justo en el gesto.
  */
-let shared: HTMLInputElement | null = null;
+let trigger: HTMLLabelElement | null = null;
 
-function buildSwitch(): HTMLInputElement {
-  const el = document.createElement('input');
-  el.type = 'checkbox';
-  el.setAttribute('switch', '');
-  el.setAttribute('aria-hidden', 'true');
-  el.tabIndex = -1;
-  /* Ni `display:none` ni `visibility:hidden`: un elemento sin caja de render no
-     dispara la háptica. Se saca de la vista con tamaño 1px y opacidad 0. */
-  Object.assign(el.style, {
+function buildTrigger(): HTMLLabelElement {
+  const label = document.createElement('label');
+  const input = document.createElement('input');
+  input.type = 'checkbox';
+  input.setAttribute('switch', '');
+  input.tabIndex = -1;
+  label.append(input);
+  label.setAttribute('aria-hidden', 'true');
+  /* Ni `display:none` ni `visibility:hidden`: sin caja de render el control no
+     llega a activarse. Se saca de la vista con 1px y opacidad 0. */
+  Object.assign(label.style, {
     position: 'fixed',
     bottom: '0',
     left: '0',
@@ -44,22 +51,23 @@ function buildSwitch(): HTMLInputElement {
     height: '1px',
     margin: '0',
     opacity: '0',
+    overflow: 'hidden',
     pointerEvents: 'none',
   });
-  document.body.append(el);
-  return el;
+  document.body.append(label);
+  return label;
 }
 
 if (isIOS) {
   /* `body` ya existe: los scripts de página van con type="module", que difiere
      hasta después de parsear el documento. */
-  shared = buildSwitch();
+  trigger = buildTrigger();
 }
 
 /** Un golpecito corto. Silencioso donde la plataforma no lo soporta. */
 export function haptic(): void {
-  if (shared) {
-    shared.click();
+  if (trigger) {
+    trigger.click();
     return;
   }
   navigator.vibrate?.(8);

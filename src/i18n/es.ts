@@ -7,6 +7,7 @@ export const es: Dict = {
   langAria: "Cambiar idioma",
   themeAria: "Cambiar modo",
   role: "Tech Lead Mobile",
+  ogImageAlt: "Leo Mogiano, Tech Lead Mobile — iOS, Android y Flutter",
   clockTitle: "Hora en Bolivia",
   nav: ["Inicio", "Apps", "Trayectoria", "Play", "Contacto"],
   photoAlt: "Retrato de Leo Mogiano",

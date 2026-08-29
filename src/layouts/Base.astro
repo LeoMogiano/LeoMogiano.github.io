@@ -1,6 +1,7 @@
 ---
 import type { Dict, Lang } from '../i18n';
 import { langs, langPrefix } from '../i18n';
+import { socials } from '../data/socials';
 import '../styles/tokens.css';
 import '../styles/fonts.css';
 import '../styles/icons.css';
@@ -37,6 +38,28 @@ const META: Record<Lang, { title: string; description: string; ogDescription: st
 
 const meta = META[lang];
 const canonical = new URL(`${langPrefix(lang)}/`, Astro.site).href;
+
+/* og:image tiene que ser absoluta: los rastreadores de X, LinkedIn y WhatsApp
+   no resuelven rutas relativas. */
+const ogImage = new URL('/og.jpg', Astro.site).href;
+
+/* Datos estructurados. Es lo que le permite a Google entender que la página es
+   una persona con un puesto y un empleador, en vez de texto suelto. */
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Leo Mogiano',
+  url: canonical,
+  image: ogImage,
+  jobTitle: t.role,
+  worksFor: { '@type': 'Organization', name: 'Datec Corp' },
+  knowsAbout: ['Flutter', 'Swift', 'Kotlin', 'iOS', 'Android'],
+  /* Derivado de socials.ts, no repetido: escrito a mano ya divergía —le
+     faltaba la barra final del enlace de LinkedIn— y un `sameAs` que no
+     coincide con el perfil real no le sirve a Google para vincularlos. */
+  sameAs: socials.filter((s) => s.external).map((s) => s.href),
+  email: socials.find((s) => s.href.startsWith('mailto:'))?.href,
+};
 ---
 
 <!doctype html>
@@ -71,7 +94,17 @@ const canonical = new URL(`${langPrefix(lang)}/`, Astro.site).href;
     <meta property="og:description" content={meta.ogDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={t.code.replace('-', '_')} />
+    <meta property="og:site_name" content="Leo Mogiano" />
+    {/* Sin esto, `summary_large_image` prometía una imagen que no existía y la
+        tarjeta salía sin nada al compartir el enlace. */}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={t.ogImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={t.ogImageAlt} />
 
     {/* Las dos caras visibles en el primer viewport. El resto va con swap. */}
     <link
@@ -97,6 +130,12 @@ const canonical = new URL(`${langPrefix(lang)}/`, Astro.site).href;
         document.documentElement.dataset.t = theme;
       })();
     </script>
+
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(personLd)}
+    />
 
     <slot name="head" />
   </head>

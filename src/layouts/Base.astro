@@ -48,8 +48,12 @@ const canonical = new URL(`${langPrefix(lang)}/`, Astro.site).href;
     <meta name="description" content={meta.description} />
     <meta name="author" content="Leo Mogiano" />
 
-    {/* Lo lee el script de tema para teñir la barra de Safari. */}
-    <meta id="tc" name="theme-color" content="#0a0a0a" />
+    {/*
+      Sin <meta theme-color> a propósito: con él, Safari iOS pinta la barra
+      superior de un color sólido que no coincide con el header translúcido y
+      deja una costura visible. Sin él, muestrea el borde del viewport (el
+      background de <html>) y la tiñe de forma continua.
+    */}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {/* iOS ignora los favicon SVG: para la pantalla de inicio hace falta PNG. */}
@@ -91,7 +95,6 @@ const canonical = new URL(`${langPrefix(lang)}/`, Astro.site).href;
           if (saved === 'light' || saved === 'dark') theme = saved;
         } catch {}
         document.documentElement.dataset.t = theme;
-        if (theme === 'light') document.querySelector('#tc')?.setAttribute('content', '#e9e4da');
       })();
     </script>
 

@@ -2,11 +2,8 @@
  * Tema claro/oscuro. El estado vive en `html[data-t]`, que el script bloqueante
  * del <head> ya fijó antes del primer frame; aquí solo se atiende el toggle.
  */
-const THEME_COLOR = { dark: '#0a0a0a', light: '#e9e4da' } as const;
-
 function apply(theme: 'dark' | 'light') {
   document.documentElement.dataset.t = theme;
-  document.querySelector('#tc')?.setAttribute('content', THEME_COLOR[theme]);
   try {
     localStorage.setItem('lm-theme', theme);
   } catch {

@@ -73,23 +73,10 @@ const langHref = langPrefix(nextLang(lang)) + '/';
     /* El legacy declaraba el safe-area ANTES del atajo `padding`, así que el
        atajo lo pisaba y el notch nunca se respetaba. Aquí se suma. */
     padding-top: calc(16px + env(safe-area-inset-top));
+    /* Sin fondo ni blur a propósito. Safari iOS tiñe su barra de estado
+       muestreando el borde del viewport: cualquier relleno aquí reaparece
+       arriba como una franja. Transparente, el contenido pasa por debajo. */
     background: transparent;
-    border-bottom: 1px solid var(--line);
-    isolation: isolate;
-  }
-
-  /* El fondo va en un pseudo-elemento: Safari tiñe la barra de estado
-     muestreando el borde del viewport, y un header con blur real ahí
-     produce ese tinte. Con el blur en un ::before que no toca el borde
-     se evita. */
-  .header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    background: color-mix(in oklab, var(--bg) 78%, transparent);
   }
 
   .header__brand {

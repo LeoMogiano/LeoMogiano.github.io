@@ -32,6 +32,7 @@ const langHref = langPrefix(nextLang(lang)) + '/';
         class="nav__link"
         href={'#' + item.id}
         data-nav-link
+        data-haptic
         data-section={item.id}
       >
         <Icon name={item.icon} size="14px" />
@@ -44,6 +45,7 @@ const langHref = langPrefix(nextLang(lang)) + '/';
       aria-label={`${t.langAria}: ${t.langNext}`}
       title={t.langNext}
       data-lang-link
+      data-haptic
     >
       {t.langLabel}
     </a>

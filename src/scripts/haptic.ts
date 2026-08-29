@@ -47,6 +47,17 @@ function overlay(el: HTMLElement, round = false): void {
   if (round) input.style.clipPath = 'inset(0 round 999px)';
   input.style.setProperty('-webkit-tap-highlight-color', 'transparent');
 
+  /*
+   * El toque cae en el switch, y el click burbujea, pero la activación por
+   * defecto no: la corre el ancestro activable más cercano, que ahora es el
+   * propio checkbox. A un <button> con su handler delegado eso le da igual,
+   * pero un <a> se quedaría sin navegar. Se le reenvía el click: el `target`
+   * pasa a ser el enlace, no el input, así que no hay recursión.
+   */
+  if (el instanceof HTMLAnchorElement) {
+    input.addEventListener('click', () => el.click());
+  }
+
   el.append(input);
 }
 

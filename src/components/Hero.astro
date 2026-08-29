@@ -114,6 +114,23 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     align-items: center;
     gap: 12px;
   }
+
+  /*
+   * En el teléfono el 11vh de arriba se leía como un hueco muerto: la cabecera
+   * no es sticky, así que su altura ya separa, y encima de ella no hay nada
+   * que respirar. Se recorta a la mitad, y el retrato baja con él para no
+   * despegarse del saludo.
+   */
+  @media (max-width: 705px) {
+    .hero {
+      padding-top: 5vh;
+    }
+
+    .hero__figure {
+      top: 3vh;
+    }
+  }
+
   .hero__portrait-frame {
     position: relative;
     display: block;

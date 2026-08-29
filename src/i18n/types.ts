@@ -54,7 +54,6 @@ export interface Dict {
   fromBolivia: string;
   eggCaption: string;
   eggClose: string;
-  skipToContent: string;
   marqueePause: string;
   marqueePlay: string;
   appSelected: string;

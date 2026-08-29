@@ -81,33 +81,6 @@ html[data-t='light'] body::before {
 }
 
 /*
- * Saltar al contenido. Sin esto, quien navega con teclado atraviesa las cinco
- * píldoras del nav y los dos botones antes de llegar al texto, en cada carga.
- * Fuera de pantalla hasta que recibe foco.
- */
-.skip {
-  position: fixed;
-  top: 8px;
-  left: 8px;
-  z-index: 100;
-  transform: translateY(-200%);
-  padding: 12px 20px;
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--label);
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition: transform 0.2s ease;
-}
-
-.skip:focus {
-  transform: translateY(0);
-}
-
-/*
  * El puntero se oculta porque el rastro del canvas hace de cursor. Si ese
  * rastro no existe —reduced-motion, o JS caído— hay que devolverlo: sin
  * puntero y sin rastro, el sitio es inusable.

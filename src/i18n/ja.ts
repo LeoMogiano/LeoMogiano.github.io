@@ -54,7 +54,6 @@ export const ja: Dict = {
   fromBolivia: "🇧🇴 ボリビアから、世界へ",
   eggCaption: "きみへ、いつまでも ❤️",
   eggClose: "タップで閉じる",
-  skipToContent: "本文へスキップ",
   marqueePause: "スクロールを一時停止",
   marqueePlay: "スクロールを再開",
   appSelected: "表示中",

@@ -180,9 +180,11 @@ const langHref = langPrefix(nextLang(lang)) + '/';
     border-radius: 50%;
   }
 
-  .header__lang:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+  @media (hover: hover) and (pointer: fine) {
+    .header__lang:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
   }
 
   .header__theme {
@@ -202,9 +204,11 @@ const langHref = langPrefix(nextLang(lang)) + '/';
     transition: border-color 0.3s ease, color 0.3s ease;
   }
 
-  .header__theme:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+  @media (hover: hover) and (pointer: fine) {
+    .header__theme:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
   }
 
   /* Sol por defecto (tema oscuro), luna cuando html[data-t="light"]. */

@@ -113,9 +113,11 @@ const {
     text-transform: uppercase;
   }
 
-  a.pill:hover,
-  button.pill:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+  @media (hover: hover) and (pointer: fine) {
+    a.pill:hover,
+    button.pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
   }
 </style>

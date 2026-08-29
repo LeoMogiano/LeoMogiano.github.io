@@ -142,9 +142,13 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     transition: filter .5s ease, transform .5s ease;
     cursor: none;
   }
-  .hero__portrait:hover {
-    filter: none;
-    transform: scale(1.04);
+  /* Ver la nota de .slide-row en global.css: en táctil el :hover se queda
+     pegado y el retrato se quedaba ampliado tras cada toque. */
+  @media (hover: hover) and (pointer: fine) {
+    .hero__portrait:hover {
+      filter: none;
+      transform: scale(1.04);
+    }
   }
 
   /* Anillo de chispas: arranca apagado, el script lo dispara por tap */

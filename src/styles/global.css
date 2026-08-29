@@ -150,9 +150,16 @@ main:focus {
   contain: paint;
 }
 
-.slide-row:hover {
-  transform: translateX(14px);
-  will-change: transform;
+/*
+ * Solo donde hay puntero real. En táctil, iOS aplica :hover al tocar y lo deja
+ * puesto hasta que se toca otra cosa: las filas se quedaban corridas 14px y
+ * estorbaban al recorrer la lista con el dedo.
+ */
+@media (hover: hover) and (pointer: fine) {
+  .slide-row:hover {
+    transform: translateX(14px);
+    will-change: transform;
+  }
 }
 
 @keyframes marquee {

@@ -35,18 +35,24 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
       <span class="hero__status" aria-label={t.statusAria} title={t.statusTitle}>😺</span>
     </span>
     <figcaption class="hero__caption">{t.role}</figcaption>
+    <span class="hero__pills hero__pills--wide">
+      <Pill as="span" icon="android" iconSize="14px" class="hero__brand" aria-label="Android" />
+      <Pill as="span" icon="ios" iconSize="14px" class="hero__brand" aria-label="Apple" />
+      <Pill as="span" icon="flutter" iconSize="15px" class="hero__brand" aria-label="Flutter" />
+    </span>
   </figure>
 
   <div class="hero__greet">
     <span class="hero__dot"></span>
     <span class="hero__greet-text">{t.greetA}<em class="hero__em">Leo Mogiano</em>{t.greetB} <span class="hero__wave">👋</span></span>
-    <span class="hero__pills">
-      <Pill as="span" variant="default" icon="ios">iOS</Pill>
-      <Pill as="span" variant="default" icon="android">Android</Pill>
+    <span class="hero__pills hero__pills--narrow">
+      <Pill as="span" icon="android" iconSize="17px" class="hero__brand" aria-label="Android" />
+      <Pill as="span" icon="ios" iconSize="17px" class="hero__brand" aria-label="Apple" />
+      <Pill as="span" icon="flutter" iconSize="19px" class="hero__brand" aria-label="Flutter" />
     </span>
   </div>
 
-  <h1 class="hero__title">Mobile<br /><em class="hero__em">Developer</em><span class="hero__sup"> ／ iOS · Android · Flutter</span></h1>
+  <h1 class="hero__title">Mobile<br /><em class="hero__em">Developer</em><span class="hero__sup"> ／ iOS · Android</span></h1>
 
   <div class="hero__grid">
     <p class="hero__bio">{t.bio}</p>
@@ -127,7 +133,7 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     }
 
     .hero__figure {
-      top: 3vh;
+      top: 5vh;
     }
   }
 
@@ -155,7 +161,7 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     object-position: 50% 22%;
     border-radius: 50%;
     border: 1px solid var(--line);
-    filter: grayscale(1) contrast(1.05);
+    filter: contrast(1.05);
     transition: filter .5s ease, transform .5s ease;
     cursor: none;
   }
@@ -163,7 +169,6 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
      pegado y el retrato se quedaba ampliado tras cada toque. */
   @media (hover: hover) and (pointer: fine) {
     .hero__portrait:hover {
-      filter: none;
       transform: scale(1.04);
     }
   }
@@ -266,11 +271,60 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
   .hero__wave {
     font-style: normal;
   }
+
+  /*
+   * Dos copias, una por breakpoint, en vez de una que se mueva: en ancho van
+   * bajo el retrato —foto, rol y plataformas como una ficha— y en estrecho el
+   * retrato es un círculo pequeño arriba a la derecha donde no cabe nada
+   * debajo, así que ahí siguen junto al saludo. `display: none` las saca del
+   * árbol de accesibilidad, así que el lector nunca las oye dos veces.
+   */
   .hero__pills {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+  }
+
+  .hero__pills--narrow {
+    display: none;
     margin-left: 4px;
+  }
+
+  /* Centradas bajo la foto, en el mismo eje que el rol. En estrecho mandan el
+     saludo y el margen izquierdo. */
+  .hero__pills--wide {
+    margin-top: 2px;
+  }
+
+  @media (max-width: 705px) {
+    .hero__pills--wide {
+      display: none;
+    }
+
+    .hero__pills--narrow {
+      display: inline-flex;
+    }
+  }
+
+  /*
+   * `.pill.hero__brand`, no `.hero__brand` a secas: Pill trae su propio
+   * `background: transparent` con la misma especificidad, y el orden de los
+   * bundles decidía quién ganaba. Con las dos clases no hay empate.
+   *
+   * Solo el logo, sin texto: el <h1> ya dice «iOS · Android» y repetirlo aquí
+   * sobraba. Los tres van con la iconografía del sitio —borde tenue y el
+   * color del texto— y no con el color de cada marca: son iconos de la
+   * interfaz como los demás, no logos.
+   *
+   * Redondas y con el logo al centro: el `border-radius: 999px` de `Pill` más
+   * `aspect-ratio: 1` dan el círculo, y el `gap` de `Pill` sobra porque aquí
+   * solo hay icono, sin texto. El `aspect-ratio` también las iguala aunque un
+   * logo sea más ancho que alto, como el de Android.
+   */
+  :global(.pill.hero__brand) {
+    justify-content: center;
+    aspect-ratio: 1;
+    padding: 7px;
   }
 
   /* Título */
@@ -283,6 +337,7 @@ const sparkAngles = [0, 45, 90, 135, 180, 225, 270, 315];
     margin: 0;
     text-wrap: balance;
   }
+
   .hero__sup {
     font-family: var(--font);
     font-size: clamp(11px, 1.1vw, 15px);

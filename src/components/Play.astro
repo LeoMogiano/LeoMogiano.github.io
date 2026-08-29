@@ -11,7 +11,7 @@ const { t } = Astro.props;
 
 <section id="play">
   <div>
-    <SectionHeader icon="badge-play" badge={t.playBadge} gap="26px">
+    <SectionHeader num={3} label={t.playBadge} aria={t.sectionAria} gap="26px">
       <h2>iOS <em>{t.vs}</em> Android 🏓</h2>
     </SectionHeader>
     <p class="play__p">{t.playP}</p>
@@ -48,7 +48,10 @@ const { t } = Astro.props;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: clamp(30px, 6vw, 80px);
-    align-items: center;
+    /* El badge tiene que arrancar arriba, como en Work y Path. Con `center`
+       la columna de texto se centraba contra la del teléfono —bastante más
+       alta— y el encabezado de la sección aparecía a media altura. */
+    align-items: start;
   }
 
   .play__p {
@@ -97,6 +100,9 @@ const { t } = Astro.props;
   }
 
   .play__phone {
+    /* El teléfono sí se queda centrado: es el objeto de la sección y con la
+       columna de texto corta, anclarlo arriba dejaba un hueco debajo. */
+    align-self: center;
     justify-self: center;
   }
 

@@ -8,15 +8,16 @@ import bancoeconomicoLogo from '../assets/logos/banco-economico.webp';
 export interface JobRole {
   /** Clave del diccionario i18n, p. ej. 'roleLead'. */
   roleKey: string;
-  /** Clave del diccionario i18n con las fechas, p. ej. 'j1d1'. */
-  dateKey: string;
+  /** Mes de inicio, 'YYYY-MM'. */
+  start: string;
+  /** Mes de fin, o `null` si es el puesto actual. */
+  end: string | null;
 }
 
 export interface Job {
   company: string;
   logo: ImageMetadata;
-  /** Clave i18n de la duración, p. ej. 'j1dur'. */
-  durKey: string;
+  /** Del más reciente al más antiguo. El tramo de la empresa sale de los extremos. */
   roles: readonly JobRole[];
 }
 
@@ -24,34 +25,29 @@ export const jobs: readonly Job[] = [
   {
     company: 'Datec Corp',
     logo: datecLogo,
-    durKey: 'j1dur',
     roles: [
-      { roleKey: 'roleLead', dateKey: 'j1d1' },
-      { roleKey: 'roleMob', dateKey: 'j1d2' },
+      { roleKey: 'roleLead', start: '2026-03', end: null },
+      { roleKey: 'roleMob', start: '2025-04', end: '2026-03' },
     ],
   },
   {
     company: 'ValidMe LLC',
     logo: validmeLogo,
-    durKey: 'j2dur',
-    roles: [{ roleKey: 'roleMob', dateKey: 'j2d' }],
+    roles: [{ roleKey: 'roleMob', start: '2024-12', end: '2025-04' }],
   },
   {
     company: 'Presto Latam',
     logo: prestoLogo,
-    durKey: 'j3dur',
-    roles: [{ roleKey: 'roleMob', dateKey: 'j3d' }],
+    roles: [{ roleKey: 'roleMob', start: '2024-08', end: '2024-11' }],
   },
   {
     company: 'GetServer',
     logo: getserverLogo,
-    durKey: 'j4dur',
-    roles: [{ roleKey: 'roleMobWeb', dateKey: 'j4d' }],
+    roles: [{ roleKey: 'roleMobWeb', start: '2024-01', end: '2024-08' }],
   },
   {
     company: 'Banco Económico',
     logo: bancoeconomicoLogo,
-    durKey: 'j5dur',
-    roles: [{ roleKey: 'roleAnalyst', dateKey: 'j5d' }],
+    roles: [{ roleKey: 'roleAnalyst', start: '2022-06', end: '2024-01' }],
   },
 ];

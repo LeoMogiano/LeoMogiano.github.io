@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import SectionHeader from './ui/SectionHeader.astro';
 import { jobs } from '../data/jobs';
+import { formatDuration, rangeParts } from '../i18n/dates';
 import type { Dict } from '../i18n';
 
 interface Props {
@@ -9,10 +10,17 @@ interface Props {
 }
 
 const { t } = Astro.props;
+
+/* El tramo de la empresa va del inicio del rol más antiguo al fin del más
+   reciente. Los roles vienen del más nuevo al más viejo. */
+const spanOf = (job: (typeof jobs)[number]) => ({
+  start: job.roles[job.roles.length - 1].start,
+  end: job.roles[0].end,
+});
 ---
 
 <section id="path" class="path">
-  <SectionHeader icon="badge-path" badge={t.pathBadge}>
+  <SectionHeader num={2} label={t.pathBadge} aria={t.sectionAria}>
     <h2>{t.pathA}<em>{t.pathEm}</em>{t.pathB}</h2>
   </SectionHeader>
 
@@ -21,7 +29,7 @@ const { t } = Astro.props;
       jobs.map((job) => (
         <div class={`slide-row path__row ${job.roles.length > 1 ? 'path__row--multi' : 'path__row--single'}`}>
           {job.roles.length > 1 && (
-            <div class="path__dur path__dur--floating">{t[job.durKey as keyof Dict] as string}</div>
+            <div class="path__dur path__dur--floating">{formatDuration(spanOf(job), t)}</div>
           )}
           <Image src={job.logo} alt={job.company} width={60} height={60} class="path__logo" />
           {job.roles.length > 1 ? (
@@ -38,8 +46,12 @@ const { t } = Astro.props;
                       <span class={`path__role-name ${ri === 0 ? 'path__role-name--accent' : 'path__role-name--dim'}`}>
                         {t[role.roleKey as keyof Dict] as string}
                       </span>
-                      <span class={`path__role-date ${ri === 0 ? 'path__role-date--dim' : 'path__role-date--faint'}`}>
-                        {t[role.dateKey as keyof Dict] as string}
+                      <span class={`path__role-date ${ri === 0 ? 'path__role-date--primary' : 'path__role-date--secondary'}`}>
+                        <time datetime={rangeParts(role, t).from.iso}>{rangeParts(role, t).from.label}</time>
+                        {' — '}
+                        {rangeParts(role, t).to.iso
+                          ? <time datetime={rangeParts(role, t).to.iso}>{rangeParts(role, t).to.label}</time>
+                          : rangeParts(role, t).to.label}
                       </span>
                     </div>
                   </>
@@ -56,10 +68,14 @@ const { t } = Astro.props;
           )}
           {job.roles.length === 1 && (
             <div class="path__aside">
-              <div class="path__role-date path__role-date--dim path__role-date--single">
-                {t[job.roles[0].dateKey as keyof Dict] as string}
+              <div class="path__role-date path__role-date--primary path__role-date--single">
+                <time datetime={rangeParts(job.roles[0], t).from.iso}>{rangeParts(job.roles[0], t).from.label}</time>
+                {' — '}
+                {rangeParts(job.roles[0], t).to.iso
+                  ? <time datetime={rangeParts(job.roles[0], t).to.iso}>{rangeParts(job.roles[0], t).to.label}</time>
+                  : rangeParts(job.roles[0], t).to.label}
               </div>
-              <div class="path__dur">{t[job.durKey as keyof Dict] as string}</div>
+              <div class="path__dur">{formatDuration(spanOf(job), t)}</div>
             </div>
           )}
         </div>
@@ -234,6 +250,10 @@ const { t } = Astro.props;
     flex: none;
     text-align: right;
     font-size: 13px;
+    /* DM Sans es variable (100–1000) y ya está descargada: el peso sale gratis.
+       La fecha es el dato del que la duración se deriva, así que es la que
+       aguanta el peso. */
+    font-weight: 450;
     letter-spacing: 0.09em;
     white-space: nowrap;
   }
@@ -242,12 +262,14 @@ const { t } = Astro.props;
     font-size: 13px;
   }
 
-  .path__role-date--dim {
-    color: var(--dim);
+  .path__role-date--primary {
+    color: var(--fg);
   }
 
-  .path__role-date--faint {
-    color: var(--faint);
+  /* El rango del rol anterior. Baja un escalón respecto al actual, pero no
+     hasta --faint: ese nivel queda para la duración. */
+  .path__role-date--secondary {
+    color: var(--dim);
   }
 
   .path__aside {

@@ -2,27 +2,48 @@
 /**
  * Badge + título de sección, apilados.
  *
- * En el legacy el badge iba en `position:absolute; top:9vh; right:5vw` y se
- * cruzaba con el título cuando este crecía. Vive apilado en una columna, y
- * al estar en un solo componente las tres secciones no pueden divergir.
+ * El badge es un contador de posición, no un adorno: la barra segmentada dice
+ * cuántas secciones hay y en cuál estás. Por eso no lleva icono ni píldora —
+ * un contenedor solo separa figura de fondo cuando hay algo de lo que
+ * separarse, y esto va solo sobre fondo plano.
+ *
+ * Lo visual queda oculto al lector de pantalla y en su lugar va una frase
+ * completa: leer «cero uno barra cero tres» no dice nada.
  */
-import Icon from './Icon.astro';
-import type { IconName } from './Icon.astro';
-
 interface Props {
-  icon: IconName;
-  badge: string;
+  /** Posición de esta sección, empezando en 1. */
+  num: number;
+  /** Cuántas secciones numeradas hay en total. */
+  total?: number;
+  label: string;
+  /** Frase para lectores de pantalla, con {n}, {total} y {label}. */
+  aria: string;
   /** Margen inferior. Play usa 26px; Work y Path, 44px. */
   gap?: string;
 }
 
-const { icon, badge, gap = '44px' } = Astro.props;
+const { num, total = 3, label, aria, gap = '44px' } = Astro.props;
+
+const pad = (n: number) => String(n).padStart(2, '0');
+const srText = aria
+  .replace('{n}', String(num))
+  .replace('{total}', String(total))
+  .replace('{label}', label);
 ---
 
 <div class="section-header" style={`margin-bottom:${gap}`}>
   <div class="section-header__badge">
-    <Icon name={icon} size="13px" />
-    {badge}
+    <span class="sr-only">{srText}</span>
+    <span class="section-header__bar" aria-hidden="true">
+      {Array.from({ length: total }, (_, i) => (
+        <span class:list={['section-header__seg', i < num && 'is-on']}></span>
+      ))}
+    </span>
+    <span class="section-header__count" aria-hidden="true">
+      <span class="section-header__num">{pad(num)}</span>
+      <span class="section-header__total">/{pad(total)}</span>
+    </span>
+    <span class="section-header__label" aria-hidden="true">{label}</span>
   </div>
   <slot />
 </div>
@@ -38,16 +59,54 @@ const { icon, badge, gap = '44px' } = Astro.props;
   .section-header__badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 7px 14px;
-    background: var(--card);
+    gap: 14px;
     font-family: var(--label);
     font-size: 10px;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
+    line-height: 1;
     text-transform: uppercase;
+  }
+
+  /* --- barra segmentada --- */
+
+  .section-header__bar {
+    display: inline-flex;
+    gap: 4px;
+  }
+
+  /* Los segmentos apagados no desaparecen: la barra tiene que decir cuántas
+     secciones faltan, no solo cuántas van. */
+  .section-header__seg {
+    width: 14px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--line);
+    transition: background 0.3s ease;
+  }
+
+  .section-header__seg.is-on {
+    background: var(--accent);
+  }
+
+  /* --- contador --- */
+
+  .section-header__count {
+    display: inline-flex;
+    /* Sin tracking: son cifras, no una etiqueta. Con 0.14em el `/` quedaba
+       flotando lejos de los dos números que separa. */
+    letter-spacing: 0;
+  }
+
+  .section-header__num {
+    color: var(--fg);
+  }
+
+  .section-header__total {
     color: var(--faint);
+  }
+
+  .section-header__label {
+    color: var(--dim);
   }
 
   .section-header :global(h2) {

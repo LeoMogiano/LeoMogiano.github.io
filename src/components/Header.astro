@@ -81,6 +81,11 @@ const langHref = langPrefix(nextLang(lang)) + '/';
     gap: 16px;
     padding: 16px 5vw;
     background: transparent;
+    /* Solo la línea, sin fondo ni blur: lo que teñía la barra de estado de
+       Safari era el relleno pegado al borde superior del viewport, y esto va
+       en el borde de abajo. Más suave que el resto de divisores del sitio —
+       separa de lo que scrollea debajo sin dibujar una franja. */
+    border-bottom: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
   }
 
   .header__brand {

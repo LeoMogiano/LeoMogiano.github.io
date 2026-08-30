@@ -60,6 +60,23 @@ body::before {
     radial-gradient(1100px 700px at 46% 108%, oklch(0.55 0.1 190 / 0.16), transparent 66%);
 }
 
+/*
+ * Mientras hay un modal a pantalla completa, la máscara sobra —y estorba.
+ *
+ * Existe solo para que Safari muestree color plano en el borde del viewport.
+ * Un modal abierto fija <meta theme-color> (ver src/scripts/theme-color.ts), o
+ * sea que Safari ya no muestrea: la máscara deja de tener trabajo. Y sí tiene
+ * un coste, porque el overlay es translúcido y desenfocado: la frontera donde
+ * el gradiente entra se sigue viendo a través de él como una banda plana en la
+ * parte de arriba de la pantalla.
+ *
+ * Sin máscara el gradiente es continuo hasta el borde y la banda desaparece.
+ */
+html.has-modal body::before {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
 html[data-t='light'] body::before {
   background-image:
     radial-gradient(820px 560px at 84% -8%, oklch(0.86 0.07 145 / 0.7), transparent 62%),

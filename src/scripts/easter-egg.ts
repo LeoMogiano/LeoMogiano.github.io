@@ -2,6 +2,15 @@
  * Cinco toques al retrato abren la polaroid. Cada toque además dispara el
  * anillo de chispas.
  */
+import { lockThemeColor, unlockThemeColor } from './theme-color';
+
+/*
+ * El overlay ya compuesto sobre el fondo de cada tema: rgba(6,6,8,.82) encima
+ * del background de <html>. Sin esto Safari muestrea el borde del viewport y
+ * pinta la barra de estado de un tono que no es el del velo, y se ve una banda.
+ */
+const EGG_DARK = '#070708';
+const EGG_LIGHT = '#2f2e2e';
 const portrait = document.querySelector<HTMLElement>('[data-portrait]');
 const sparks = document.querySelector<HTMLElement>('[data-sparks]');
 const egg = document.querySelector<HTMLElement>('[data-egg]');
@@ -20,6 +29,8 @@ function playSparks() {
 function closeEgg() {
   if (!egg) return;
   egg.hidden = true;
+  unlockThemeColor();
+  document.documentElement.style.overflow = '';
   taps = 0;
   portrait?.focus();
 }
@@ -51,6 +62,18 @@ portrait?.addEventListener('click', () => {
   if (taps >= 5 && egg) {
     taps = 0;
     egg.hidden = false;
+    lockThemeColor(EGG_DARK, EGG_LIGHT);
+    /*
+     * La página de atrás deja de moverse.
+     *
+     * El velo es translúcido a propósito —82% con desenfoque—, así que lo que
+     * pasa por detrás se ve un poco. Con el fondo oscuro no se nota, pero al
+     * scrollear entraban los titulares del sitio, que son grandes y claros, y
+     * asomaban por debajo del velo como si el diálogo no tapara nada.
+     *
+     * Un fixed no bloquea el scroll de lo que tiene detrás: hay que decirlo.
+     */
+    document.documentElement.style.overflow = 'hidden';
     egg.focus();
   }
 });

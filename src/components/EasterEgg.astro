@@ -40,10 +40,6 @@ const floaters = [
 <style>
   .egg {
     display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
     z-index: 90;
     align-items: center;
     justify-content: center;
@@ -52,27 +48,40 @@ const floaters = [
     animation: fadeIn .5s ease both;
 
     /*
-     * `inset: 0` medía el viewport grande —el que hay con la barra de Safari
-     * escondida— y ese alto en pantalla no existe mientras la barra está
-     * desplegada: la polaroid se centraba contra 932 px de los que los últimos
-     * 100 estaban tapados, así que quedaba alta y el "toca para cerrar" caía
-     * detrás de la barra.
-     *
-     * svh es el viewport chico: el que queda con la barra puesta, el más
-     * pequeño que el navegador puede dar. dvh no sirve —cambia al esconderse la
-     * barra y el modal saltaría a mitad de gesto—, y vh es el grande otra vez.
-     *
-     * El padding es lo otro: con viewport-fit=cover un fixed en top:0 arranca
-     * DEBAJO de la barra de estado, no después. Las cuatro insets dejan el
-     * contenido dentro de lo que se ve, y en escritorio valen cero.
+     * El velo va A SANGRE: `inset: 0` sobre un fixed cubre el viewport entero,
+     * que con viewport-fit=cover llega hasta el borde físico de la pantalla —
+     * debajo de la barra de estado y debajo de la barra del navegador. Nada de
+     * recortarlo a `100svh`: eso lo dejaba terminar antes que la pantalla y por
+     * el hueco de abajo asomaba la página.
      */
-    height: 100svh;
+    position: fixed;
+    inset: 0;
+
+    /*
+     * El CONTENIDO es otra medida. El velo cubre debajo de las barras, pero la
+     * polaroid no puede quedar ahí: `100lvh - 100svh` es justo el alto de la
+     * barra del navegador, y se descuenta como padding. Arriba hace lo mismo la
+     * inset de la barra de estado.
+     *
+     * Con box-sizing: border-box el elemento sigue midiendo la pantalla entera
+     * —el fondo no se mueve—; lo único que encoge es la caja donde se centra.
+     */
     box-sizing: border-box;
     padding:
       env(safe-area-inset-top)
       env(safe-area-inset-right)
       env(safe-area-inset-bottom)
       env(safe-area-inset-left);
+
+    /*
+     * Y encima, donde se pueda, la banda de la barra del navegador. Va en una
+     * declaración aparte a propósito: si `lvh`/`svh` no existen, `calc()` no
+     * parsea, esta línea se cae sola y arriba sobrevive el padding con las
+     * insets, que es el comportamiento de antes. Metido en una custom property
+     * no pasaría: esas se tragan cualquier cosa y el error reaparece al usarla,
+     * llevándose la declaración entera por delante.
+     */
+    padding-bottom: max(calc(100lvh - 100svh), env(safe-area-inset-bottom));
   }
 
   .egg:not([hidden]) {
@@ -126,12 +135,13 @@ const floaters = [
   .egg__close {
     position: absolute;
     /*
-     * Un absolute se posiciona contra la caja de padding, o sea contra el borde
-     * del .egg entero: el padding no lo descuenta. Pero ese borde ya es el
-     * arranque de la barra de Safari, así que estos ~50 px son separación real.
-     * En vh medía contra el viewport grande y el texto se iba detrás de la barra.
+     * Un absolute se mide contra la caja de padding —el borde del .egg, que
+     * llega hasta abajo de todo—, así que el padding del contenedor no lo salva
+     * y la banda de la barra hay que sumarla aquí también. Escalonado por lo
+     * mismo: si no hay `lvh`/`svh`, queda el 6vh de siempre.
      */
-    bottom: 6svh;
+    bottom: 6vh;
+    bottom: calc(max(calc(100lvh - 100svh), env(safe-area-inset-bottom)) + 3svh);
     font-family: var(--label);
     font-size: 10px;
     letter-spacing: .18em;

@@ -61,15 +61,6 @@ function overlay(el: HTMLElement, round = false): void {
   el.append(input);
 }
 
-/**
- * Para lo que no existe al cargar la página. El barrido de abajo solo ve el DOM
- * inicial, y fuera de iOS no hace falta: ahí la vibración va delegada en el
- * documento y le da igual cuándo apareció el botón.
- */
-export function attachHaptic(el: HTMLElement, round = false): void {
-  if (isIOS) overlay(el, round);
-}
-
 if (isIOS) {
   for (const el of document.querySelectorAll<HTMLElement>('[data-haptic]')) overlay(el);
 } else {

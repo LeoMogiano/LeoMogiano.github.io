@@ -67,7 +67,4 @@ export const en: Dict = {
   shotsAria: "{app} screenshots",
   shotAlt: "{app} screenshot {n}",
   shotGo: "Show {app} screenshot {n}",
-  shotOpen: "View {app} screenshots full screen",
-  shotsFullAria: "{app} screenshots, full screen",
-  shotClose: "Close",
 };

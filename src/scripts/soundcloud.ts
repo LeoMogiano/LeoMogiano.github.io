@@ -1,9 +1,9 @@
 /**
  * El mini reproductor del hero, atado al widget de SoundCloud.
  *
- * Nada de SoundCloud se toca hasta que alguien pulsa play: ni la API (~40 KB)
- * ni el iframe. Quien solo mira el portafolio no le hace una sola petición a
- * un tercero ni recibe sus cookies.
+ * Nada de SoundCloud se toca hasta que el visitante hace algo: ni la API
+ * (~40 KB) ni el iframe. Quien abre la página, mira y se va no le hace una sola
+ * petición a un tercero ni recibe sus cookies.
  *
  * El orden importa y es la razón de que esto estuviera roto: el iframe anuncia
  * que está listo con un postMessage en cuanto carga. Si la API llega después,
@@ -108,20 +108,40 @@ async function createWidget(): Promise<SCWidget | null> {
 }
 
 /*
- * El widget se prepara en cuanto alguien se acerca al reproductor: el cursor
- * encima, el dedo bajando o el foco en el botón. Solo ahí, no en cualquier
- * interacción de la página: quien nunca se acerca al reproductor no le hace
- * una sola petición a SoundCloud.
+ * Calentar el widget con tiempo es todo el truco: las políticas de autoplay
+ * exigen que toggle() se llame de forma síncrona dentro del gesto, y eso solo
+ * es posible si para cuando llega el click ya está READY.
  *
- * Con esto el click encuentra el widget listo y llama a toggle() de forma
- * síncrona, dentro del gesto, que es lo que exigen las políticas de autoplay.
+ * Se dispara desde dos sitios, y hacen falta los dos.
  */
 function warm() {
   void connect().catch(() => {});
 }
 
+/* Uno: acercarse al reproductor — el cursor encima, el dedo bajando, el foco
+   en el botón. */
 for (const event of ['pointerenter', 'pointerdown', 'focusin'] as const) {
   player?.addEventListener(event, warm, { once: true, passive: true });
+}
+
+/*
+ * Dos: la primera interacción con la página, sea donde sea.
+ *
+ * Los de arriba alcanzan con un mouse: el puntero pasa por encima del
+ * reproductor antes de pulsarlo, y ese medio segundo es justo el que el widget
+ * necesita. Con un dedo no hay hover. `pointerenter` y `pointerdown` llegan en
+ * el mismo instante que el tap, el `click` llega milisegundos después y para
+ * entonces todavía falta bajar la API, cargar el iframe y esperar READY: el
+ * botón se iba por el camino asíncrono de abajo, iOS lo bloqueaba por estar
+ * fuera del gesto, y había que tocar una segunda vez.
+ *
+ * Esto no rompe la promesa de la cabecera. Quien entra, mira y se va sigue sin
+ * hacerle una sola petición a SoundCloud: hace falta que haga algo —un scroll,
+ * un toque en cualquier parte, una tecla—. Pero con casi cualquier cosa que
+ * haga, al llegar al botón el widget ya está listo y suena al primer tap.
+ */
+for (const event of ['pointerdown', 'keydown', 'scroll'] as const) {
+  addEventListener(event, warm, { once: true, passive: true });
 }
 
 toggle?.addEventListener('click', () => {
@@ -133,16 +153,19 @@ toggle?.addEventListener('click', () => {
     return;
   }
 
-  // Primer uso sin haber podido calentar antes. Se conecta y se reproduce en
-  // cuanto esté; en Safari puede que este primer intento no suene, y para eso
-  // está el calentamiento de arriba.
-  toggle.disabled = true;
+  /*
+   * Primer uso sin haber podido calentar: el tap sobre play fue la primera
+   * interacción de la visita. Se conecta y se intenta reproducir en cuanto
+   * esté, aunque en iOS ese toggle cae fuera del gesto y el sistema lo bloquea.
+   *
+   * El botón NO se deshabilita mientras tanto. Lo hacía, y era peor: connect()
+   * ya cachea la promesa —`connecting ??=`—, así que dos clicks nunca pudieron
+   * crear dos widgets, y lo único que conseguía era tragarse el tap siguiente,
+   * que es precisamente el que sí habría sonado. De ahí el tercer tap.
+   */
   connect()
     .then((w) => w?.toggle())
-    .catch(() => {})
-    .finally(() => {
-      toggle.disabled = false;
-    });
+    .catch(() => {});
 });
 
 export {};

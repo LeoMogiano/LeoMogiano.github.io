@@ -27,10 +27,10 @@ export const appCopy: Record<Lang, Record<string, AppCopy>> = {
       desc: "Validación de documentos con la fluidez de un pase del Wallet de iOS: escaneo, verificación y credenciales que viven en el teléfono.",
     },
     '03': {
-      tag: "Eventos · Flutter",
+      tag: "Eventos · Swift/Kotlin",
       role: "Mobile Dev",
       short: "Control de acceso para eventos corporativos: QR, aforo y staff en vivo.",
-      desc: "Herramienta de control de acceso para eventos corporativos. Lectura de QR offline, aforo en vivo y roles de staff.",
+      desc: "Herramienta interna, nativa en Swift y Kotlin, para control de acceso en eventos corporativos. Lectura de QR offline, aforo en vivo y roles de staff.",
     },
     '04': {
       tag: "Financiera · Flutter",
@@ -59,10 +59,10 @@ export const appCopy: Record<Lang, Record<string, AppCopy>> = {
       desc: "Document validation with the fluidity of an iOS Wallet pass: scanning, verification and credentials that live on the phone.",
     },
     '03': {
-      tag: "Events · Flutter",
+      tag: "Events · Swift/Kotlin",
       role: "Mobile Dev",
       short: "Access control for corporate events: QR, capacity and live staff.",
-      desc: "Access-control tool for corporate events. Offline QR scanning, live capacity and staff roles.",
+      desc: "Internal tool, native in Swift and Kotlin, for access control at corporate events. Offline QR scanning, live capacity and staff roles.",
     },
     '04': {
       tag: "Lending · Flutter",
@@ -91,10 +91,10 @@ export const appCopy: Record<Lang, Record<string, AppCopy>> = {
       desc: "iOSウォレットのパスのような滑らかさで書類を認証。スキャン、検証、そして端末の中に収まるクレデンシャル。",
     },
     '03': {
-      tag: "イベント · Flutter",
+      tag: "イベント · Swift/Kotlin",
       role: "モバイル開発",
-      short: "法人イベントの入場管理：QR、入場者数、スタッフ権限。",
-      desc: "法人イベント向けの入場管理ツール。オフラインQR読み取り、リアルタイムの入場者数、スタッフ権限の管理。",
+      short: "法人イベントの入場管理:QR、入場者数、スタッフ権限。",
+      desc: "SwiftとKotlinによるネイティブの社内ツール。法人イベント向け入場管理、オフラインQR読み取り、リアルタイムの入場者数、スタッフ権限の管理。",
     },
     '04': {
       tag: "金融 · Flutter",

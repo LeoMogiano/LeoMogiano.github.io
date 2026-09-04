@@ -24,7 +24,7 @@ export const en: Dict = {
   descValidme: "Decentralised identity end to end: KYC, biometrics and cryptography over native iOS and Android SDKs, with push, isolates and stability watched through Crashlytics.",
   descPresto: "A fintech app in Flutter with BLoC, mostly onboarding. Scrum, Gitflow and PR reviews, with builds through Firebase, TestFlight and both stores, plus CI work on GitHub Actions.",
   descGetserver: "Mobile apps in Flutter with Provider and web systems in Laravel, for academic and parcel projects. I integrated payment gateways and automated processes done by hand.",
-  descBanco: "Maintaining a Java claims system: fixes, improvements and support alongside the bank's functional teams. My first software that people relied on every day.",
+  descBanco: "Maintaining a claims system in Java and .NET (C#): fixes, improvements and support alongside the bank's functional teams. My first software that people relied on every day.",
   workBadge: "Apps",
   sectionAria: "Section {n} of {total}: {label}",
   workA: "Things I've ",

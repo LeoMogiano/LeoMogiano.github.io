@@ -24,7 +24,7 @@ export const ja: Dict = {
   descValidme: "分散型本人確認を一気通貫で開発。KYC・生体認証・暗号化を iOS と Android のネイティブ SDK 上で実装し、プッシュ通知と Isolate、Crashlytics での安定性監視まで。",
   descPresto: "Flutter と BLoC による金融アプリ、主にオンボーディング。Scrum・Gitflow・PR レビューを回し、Firebase、TestFlight、両ストアで配信。GitHub Actions の CI にも貢献。",
   descGetserver: "Flutter（Provider）のモバイルアプリと Laravel の Web システムを、教育系と配送管理の案件向けに開発。決済ゲートウェイを統合し、手作業の処理を自動化した。",
-  descBanco: "Java の申立管理システムの保守。修正・改善・サポートを銀行の業務部門と進めた、人が毎日頼るソフトウェアに初めて関わった仕事。",
+  descBanco: "Java と .NET(C#)の申立管理システムの保守。修正・改善・サポートを銀行の業務部門と進めた、人が毎日頼るソフトウェアに初めて関わった仕事。",
   workBadge: "アプリ",
   sectionAria: "セクション {n}／{total}：{label}",
   workA: "",

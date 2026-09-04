@@ -24,7 +24,7 @@ export const es: Dict = {
   descValidme: "Identidad descentralizada de punta a punta: KYC, biometría y criptografía sobre SDK nativos de iOS y Android, con push, isolates y estabilidad vigilada en Crashlytics.",
   descPresto: "App financiera en Flutter con BLoC, sobre todo el onboarding. Scrum, Gitflow y revisión de PR, con versiones por Firebase, TestFlight y las dos tiendas, y aporte al CI en Actions.",
   descGetserver: "Apps móviles en Flutter con Provider y sistemas web en Laravel, para proyectos académicos y de paquetería. Integré pasarelas de pago y automaticé procesos que se hacían a mano.",
-  descBanco: "Mantenimiento de un sistema de reclamos en Java: correcciones, mejoras y soporte junto a las áreas funcionales. Mi primer software del que dependía gente todos los días.",
+  descBanco: "Mantenimiento de un sistema de reclamos en Java y .NET (C#): correcciones, mejoras y soporte junto a las áreas funcionales. Mi primer software del que dependía gente todos los días.",
   workBadge: "Apps",
   sectionAria: "Sección {n} de {total}: {label}",
   workA: "Cosas en las que ",

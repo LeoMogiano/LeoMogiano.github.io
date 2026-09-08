@@ -24,7 +24,7 @@ const odo = el?.querySelector<HTMLElement>('[data-counter-odo]');
 const sr = el?.querySelector<HTMLElement>('[data-counter-sr]');
 
 /** Cuatro dígitos, siempre por encima de mil: nunca cambia de ancho. */
-const randomTotal = () => 1_000 + Math.floor(Math.random() * 9_000);
+const randomTotal = () => 1_000 + Math.floor(Math.random() * 1_000);
 
 if (el && odo && sr) {
   const locale = document.documentElement.lang || 'es';

@@ -6,8 +6,8 @@
  * respuesta no es `{ count }`, ajustar `parse`. Sirve igual para GoatCounter,
  * un Worker propio o cualquier cosa que devuelva JSON.
  *
- * Con ENDPOINT vacío el contador se queda oculto: prefiero que no se vea nada
- * a que se vea un número inventado.
+ * Mientras ENDPOINT esté vacío el número lo genera `randomTotal()`: es un
+ * marcador de posición para ver el odómetro funcionando, no una métrica.
  */
 const ENDPOINT = '';
 
@@ -23,11 +23,10 @@ const el = document.querySelector<HTMLElement>('[data-counter]');
 const odo = el?.querySelector<HTMLElement>('[data-counter-odo]');
 const sr = el?.querySelector<HTMLElement>('[data-counter-sr]');
 
-/* Sin endpoint no hay nada que pintar en producción, pero en dev conviene ver
-   el odómetro: se le da un número fijo de mentira. */
-const DEMO = import.meta.env.DEV && !ENDPOINT;
+/** Cuatro dígitos, siempre por encima de mil: nunca cambia de ancho. */
+const randomTotal = () => 1_000 + Math.floor(Math.random() * 9_000);
 
-if (el && odo && sr && (ENDPOINT || DEMO)) {
+if (el && odo && sr) {
   const locale = document.documentElement.lang || 'es';
   const nf = new Intl.NumberFormat(locale);
 
@@ -81,11 +80,11 @@ if (el && odo && sr && (ENDPOINT || DEMO)) {
     }
   };
 
-  if (DEMO) paint(1447);
-  else refresh();
+  if (ENDPOINT) refresh();
+  else paint(randomTotal());
   // Refresco lento: es un total acumulado, no cambia de segundo a segundo, y
   // así una pestaña abierta toda la tarde no machaca el servicio.
-  if (!DEMO) setInterval(refresh, 60_000);
+  if (ENDPOINT) setInterval(refresh, 60_000);
 }
 
 export {};

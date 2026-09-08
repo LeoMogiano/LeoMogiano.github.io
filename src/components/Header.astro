@@ -1,5 +1,6 @@
 ---
 import Icon from './ui/Icon.astro';
+import Counter from './Counter.astro';
 import Pill from './ui/Pill.astro';
 import { nav } from '../data/nav';
 import { nextLang, langPrefix } from '../i18n';
@@ -22,6 +23,7 @@ const langHref = langPrefix(nextLang(lang)) + '/';
       <span class="header__clock" title={t.clockTitle}>
         <span class="header__flag">🇧🇴</span><time class="clock" datetime="">--:--</time>
       </span>
+      <Counter t={t} />
     </span>
   </div>
   <nav class="header__nav">
@@ -250,6 +252,8 @@ const langHref = langPrefix(nextLang(lang)) + '/';
       display: none;
     }
 
+    /* Sin el rol delante, el reloj ya no separa nada. El contador sí: sigue
+       yendo detrás del reloj. */
     .header__clock {
       border-left: 0;
       padding-left: 0;

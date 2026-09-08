@@ -9,6 +9,8 @@ export const ja: Dict = {
   role: "モバイル・テックリード",
   ogImageAlt: "Leo Mogiano、モバイル・テックリード — iOS、Android、Flutter",
   clockTitle: "ボリビアの現地時間",
+  visitsTitle: "このページの訪問数",
+  visitsLabel: "訪問",
   nav: ["ホーム", "アプリ", "経歴", "プレイ", "連絡"],
   photoAlt: "レオ・モヒアーノのポートレート",
   statusAria: "ステータス",

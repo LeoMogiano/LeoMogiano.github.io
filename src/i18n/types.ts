@@ -9,6 +9,8 @@ export interface Dict {
   role: string;
   ogImageAlt: string;
   clockTitle: string;
+  visitsLabel: string;
+  visitsTitle: string;
   nav: readonly [string, string, string, string, string];
   photoAlt: string;
   statusAria: string;

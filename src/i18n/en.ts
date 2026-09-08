@@ -9,6 +9,8 @@ export const en: Dict = {
   role: "Tech Lead Mobile",
   ogImageAlt: "Leo Mogiano, Mobile Tech Lead — iOS, Android and Flutter",
   clockTitle: "Time in Bolivia",
+  visitsLabel: "visits",
+  visitsTitle: "Visits to this page",
   nav: ["Home", "Apps", "Experience", "Play", "Contact"],
   photoAlt: "Portrait of Leo Mogiano",
   statusAria: "Status",

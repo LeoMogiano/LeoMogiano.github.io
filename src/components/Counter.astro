@@ -1,0 +1,95 @@
+---
+/**
+ * Contador de visitas, en la cabecera junto al reloj. El número entra por
+ * scripts/counter.ts; el HTML sale con el hueco vacío para que no haya salto
+ * cuando llega el dato.
+ */
+import type { Dict } from '../i18n';
+
+interface Props {
+  t: Dict;
+}
+const { t } = Astro.props;
+---
+
+<span class="counter" title={t.visitsTitle} data-counter>
+  <span class="counter__odo" data-counter-odo aria-hidden="true"></span>
+  <span class="counter__label">{t.visitsLabel}</span>
+  <span class="counter__sr" data-counter-sr></span>
+</span>
+
+<style>
+  .counter {
+    font-family: var(--label);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+    white-space: nowrap;
+    /* Mismo divisor que separa el rol del reloj: el contador es el tercer
+       dato de la fila, no un apéndice del reloj. */
+    border-left: 1px solid var(--line);
+    padding-left: 9px;
+    /* Hasta que llega el dato el odómetro está vacío: sin esto la etiqueta
+       arrancaba pegada al reloj y saltaba al pintar el número. */
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .counter[data-ready] {
+    opacity: 1;
+  }
+
+  /* El texto del número solo para lectores de pantalla: el odómetro son diez
+     dígitos apilados por columna y se leería "0123456789" en cada una. */
+  .counter__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  /* Mismo tamaño y mismo tono que el reloj de al lado: son dos datos vivos
+     del mismo rango, y con el número en --fg y 11px el contador se comía al
+     reloj. Los dígitos heredan todo del contenedor; lo único propio es
+     tabular-nums, para que el ancho no baile al rodar. */
+  .counter__odo {
+    display: inline-flex;
+    align-items: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .counter__odo :global(.counter__col) {
+    display: inline-block;
+    overflow: hidden;
+    height: 1em;
+    line-height: 1;
+  }
+
+  .counter__odo :global(.counter__reel) {
+    display: block;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .counter__odo :global(.counter__reel span) {
+    display: block;
+    height: 1em;
+    line-height: 1;
+  }
+
+  .counter__odo :global(.counter__punct) {
+    display: inline-block;
+    opacity: 0.45;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .counter,
+    .counter__odo :global(.counter__reel) {
+      transition: none;
+    }
+  }
+</style>

@@ -16,13 +16,13 @@
     "test": "astro build && node --test 'tests/*.test.mjs'"
   },
   "dependencies": {
-    "astro": "^7.2.9"
+    "astro": "^7.3.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
-    "@types/node": "^26.4.0",
-    "sharp": "^0.35.4",
-    "subset-font": "^2.4.0",
+    "@types/node": "^26.6.4",
+    "sharp": "^0.35.5",
+    "subset-font": "^2.9.0",
     "typescript": "^6.0.3"
   }
 }

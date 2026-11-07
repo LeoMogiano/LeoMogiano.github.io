@@ -69,7 +69,17 @@ if (canvas && ctx) {
     { passive: true },
   );
 
+  // WCAG 2.2.2: con movimiento reducido la pelota espera al primer gesto.
+  let running = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const start = () => {
+    running = true;
+  };
+  canvas.addEventListener('pointerdown', start, { passive: true });
+  // pointercancel (el navegador toma el pan vertical): sin captura ni estado
+  // de arrastre, la paleta simplemente se queda donde estaba.
+
   canvas.addEventListener('keydown', (event) => {
+    start();
     if (event.key === 'ArrowLeft') {
       state.px = Math.max(state.pw / 2, state.px - 26);
       event.preventDefault();
@@ -83,10 +93,16 @@ if (canvas && ctx) {
   // Fuera de pantalla el bucle no simula ni pinta: es un juguete, no debe
   // gastar batería mientras alguien lee otra sección.
   let visible = true;
+  let raf = 0;
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(
       (entries) => {
         visible = entries[0]?.isIntersecting ?? true;
+        if (visible && !raf) {
+          lastTime = performance.now();
+          accumulator = 0;
+          raf = requestAnimationFrame(loop);
+        }
       },
       { threshold: 0 },
     ).observe(canvas);
@@ -97,8 +113,9 @@ if (canvas && ctx) {
   let accumulator = 0;
 
   const loop = () => {
-    requestAnimationFrame(loop);
+    raf = 0;
     if (!visible) return;
+    raf = requestAnimationFrame(loop);
 
     const accent = token('--accent', '#c8ff4d');
     const fg = token('--fg', '#f2f1ee');
@@ -108,7 +125,8 @@ if (canvas && ctx) {
     accumulator += Math.min(50, now - lastTime);
     lastTime = now;
 
-    while (accumulator >= STEP) {
+    if (!running) accumulator = 0;
+    while (running && accumulator >= STEP) {
       accumulator -= STEP;
       const dt = STEP / 16.6667;
 

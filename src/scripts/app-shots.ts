@@ -263,6 +263,7 @@ for (const shots of document.querySelectorAll<HTMLElement>('[data-app-shots]')) 
 
   track.addEventListener('pointerup', endDrag);
   track.addEventListener('pointercancel', endDrag);
+  track.addEventListener('lostpointercapture', endDrag);
 
   // El ancho del teléfono es relativo al viewport: al redimensionar, la posición
   // en píxeles deja de caer en un múltiplo del ancho y la captura queda partida.

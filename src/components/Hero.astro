@@ -68,6 +68,22 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
   <div class="hero__grid">
     <p class="hero__bio">{t.bio}</p>
 
+    <div class="hero__actions">
+    {/* Se abre en una pestaña, no se descarga a la fuerza: casi nadie guarda
+        un PDF que no ha visto, y en el teléfono una descarga a ciegas acaba
+        en una carpeta que nadie abre. */}
+    <Pill
+      as="a"
+      variant="active"
+      icon="file-down"
+      class="hero__cv"
+      href={cvHref}
+      target="_blank"
+      rel="noopener"
+      aria-label={t.cvAria}
+    >
+      {t.cvLabel} <span class="hero__cv-ext">(PDF)</span>
+    </Pill>
     <div class="hero__socials">
       {socials.map((s) => (
         <Pill
@@ -81,21 +97,7 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
           {s.label}
         </Pill>
       ))}
-      {/* Se abre en una pestaña, no se descarga a la fuerza: casi nadie guarda
-          un PDF que no ha visto, y en el teléfono una descarga a ciegas acaba
-          en una carpeta que nadie abre. */}
-      <Pill
-        as="a"
-        variant="card"
-        icon="file-down"
-        class="hero__cv"
-        href={cvHref}
-        target="_blank"
-        rel="noopener"
-        aria-label={t.cvAria}
-      >
-        {t.cvLabel}
-      </Pill>
+    </div>
     </div>
 
     <div class="hero__player" data-player>
@@ -104,7 +106,7 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
           <span class="hero__disc-dot"></span>
         </div>
         <div class="hero__now">
-          <div class="hero__now-title">now playing — infinity_repeating.loop</div>
+          <div class="hero__now-title">{t.nowPlaying} — infinity_repeating.loop</div>
           <div class="hero__progress">
             <span class="hero__progress-bar" data-progress></span>
           </div>
@@ -117,6 +119,8 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
       <iframe
         class="hero__iframe"
         data-sc
+        tabindex="-1"
+        aria-hidden="true"
         title="SoundCloud"
         width="100%"
         height="20"
@@ -388,11 +392,20 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
     max-width: 44ch;
     text-wrap: pretty;
   }
-  /* La única de la fila que no es una red social: lleva el borde en acento
-     para que se lea como acción y no como un enlace más. */
+  /* La acción principal va aparte de las redes: relleno de acento (variante
+     active) y una fila propia, para que no se lea como un enlace más. */
+  .hero__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
   :global(.pill.hero__cv) {
-    border-color: color-mix(in oklab, var(--accent) 55%, transparent);
-    color: var(--fg);
+    padding: 13px 22px;
+    font-size: 12px;
+  }
+  .hero__cv-ext {
+    opacity: 0.7;
   }
 
   .hero__socials {

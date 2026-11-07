@@ -55,6 +55,11 @@ export interface Dict {
   cpuAndroid: string;
   resetBtn: string;
   pongAria: string;
+  boatA: string;
+  boatEm: string;
+  boatB: string;
+  nowPlaying: string;
+  appIconAlt: string;
   boatSub: string;
   ctaA: string;
   ctaEm: string;

@@ -8,7 +8,7 @@ interface Props {
 const { t } = Astro.props;
 ---
 <section id="tiempo" class="boat">
-  <p class="boat__title">In the same boat, <em class="boat__em">time happens differently</em> ⛵</p>
+  <p class="boat__title">{t.boatA}<em class="boat__em">{t.boatEm}</em>{t.boatB}</p>
   <p class="boat__sub">{t.boatSub}</p>
 </section>
 

@@ -71,7 +71,7 @@ const ICON = {
         if (target !== location.pathname) location.replace(target + location.hash);
       }
     </script>
-    <title>{title} · MiMicro</title>
+    <title>{title} · {t.brand}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {LANGS.map((l) => <link rel="alternate" hreflang={l} href={new URL(legalPath(key, l), Astro.site).href} />)}
@@ -100,7 +100,7 @@ const ICON = {
         <span class="brand__mark">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICON.bus} /></svg>
         </span>
-        <span class="brand__word">Mi<b>Micro</b></span>
+        <span class="brand__word">{t.brand.slice(0, 2)}<b>Micro</b></span>
       </span>
 
       <nav class="seg" aria-label={t.nav}>
@@ -168,7 +168,7 @@ const ICON = {
             <p class="ask__title">{t.askTitle}</p>
             <p class="ask__text">{t.askText}</p>
           </div>
-          <a class="ask__btn" href={`mailto:${CONTACT}?subject=${encodeURIComponent(`MiMicro · ${title}`)}`}>
+          <a class="ask__btn" href={`mailto:${CONTACT}?subject=${encodeURIComponent(`${t.brand} · ${title}`)}`}>
             {t.askBtn}
           </a>
         </aside>
@@ -191,7 +191,7 @@ const ICON = {
         }
       </nav>
       <p>
-        MiMicro · Santa Cruz de la Sierra, Bolivia · {t.madeBy} <a href="/">Leo Mogiano</a>
+        {t.brand} · Santa Cruz de la Sierra, Bolivia · {t.madeBy} <a href="/">Leo Mogiano</a>
       </p>
       <p>
         {t.generated} <a href="https://app-privacy-policy-generator.nisrulz.com/" rel="noopener"

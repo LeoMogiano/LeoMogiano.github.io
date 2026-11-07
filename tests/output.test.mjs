@@ -133,3 +133,12 @@ test('páginas legales de MiMicro: 8 idiomas × 2 documentos, con lang y hreflan
     }
   }
 });
+
+test('MiMicro solo en español; MyMicro en el resto, como el nombre de la app', () => {
+  const es = read('mimicro/es/terms/index.html');
+  assert.ok(es.includes('MiMicro') && !es.includes('MyMicro'), 'es usa MiMicro');
+  for (const p of ['mimicro/terms/index.html', 'mimicro/ja/privacy/index.html', 'mimicro/de/terms/index.html']) {
+    const html = read(p);
+    assert.ok(html.includes('MyMicro') && !html.includes('MiMicro'), `${p} usa MyMicro`);
+  }
+});

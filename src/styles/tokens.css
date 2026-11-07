@@ -7,11 +7,17 @@
   --font: 'DM Sans', system-ui, sans-serif;
   --label: 'DM Mono', ui-monospace, monospace;
 
-  /* La tipografía de los nombres de app. applyType() la elegía desde una
-     perilla del builder; el valor por defecto —el publicado— era este. */
-  --appfont: 'Bricolage Grotesque', system-ui, sans-serif;
+  /* Escala de texto fijo: etiquetas mono, metadatos, cuerpo, destacado.
+     Los titulares siguen con clamp() propio. */
+  --fs-label: 11px;
+  --fs-meta: 13px;
+  --fs-body: 15px;
+  --fs-lead: 17px;
+
+  /* Nombres de app: DM Sans en peso alto (antes Bricolage Grotesque). */
+  --appfont: var(--font);
   --appstyle: normal;
-  --apptrack: -0.015em;
+  --apptrack: -0.02em;
   --appcase: none;
 
   --bg: #0a0a0a;

@@ -255,7 +255,7 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
     border: 1px solid var(--line);
     display: grid;
     place-items: center;
-    font-size: clamp(13px, 1.6vw, 17px);
+    font-size: clamp(var(--fs-meta), 1.6vw, 17px);
     line-height: 1;
     padding-top: 1px;
     z-index: 6;
@@ -263,7 +263,7 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
 
   .hero__caption {
     font-family: var(--label);
-    font-size: 9px;
+    font-size: var(--fs-label);
     letter-spacing: .2em;
     text-transform: uppercase;
     color: var(--faint);
@@ -370,7 +370,7 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
 
   .hero__sup {
     font-family: var(--font);
-    font-size: clamp(11px, 1.1vw, 15px);
+    font-size: clamp(var(--fs-meta), 1.1vw, 15px);
     letter-spacing: .1em;
     vertical-align: super;
     color: var(--dim);
@@ -386,8 +386,8 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
   }
   .hero__bio {
     margin: 0;
-    font-size: 14px;
-    line-height: 1.75;
+    font-size: var(--fs-lead);
+    line-height: 1.65;
     color: var(--dim);
     max-width: 44ch;
     text-wrap: pretty;
@@ -402,7 +402,7 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
   }
   :global(.pill.hero__cv) {
     padding: 13px 22px;
-    font-size: 12px;
+    font-size: var(--fs-meta);
   }
   .hero__cv-ext {
     opacity: 0.7;
@@ -457,7 +457,7 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
     min-width: 0;
   }
   .hero__now-title {
-    font-size: 10px;
+    font-size: var(--fs-label);
     letter-spacing: .1em;
     color: var(--dim);
     white-space: nowrap;

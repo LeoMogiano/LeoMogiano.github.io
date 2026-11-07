@@ -49,14 +49,6 @@ const FONTS = [
     axes: { opsz: 14 },
   },
   {
-    // La tipografía de los nombres de app. El builder la exponía como una
-    // perilla y su valor por defecto —el que salió publicado— era esta.
-    out: 'bricolage-grotesque-var.woff2',
-    url: `${RAW}/ofl/bricolagegrotesque/BricolageGrotesque%5Bopsz%2Cwdth%2Cwght%5D.ttf`,
-    scope: 'latin',
-    axes: { opsz: 14, wdth: 100 },
-  },
-  {
     // Solo para las páginas legales de MiMicro: la misma cara que usa la app.
     // Lleva cirílico porque esas páginas también salen en ruso.
     out: 'montserrat-var.woff2',

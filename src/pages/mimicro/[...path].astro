@@ -133,7 +133,7 @@ const ICON = {
         }
       </div>
 
-      <aside class="toc">
+      <aside class="toc" id="toc">
         <details>
           <summary>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICON.list} /></svg>
@@ -146,7 +146,11 @@ const ICON = {
       </aside>
       <script is:inline>
         // En móvil el índice arranca cerrado para no empujar el texto; en escritorio es la barra lateral.
-        if (matchMedia('(min-width: 960px)').matches) document.querySelector('.toc details').open = true;
+        const toc = document.querySelector('.toc details');
+        const desk = matchMedia('(min-width: 960px)');
+        if (desk.matches) toc.open = true;
+        // En escritorio el resumen no es clicable: el teclado tampoco puede cerrarlo.
+        toc.addEventListener('toggle', () => { if (desk.matches && !toc.open) toc.open = true; });
       </script>
 
       <main id="doc" class="doc" tabindex="-1">
@@ -172,6 +176,7 @@ const ICON = {
             {t.askBtn}
           </a>
         </aside>
+        <a class="back" href="#toc">{t.toc} ↑</a>
       </main>
     </div>
 
@@ -326,6 +331,10 @@ const ICON = {
   /* La brújula de Inicio, mismo gesto: 260px, −8°, recortada en la esquina.
      Separada del borde superior: si lo tocara, Safari iOS muestrearía su verde
      y teñiría la barra de direcciones. */
+  /* Contenedor de .deco: así la brújula recortada no ensancha la página. */
+  body {
+    position: relative;
+  }
   .deco {
     position: absolute;
     top: 64px;
@@ -501,8 +510,18 @@ const ICON = {
     color: var(--ink);
   }
 
+  .back {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 13px;
+  }
+  @media (min-width: 960px) {
+    .back {
+      display: none;
+    }
+  }
   .doc {
-    max-width: 68ch;
+    max-width: 60ch;
     outline: none;
   }
   .doc p,

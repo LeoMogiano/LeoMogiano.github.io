@@ -12,7 +12,11 @@ const { t } = Astro.props;
 <section id="hello" class="contact">
   <div class="contact__cta-wrap">
     <a href="mailto:leomogiano@outlook.com" class="contact__cta">{t.ctaA}<em class="contact__cta-em">{t.ctaEm}</em>{t.ctaB}</a>
-    <span class="contact__email">leomogiano@outlook.com</span>
+    <a href="mailto:leomogiano@outlook.com" class="contact__email">leomogiano@outlook.com</a>
+    <a href={`/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`} class="contact__cv" target="_blank" rel="noopener" aria-label={t.cvAria}>
+      <Icon name="file-down" size="13px" />
+      {t.cvLabel} (PDF)
+    </a>
   </div>
   <footer class="contact__foot">
     <span>© 2026 Leo Mogiano</span>
@@ -66,6 +70,22 @@ const { t } = Astro.props;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--dim);
+    padding: 12px 0;
+  }
+
+  .contact__cv {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    font-family: var(--label);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg);
   }
 
   .contact__foot {
@@ -92,6 +112,7 @@ const { t } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: 7px;
+    min-height: 44px;
     color: var(--dim);
   }
 </style>

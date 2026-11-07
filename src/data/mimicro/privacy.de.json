@@ -1,0 +1,96 @@
+{
+  "effective": "2026-10-30",
+  "intro": "<p>Diese Datenschutzerklärung gilt für die MiMicro-App für Mobilgeräte sowie für alle damit verbundenen Dienste, die von Leonardo Mogiano betrieben werden (zusammen die „Anwendung“). Leonardo Mogiano wird im Folgenden als „Dienstanbieter“ bezeichnet.</p><p></p>",
+  "sections": [
+    {
+      "id": "information-collection-and-use",
+      "title": "Erhebung und Verwendung von Informationen",
+      "html": "<p>Die Anwendung erhebt Informationen, wenn Sie sie herunterladen und nutzen. Zu diesen Informationen können beispielsweise gehören</p><ul><li>die Internetprotokolladresse (IP-Adresse) Ihres Geräts</li><li>die Seiten der Anwendung, die Sie besuchen, Uhrzeit und Datum Ihres Besuchs sowie die auf diesen Seiten verbrachte Zeit</li><li>die in der Anwendung verbrachte Zeit</li><li>das von Ihnen verwendete mobile Betriebssystem</li></ul>"
+    },
+    {
+      "id": "crash-reporting-and-diagnostics",
+      "title": "Absturzberichte und Diagnose",
+      "html": "<p>Die Anwendung verwendet Sentry, um Fehler zu erkennen und zu beheben. Wenn die Anwendung abstürzt, einfriert oder einen Fehler protokolliert, sendet sie einen Bericht, der Folgendes enthalten kann: den Fehler und den Stacktrace, Gerätemodell und Betriebssystem, App-Version, eine zufällige Installationskennung, Leistungsdaten (etwa Ladezeiten von Bildschirmen), aktuelle App-Ereignisse sowie einen Screenshot des Bildschirms, auf dem der Fehler aufgetreten ist. Der Screenshot kann die Karte und die auf dem Bildschirm angezeigten Orte zeigen. Die Berichte enthalten weder Ihren Namen noch Ihre E-Mail-Adresse oder eine IP-basierte Identität, werden nicht mit Ihnen verknüpft und ausschließlich zur Diagnose und Verbesserung der Anwendung verwendet. Sie werden bis zu 90 Tage lang aufbewahrt.</p>"
+    },
+    {
+      "id": "push-notifications",
+      "title": "Push-Benachrichtigungen",
+      "html": "<p>Wenn Sie Benachrichtigungen zulassen, registriert die Anwendung ein Geräte-Token bei Firebase Cloud Messaging, damit der Dienstanbieter Ihnen Neuigkeiten zur Anwendung senden kann. Sie können Benachrichtigungen jederzeit in den Einstellungen der Anwendung oder in den Einstellungen Ihres Geräts deaktivieren.</p>"
+    },
+    {
+      "id": "cookies-and-tracking-technologies",
+      "title": "Cookies und Tracking-Technologien",
+      "html": "<p>Die Anwendung oder die darin eingebundenen SDKs von Drittanbietern können Cookies, SDKs, Pixel und ähnliche Technologien verwenden, um Funktionen, Analysen oder die Bereitstellung des Dienstes zu unterstützen. Soweit nach geltendem Recht erforderlich, holt der Dienstanbieter vor dem Einsatz nicht notwendiger Tracking-Technologien eine Einwilligung ein.</p><p></p>"
+    },
+    {
+      "id": "location-information",
+      "title": "Standortinformationen",
+      "html": "<p>Die Anwendung erhebt den Standort Ihres Geräts, um standortbezogene Funktionen bereitzustellen, die Anwendung zu verbessern und damit verbundene Dienste zu unterstützen.</p><ul><li>Geolokalisierungsdienste: Der Dienstanbieter kann Standortdaten verwenden, um standortbezogene Funktionen oder Inhalte bereitzustellen.</li><li>Analysen und Verbesserungen: Aggregierte Standortdaten können dem Dienstanbieter helfen, Nutzungsmuster zu verstehen und die Leistung zu verbessern.</li><li>Dienste Dritter: Standortdaten können mit Diensten Dritter geteilt werden, die zur Unterstützung der Funktionen der Anwendung eingesetzt werden, vorbehaltlich dieser Datenschutzerklärung und des geltenden Rechts.</li></ul><p></p>"
+    },
+    {
+      "id": "your-rights",
+      "title": "Ihre Rechte",
+      "html": "<p>Sie können Auskunft über, Berichtigung oder Löschung Ihrer beim Dienstanbieter gespeicherten personenbezogenen Daten verlangen. Um diese Rechte auszuüben oder eine Einwilligung zu widerrufen, sofern die Verarbeitung auf einer Einwilligung beruht, wenden Sie sich an den Dienstanbieter unter <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p></p>"
+    },
+    {
+      "id": "your-california-privacy-rights-ccpa-cpra",
+      "title": "Ihre Datenschutzrechte in Kalifornien (CCPA/CPRA)",
+      "html": "<p>Wenn Sie in Kalifornien ansässig sind, haben Sie das Recht zu erfahren, welche personenbezogenen Informationen erhoben werden, das Recht auf Löschung personenbezogener Informationen, das Recht, dem Verkauf oder der Weitergabe personenbezogener Informationen zu widersprechen (Opt-out), sowie das Recht, wegen der Ausübung dieser Rechte nicht benachteiligt zu werden. Um Ihre Rechte nach CCPA/CPRA auszuüben, wenden Sie sich an den Dienstanbieter unter <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p>Der Dienstanbieter kann die von Ihnen bereitgestellten Informationen verwenden, um Ihnen wichtige Informationen, erforderliche Mitteilungen und, soweit gesetzlich zulässig, Marketingmitteilungen zu senden.</p><p>Für ein besseres Nutzungserlebnis kann der Dienstanbieter Sie bei der Nutzung der Anwendung auffordern, bestimmte personenbezogene Informationen bereitzustellen, einschließlich, aber nicht beschränkt auf genauen Standort, ungefähren Standort und Suchanfragen nach Orten. Die vom Dienstanbieter angeforderten Informationen werden wie in dieser Datenschutzerklärung beschrieben aufbewahrt und verwendet.</p><p></p>"
+    },
+    {
+      "id": "third-party-access",
+      "title": "Zugriff durch Dritte",
+      "html": "<p>Nur aggregierte, anonymisierte Daten werden regelmäßig an externe Dienste übermittelt, um den Dienstanbieter bei der Verbesserung der Anwendung und seines Dienstes zu unterstützen. Der Dienstanbieter kann Ihre Informationen auf die in dieser Datenschutzerklärung beschriebene Weise an Dritte weitergeben.</p><p></p>"
+    },
+    {
+      "id": "international-data-transfers",
+      "title": "Internationale Datenübermittlungen",
+      "html": "<p>Der Dienstanbieter oder seine Drittdienstleister können personenbezogene Daten in Länder außerhalb Ihres Wohnsitzlandes übermitteln, auch außerhalb des Europäischen Wirtschaftsraums (EWR). Soweit das geltende Recht Garantien für internationale Übermittlungen vorschreibt, setzt der Dienstanbieter geeignete Mechanismen ein.</p><ul><li>von der Europäischen Kommission genehmigte Standardvertragsklauseln (SCC)</li><li>Angemessenheitsbeschlüsse oder sonstige rechtlich anerkannte Übermittlungsmechanismen</li><li>Ihre Einwilligung, soweit erforderlich und rechtlich zulässig</li></ul><p>Die Datenschutzgesetze anderer Länder können von denen in Ihrem Rechtsgebiet abweichen. Soweit gesetzlich vorgeschrieben, wendet der Dienstanbieter geeignete Garantien an und holt jede für die Übermittlung erforderliche Einwilligung ein.</p><p>&nbsp;</p><p>Bitte beachten Sie, dass die Anwendung Dienste Dritter nutzt, die eigene Datenschutzerklärungen zum Umgang mit Daten haben. Nachfolgend finden Sie die Links zu den Datenschutzerklärungen der von der Anwendung genutzten Drittdienstleister:</p><ul><li><a href=\"https://www.google.com/policies/privacy/\" rel=\"noopener\" target=\"_blank\">Google Play Services</a></li><li><a href=\"https://www.mapbox.com/legal/privacy\" rel=\"noopener\" target=\"_blank\">Mapbox</a></li><li><a href=\"https://sentry.io/privacy/\" rel=\"noopener\" target=\"_blank\">Sentry</a></li><li><a href=\"https://firebase.google.com/support/privacy\" rel=\"noopener\" target=\"_blank\">Firebase Cloud Messaging</a></li></ul><p>Der Dienstanbieter kann vom Nutzer bereitgestellte und automatisch erhobene Informationen offenlegen:</p><ul><li>soweit gesetzlich vorgeschrieben, etwa zur Befolgung einer gerichtlichen Anordnung oder eines ähnlichen rechtlichen Verfahrens;</li><li>wenn er in gutem Glauben der Ansicht ist, dass die Offenlegung erforderlich ist, um seine Rechte zu schützen, Ihre Sicherheit oder die Sicherheit anderer zu schützen, Betrug zu untersuchen oder einer behördlichen Anfrage nachzukommen;</li><li>gegenüber seinen vertrauenswürdigen Dienstleistern, die in seinem Auftrag tätig sind, die vom Dienstanbieter offengelegten Informationen nicht eigenständig nutzen und sich verpflichtet haben, die in dieser Datenschutzerklärung festgelegten Regeln einzuhalten.</li></ul><p></p>"
+    },
+    {
+      "id": "opt-out-rights",
+      "title": "Widerspruchsrechte",
+      "html": "<p>Sie können die weitere Erhebung von Informationen von Ihrem Mobilgerät beenden, indem Sie die Anwendung deinstallieren. Durch die Deinstallation erhebt die Anwendung keine Daten mehr von Ihrem Gerät; Informationen, die bereits an den Dienstanbieter oder an Dritte übermittelt wurden, werden dadurch jedoch nicht automatisch gelöscht.</p><p>Um die Löschung Ihrer personenbezogenen Daten zu verlangen, eine Einwilligung zu widerrufen oder eines Ihrer Rechte auszuüben, wenden Sie sich an den Dienstanbieter unter <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p></p>"
+    },
+    {
+      "id": "data-retention-policy",
+      "title": "Richtlinie zur Datenaufbewahrung",
+      "html": "<p>Der Dienstanbieter bewahrt personenbezogene Daten so lange auf, wie es für die angegebenen Zwecke erforderlich ist:</p><ul><li>Vom Nutzer bereitgestellte Daten: Aufbewahrung für die Dauer Ihrer Nutzung der Anwendung und weitere 12 Monate danach, sofern nicht gesetzlich eine längere Aufbewahrung vorgeschrieben ist</li><li>Automatisch erhobene Daten: Aufbewahrung für bis zu 24 Monate ab Erhebung, sofern nicht zur Einhaltung gesetzlicher Vorschriften eine längere Aufbewahrung erforderlich ist</li><li>Aggregierte und anonymisierte Daten: unbefristete Aufbewahrung, da sie Sie nicht mehr identifizieren</li><li>Zur Einhaltung gesetzlicher Vorschriften erforderliche Daten: Aufbewahrung, solange es das geltende Recht vorschreibt</li></ul><p>Sie können die Löschung Ihrer personenbezogenen Daten verlangen, vorbehaltlich etwaiger gesetzlicher Aufbewahrungspflichten. Wenn Sie möchten, dass der Dienstanbieter über die Anwendung übermittelte, vom Nutzer bereitgestellte Daten löscht, wenden Sie sich bitte unter <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a> an ihn. Bitte beachten Sie, dass einige vom Nutzer bereitgestellte Daten für das ordnungsgemäße Funktionieren der Anwendung erforderlich sein können.</p><p></p>"
+    },
+    {
+      "id": "data-deletion",
+      "title": "Löschung von Daten",
+      "html": "<p>Sie können die Löschung Ihrer personenbezogenen Daten oder Ihres Kontos beantragen, indem Sie sich an den Dienstanbieter unter <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a> wenden. Der Dienstanbieter bearbeitet Ihren Antrag innerhalb der nach geltendem Recht vorgeschriebenen Fristen.</p><p>Nach Überprüfung Ihrer Identität löscht der Dienstanbieter Ihre personenbezogenen Daten aus seinen Systemen, es sei denn, die Aufbewahrung ist zur Einhaltung gesetzlicher Vorschriften oder für berechtigte geschäftliche Zwecke erforderlich.</p><p></p>"
+    },
+    {
+      "id": "children",
+      "title": "Kinder",
+      "html": "<p>Die Anwendung ist nicht für Kinder unter 13 Jahren bzw. unter einem nach geltendem Recht vorgeschriebenen höheren Alter bestimmt. Der Dienstanbieter erhebt nicht wissentlich Daten von Kindern unter diesem Alter und bewirbt die Anwendung nicht bei ihnen.</p><p>Soweit nach geltendem Recht die Einwilligung eines Elternteils oder Erziehungsberechtigten erforderlich ist, ist die Anwendung nicht für die Nutzung ohne diese Einwilligung bestimmt. Der Dienstanbieter erhebt nicht wissentlich personenbezogene Informationen von Kindern unter 13 Jahren unter Verstoß gegen geltendes Recht. Die Anwendung hat keine Konten, und der Dienstanbieter speichert keine personenbezogenen Daten auf eigenen Servern; wenn Sie jedoch Elternteil oder Erziehungsberechtigter sind und annehmen, dass Ihr Kind über die Anwendung personenbezogene Informationen bereitgestellt hat, wenden Sie sich bitte an den Dienstanbieter (<a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>), damit er die erforderlichen Maßnahmen ergreifen kann.</p><p></p>"
+    },
+    {
+      "id": "security",
+      "title": "Sicherheit",
+      "html": "<p>Dem Dienstanbieter ist der Schutz der Vertraulichkeit Ihrer Informationen ein Anliegen. Der Dienstanbieter setzt physische, elektronische und verfahrenstechnische Schutzmaßnahmen ein, um die von ihm verarbeiteten und gespeicherten Informationen zu schützen.</p><p></p>"
+    },
+    {
+      "id": "data-breach-notification",
+      "title": "Benachrichtigung bei Datenschutzverletzungen",
+      "html": "<p>Kommt es zu einer Verletzung des Schutzes personenbezogener Daten, die Ihre personenbezogenen Daten betrifft, wird der Dienstanbieter Sie gemäß den geltenden gesetzlichen Anforderungen benachrichtigen und Ihnen, soweit erforderlich, Informationen über die Art der Verletzung und die zu ihrer Behebung ergriffenen Maßnahmen bereitstellen.</p><p></p>"
+    },
+    {
+      "id": "changes",
+      "title": "Änderungen",
+      "html": "<p>Der Dienstanbieter kann diese Datenschutzerklärung von Zeit zu Zeit aktualisieren. Der Dienstanbieter wird Sie über wesentliche Änderungen informieren, indem er die aktualisierte Datenschutzerklärung mit einem Datum des Inkrafttretens veröffentlicht. Soweit gesetzlich vorgeschrieben, wird der Dienstanbieter Ihre Einwilligung zu wesentlichen Änderungen einholen, bevor diese wirksam werden.<br>&nbsp;</p><p>Frühere Fassungen dieser Datenschutzerklärung werden aufbewahrt und sind auf Anfrage beim Dienstanbieter unter <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a> erhältlich.</p><p>Diese Datenschutzerklärung gilt ab dem 2026-10-30</p><p></p>"
+    },
+    {
+      "id": "your-consent",
+      "title": "Ihre Einwilligung",
+      "html": "<p>Beruht die Verarbeitung auf einer Einwilligung, erteilen Sie diese, indem Sie der betreffenden Funktion oder Handlung ausdrücklich zustimmen (Opt-in). Sie können Ihre Einwilligung jederzeit widerrufen, ohne dass die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung berührt wird. Eine auf anderen Rechtsgrundlagen beruhende Verarbeitung erfolgt wie oben beschrieben.</p><p></p>"
+    },
+    {
+      "id": "contact-us",
+      "title": "Kontakt",
+      "html": "<p>Wenn Sie Fragen zum Datenschutz bei der Nutzung der Anwendung oder Fragen zu den Praktiken haben, wenden Sie sich bitte per E-Mail an den Dienstanbieter unter <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p>"
+    }
+  ]
+}

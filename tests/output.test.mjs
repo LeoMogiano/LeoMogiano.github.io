@@ -121,3 +121,15 @@ test('el CSS va inline: cero hojas que bloqueen el primer pintado', () => {
     assert.ok(/<style>/.test(html), `${page} no tiene el CSS inline`);
   }
 });
+
+test('páginas legales de MiMicro: 8 idiomas × 2 documentos, con lang y hreflang', () => {
+  const langs = ['en', 'es', 'pt', 'fr', 'de', 'it', 'ja', 'ru'];
+  for (const lang of langs) {
+    for (const doc of ['terms', 'privacy']) {
+      const html = read(`mimicro/${lang === 'en' ? '' : `${lang}/`}${doc}/index.html`);
+      assert.match(html, new RegExp(`<html lang="${lang}"`), `${lang}/${doc} declara su idioma`);
+      assert.equal((html.match(/rel="alternate" hreflang=/g) ?? []).length, 9, `${lang}/${doc} enlaza los 8 idiomas + x-default`);
+      assert.ok(!html.includes('name="theme-color"'), 'sin theme-color: Safari iOS muestrea el fondo');
+    }
+  }
+});

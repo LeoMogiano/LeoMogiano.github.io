@@ -58,9 +58,10 @@ const FONTS = [
   },
   {
     // Solo para las páginas legales de MiMicro: la misma cara que usa la app.
+    // Lleva cirílico porque esas páginas también salen en ruso.
     out: 'montserrat-var.woff2',
     url: `${RAW}/ofl/montserrat/Montserrat%5Bwght%5D.ttf`,
-    scope: 'latin',
+    scope: 'cyrillic',
   },
   {
     out: 'dm-mono-400.woff2',
@@ -89,6 +90,9 @@ const LATIN =
   'ĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽž' +
   '‐‑‒–—―‘’‚‛“”„‟†‡•…‰′″‹›‽⁄€™←↑→↓↔⌘' +
   '／·';
+
+/** Cirílico básico (U+0400–U+045F) más № y la ґ ucraniana, como el subset cyrillic de Google. */
+const CYRILLIC = String.fromCharCode(...Array.from({ length: 0x60 }, (_, i) => 0x400 + i)) + 'Ґґ№';
 
 /** Todo el texto japonés real del sitio, más los latinos que lo acompañan. */
 function japaneseText() {
@@ -119,7 +123,7 @@ for (const font of FONTS) {
   }
 
   const source = readFileSync(cached);
-  const text = font.scope === 'ja' ? LATIN + jaText : LATIN;
+  const text = font.scope === 'ja' ? LATIN + jaText : font.scope === 'cyrillic' ? LATIN + CYRILLIC : LATIN;
 
   // El eje `wght` nunca se instancia: el archivo sigue siendo variable. Solo se
   // fijan los ejes que la fuente declara en `axes` y el sitio no usa.

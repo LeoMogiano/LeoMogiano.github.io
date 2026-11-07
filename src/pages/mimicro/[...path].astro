@@ -7,34 +7,37 @@
  * MyMicro-iOS/Core/DesignSystem, Montserrat) para que quien llega desde
  * Ajustes > Acerca de sienta que sigue dentro de MiMicro.
  *
- * El texto legal vive en src/data/mimicro/*.json, copiado tal cual del
- * documento de Flycricket (vigente 2026-10-30). Se edita ahí, no aquí.
+ * El texto legal vive en src/data/mimicro/<doc>.<lang>.json. El inglés es
+ * copia tal cual del documento de Flycricket (vigente 2026-10-30); los otros
+ * siete son traducciones de cortesía. Se editan ahí, no aquí.
+ *
+ * Rutas: /mimicro/terms/ (inglés) y /mimicro/<lang>/terms/. Además, ?lang=xx
+ * en cualquiera de ellas redirige al idioma pedido (ver el script del head).
  */
 import type { GetStaticPaths } from 'astro';
-import terms from '../../data/mimicro/terms.json';
-import privacy from '../../data/mimicro/privacy.json';
+import { DOC_KEYS, LANGS, UI, getDoc, legalPath, type DocKey, type LegalLang } from '../../data/mimicro/i18n';
 
-const DOCS = {
-  terms: { title: 'Terms & Conditions', tab: 'Terms', data: terms },
-  privacy: { title: 'Privacy Policy', tab: 'Privacy', data: privacy },
-} as const;
-type DocKey = keyof typeof DOCS;
-
-// Astro saca getStaticPaths del componente: no ve DOCS, por eso la lista va aquí.
 export const getStaticPaths = (() =>
-  ['terms', 'privacy'].map((doc) => ({ params: { doc } }))) satisfies GetStaticPaths;
+  LANGS.flatMap((lang) =>
+    DOC_KEYS.map((doc) => ({
+      params: { path: lang === 'en' ? doc : `${lang}/${doc}` },
+      props: { lang, doc },
+    })),
+  )) satisfies GetStaticPaths;
 
-const key = Astro.params.doc as DocKey;
-const { title, data } = DOCS[key];
-const canonical = new URL(`/mimicro/${key}/`, Astro.site).href;
+const { lang, doc: key } = Astro.props as { lang: LegalLang; doc: DocKey };
+const t = UI[lang];
+const title = t.title[key];
+const data = getDoc(key, lang);
+const canonical = new URL(legalPath(key, lang), Astro.site).href;
 
-const effective = new Date(`${data.effective}T12:00:00Z`).toLocaleDateString('en-US', {
+const effective = new Date(`${data.effective}T12:00:00Z`).toLocaleDateString(lang, {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
   timeZone: 'UTC',
 });
-const description = `${title} for MiMicro, the bus app for Santa Cruz de la Sierra. Effective ${effective}.`;
+const description = t.description(title, effective);
 const CONTACT = 'leomogiano@outlook.com';
 
 /* Material Icons (Apache 2.0), los mismos nombres que usa la app. */
@@ -50,16 +53,36 @@ const ICON = {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    {/*
+      ?lang=xx → ruta del idioma. Va primero en el head para salir antes de pintar.
+      Acepta "pt-BR", "es_BO", "ES": se queda con el código base. Un idioma que no
+      está cae a inglés, igual que las apps.
+    */}
+    <script is:inline define:vars={{ doc: key, langs: LANGS }}>
+      const q = new URLSearchParams(location.search).get('lang');
+      if (q) {
+        const base = q.toLowerCase().split(/[-_]/)[0];
+        const l = langs.includes(base) ? base : 'en';
+        const target = `/mimicro/${l === 'en' ? '' : l + '/'}${doc}/`;
+        if (target !== location.pathname) location.replace(target + location.hash);
+      }
+    </script>
     <title>{title} · MiMicro</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#F6F8F5" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1F2022" media="(prefers-color-scheme: dark)" />
+    {LANGS.map((l) => <link rel="alternate" hreflang={l} href={new URL(legalPath(key, l), Astro.site).href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(legalPath(key, 'en'), Astro.site).href} />
+    {/*
+      Sin <meta theme-color>, igual que Base.astro: con él Safari iOS pinta sus
+      barras de un color sólido; sin él muestrea el fondo de <html> en el borde
+      del viewport, que aquí es plano, y la barra queda continua con la página.
+    */}
     <meta name="color-scheme" content="light dark" />
+    <meta name="format-detection" content="telephone=no" />
     <link rel="preload" href="/fonts/montserrat-var.woff2" as="font" type="font/woff2" crossorigin />
     <link
       rel="icon"
@@ -68,7 +91,7 @@ const ICON = {
   </head>
 
   <body>
-    <a class="skip" href="#doc">Skip to content</a>
+    <a class="skip" href="#doc">{t.skip}</a>
 
     <svg class="deco" viewBox="0 0 24 24" aria-hidden="true"><path d={ICON.explore} /></svg>
 
@@ -80,11 +103,11 @@ const ICON = {
         <span class="brand__word">Mi<b>Micro</b></span>
       </span>
 
-      <nav class="seg" aria-label="Legal documents">
+      <nav class="seg" aria-label={t.nav}>
         {
-          (Object.keys(DOCS) as DocKey[]).map((k) => (
-            <a href={`/mimicro/${k}/`} aria-current={k === key ? 'page' : undefined}>
-              {DOCS[k].tab}
+          DOC_KEYS.map((k) => (
+            <a href={legalPath(k, lang)} aria-current={k === key ? 'page' : undefined}>
+              {t.tab[k]}
             </a>
           ))
         }
@@ -96,15 +119,25 @@ const ICON = {
         <h1>{title}</h1>
         <p class="chip">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICON.event} /></svg>
-          Effective <time datetime={data.effective}>{effective}</time>
+          {t.effective} <time datetime={data.effective}>{effective}</time>
         </p>
+        {
+          t.courtesy && (
+            <p class="courtesy">
+              {t.courtesy}{' '}
+              <a href={legalPath(key, 'en')} hreflang="en" lang="en">
+                {t.readEnglish}
+              </a>
+            </p>
+          )
+        }
       </div>
 
       <aside class="toc">
         <details>
           <summary>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICON.list} /></svg>
-            On this page
+            {t.toc}
           </summary>
           <ol>
             {data.sections.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}
@@ -132,22 +165,36 @@ const ICON = {
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d={ICON.mail} /></svg>
           </span>
           <div>
-            <p class="ask__title">Questions about this?</p>
-            <p class="ask__text">Write to Leonardo Mogiano, who builds MiMicro.</p>
+            <p class="ask__title">{t.askTitle}</p>
+            <p class="ask__text">{t.askText}</p>
           </div>
           <a class="ask__btn" href={`mailto:${CONTACT}?subject=${encodeURIComponent(`MiMicro · ${title}`)}`}>
-            Email us
+            {t.askBtn}
           </a>
         </aside>
       </main>
     </div>
 
     <footer class="foot">
+      <nav class="langs" aria-label={t.language}>
+        {
+          LANGS.map((l) => (
+            <a
+              href={legalPath(key, l)}
+              hreflang={l}
+              lang={l}
+              aria-current={l === lang ? 'page' : undefined}
+            >
+              {UI[l].name}
+            </a>
+          ))
+        }
+      </nav>
       <p>
-        MiMicro · Santa Cruz de la Sierra, Bolivia · Made by <a href="/">Leo Mogiano</a>
+        MiMicro · Santa Cruz de la Sierra, Bolivia · {t.madeBy} <a href="/">Leo Mogiano</a>
       </p>
       <p>
-        Originally generated with <a href="https://app-privacy-policy-generator.nisrulz.com/" rel="noopener"
+        {t.generated} <a href="https://app-privacy-policy-generator.nisrulz.com/" rel="noopener"
           >App Privacy Policy Generator</a
         >.
       </p>
@@ -205,9 +252,12 @@ const ICON = {
   }
 
   html {
+    /* Fondo en <html>: es lo que Safari muestrea para teñir sus barras. */
+    background-color: var(--bg);
     -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
-    scroll-padding-top: 24px;
+    scroll-padding-top: calc(24px + env(safe-area-inset-top));
     scrollbar-color: var(--line) var(--bg);
     accent-color: var(--primary);
   }
@@ -225,6 +275,7 @@ const ICON = {
     font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
     caret-color: var(--primary);
+    overflow-wrap: break-word;
     overflow-x: clip;
     position: relative;
     min-height: 100dvh;
@@ -272,10 +323,12 @@ const ICON = {
     top: 12px;
   }
 
-  /* La brújula de Inicio, mismo gesto: 260px, −8°, recortada en la esquina. */
+  /* La brújula de Inicio, mismo gesto: 260px, −8°, recortada en la esquina.
+     Separada del borde superior: si lo tocara, Safari iOS muestrearía su verde
+     y teñiría la barra de direcciones. */
   .deco {
     position: absolute;
-    top: -30px;
+    top: 64px;
     right: -60px;
     width: 300px;
     height: 300px;
@@ -435,7 +488,7 @@ const ICON = {
   }
   .toc li a {
     display: block;
-    padding: 8px 12px 8px 42px;
+    padding: 10px 12px 10px 42px;
     border-radius: 12px;
     color: var(--ink-3);
     font-size: 14px;
@@ -543,8 +596,10 @@ const ICON = {
     background: #23683f;
   }
 
+  /* Holgura abajo para la barra flotante de Safari iOS (y la de gestos de
+     Android): sin ella tapa el selector de idioma al llegar al final. */
   .foot {
-    padding-bottom: max(32px, env(safe-area-inset-bottom));
+    padding-bottom: calc(56px + env(safe-area-inset-bottom));
     font-size: 13px;
     color: var(--ink-2);
   }
@@ -553,6 +608,65 @@ const ICON = {
   }
   .foot a {
     color: inherit;
+  }
+
+  .langs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0 0 20px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .langs a {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    padding-inline: 14px;
+    border-radius: 99px;
+    background: var(--soft);
+    color: var(--ink-3);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .langs a:hover {
+    color: var(--ink);
+  }
+  .langs a[aria-current='page'] {
+    background: var(--accent-bg);
+    color: var(--primary-deep);
+  }
+
+  .courtesy {
+    max-width: 52ch;
+    margin: 14px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  /* Compuestos largos (Nutzungsbedingungen, конфиденциальности): guion donde
+     toca en vez de corte a mitad de palabra. En el cuerpo solo alemán y ruso;
+     en español o inglés partiría palabras comunes sin necesidad. */
+  h1,
+  h2,
+  :lang(de) body,
+  :lang(ru) body {
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+
+  /* Japonés: Montserrat no trae kanji. La cara del sistema (Hiragino en Apple,
+     Noto CJK en Android) toma esos glifos; el latín sigue en Montserrat. */
+  :lang(ja) body {
+    font-family: 'Montserrat', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Noto Sans CJK JP',
+      'Yu Gothic', system-ui, sans-serif;
+    line-height: 1.85;
+    line-break: strict;
+  }
+  :lang(ja) h1,
+  :lang(ja) h2 {
+    letter-spacing: 0;
   }
 
   @media (min-width: 960px) {
@@ -582,7 +696,7 @@ const ICON = {
       width: 420px;
       height: 420px;
       right: -90px;
-      top: -60px;
+      top: 48px;
     }
   }
 

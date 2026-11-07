@@ -1,0 +1,96 @@
+{
+  "effective": "2026-10-30",
+  "intro": "<p>La présente politique de confidentialité s’applique à l’application MiMicro pour appareils mobiles, ainsi qu’à tout service connexe exploité par Leonardo Mogiano (collectivement, l’« Application »). Leonardo Mogiano est ci-après dénommé le « Prestataire de services ».</p><p></p>",
+  "sections": [
+    {
+      "id": "information-collection-and-use",
+      "title": "Collecte et utilisation des informations",
+      "html": "<p>L’Application collecte des informations lorsque vous la téléchargez et l’utilisez. Ces informations peuvent notamment comprendre</p><ul><li>L’adresse IP (Internet Protocol) de votre appareil</li><li>Les pages de l’Application que vous consultez, l’heure et la date de votre visite, le temps passé sur ces pages</li><li>Le temps passé sur l’Application</li><li>le système d’exploitation mobile que vous utilisez</li></ul>"
+    },
+    {
+      "id": "crash-reporting-and-diagnostics",
+      "title": "Rapports de plantage et diagnostics",
+      "html": "<p>L’Application utilise Sentry pour détecter et corriger les erreurs. Lorsque l’Application plante, se fige ou enregistre une erreur, elle envoie un rapport pouvant comprendre : l’erreur et la trace d’appels (stack trace), le modèle de l’appareil et le système d’exploitation, la version de l’application, un identifiant d’installation aléatoire, des données de performance (telles que les temps de chargement des écrans), les événements récents de l’application et une capture de l’écran sur lequel l’erreur s’est produite. La capture d’écran peut montrer la carte et les lieux affichés à l’écran. Les rapports ne comprennent ni votre nom, ni votre adresse e-mail, ni d’identité fondée sur l’adresse IP, ne sont pas associés à vous et sont utilisés uniquement pour diagnostiquer et améliorer l’Application. Ils sont conservés pendant 90 jours au maximum.</p>"
+    },
+    {
+      "id": "push-notifications",
+      "title": "Notifications push",
+      "html": "<p>Si vous autorisez les notifications, l’Application enregistre un jeton d’appareil auprès de Firebase Cloud Messaging afin que le Prestataire de services puisse vous envoyer des actualités concernant l’Application. Vous pouvez désactiver les notifications à tout moment dans les réglages de l’Application ou dans les réglages de votre appareil.</p>"
+    },
+    {
+      "id": "cookies-and-tracking-technologies",
+      "title": "Cookies et technologies de suivi",
+      "html": "<p>L’Application ou ses SDK tiers peuvent utiliser des cookies, des SDK, des pixels et des technologies similaires pour assurer le bon fonctionnement, l’analyse d’audience ou la fourniture du service. Lorsque la loi applicable l’exige, le Prestataire de services obtiendra votre consentement avant d’utiliser des technologies de suivi non essentielles.</p><p></p>"
+    },
+    {
+      "id": "location-information",
+      "title": "Données de localisation",
+      "html": "<p>L’Application collecte la localisation de votre appareil afin de fournir des fonctionnalités fondées sur la localisation, d’améliorer l’Application et de prendre en charge les services connexes.</p><ul><li>Services de géolocalisation : le Prestataire de services peut utiliser les données de localisation pour fournir des fonctionnalités ou du contenu fondés sur la localisation.</li><li>Analyses et améliorations : des données de localisation agrégées peuvent aider le Prestataire de services à comprendre les habitudes d’utilisation et à améliorer les performances.</li><li>Services tiers : les données de localisation peuvent être partagées avec des services tiers utilisés pour assurer le fonctionnement de l’Application, sous réserve de la présente politique de confidentialité et de la loi applicable.</li></ul><p></p>"
+    },
+    {
+      "id": "your-rights",
+      "title": "Vos droits",
+      "html": "<p>Vous pouvez demander l’accès à vos données personnelles détenues par le Prestataire de services, leur rectification ou leur suppression. Pour exercer ces droits, ou pour retirer votre consentement lorsque le traitement est fondé sur le consentement, contactez le Prestataire de services à l’adresse <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p></p>"
+    },
+    {
+      "id": "your-california-privacy-rights-ccpa-cpra",
+      "title": "Vos droits en matière de confidentialité en Californie (CCPA/CPRA)",
+      "html": "<p>Si vous résidez en Californie, vous disposez du droit de savoir quelles informations personnelles sont collectées, du droit de faire supprimer vos informations personnelles, du droit de vous opposer à la vente ou au partage de vos informations personnelles et du droit de ne pas faire l’objet de discrimination pour avoir exercé ces droits. Pour exercer vos droits au titre du CCPA/CPRA, contactez le Prestataire de services à l’adresse <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p>Le Prestataire de services peut utiliser les informations que vous fournissez pour vous envoyer des informations importantes, des avis obligatoires et, lorsque la loi le permet, des communications marketing.</p><p>Afin d’améliorer votre expérience lors de l’utilisation de l’Application, le Prestataire de services peut vous demander de fournir certaines informations permettant de vous identifier personnellement, y compris, sans s’y limiter, la localisation précise, la localisation approximative et les recherches de lieux. Les informations demandées par le Prestataire de services seront conservées et utilisées conformément à la présente politique de confidentialité.</p><p></p>"
+    },
+    {
+      "id": "third-party-access",
+      "title": "Accès des tiers",
+      "html": "<p>Seules des données agrégées et anonymisées sont périodiquement transmises à des services externes afin d’aider le Prestataire de services à améliorer l’Application et son service. Le Prestataire de services peut partager vos informations avec des tiers selon les modalités décrites dans la présente déclaration de confidentialité.</p><p></p>"
+    },
+    {
+      "id": "international-data-transfers",
+      "title": "Transferts internationaux de données",
+      "html": "<p>Le Prestataire de services ou ses prestataires de services tiers peuvent transférer des données personnelles vers des pays situés en dehors de votre pays de résidence, y compris en dehors de l’Espace économique européen (EEE). Lorsque la loi applicable exige des garanties pour les transferts internationaux, le Prestataire de services aura recours à des mécanismes appropriés.</p><ul><li>Clauses contractuelles types (CCT) approuvées par la Commission européenne</li><li>Décisions d’adéquation ou autres mécanismes de transfert juridiquement reconnus</li><li>Votre consentement, lorsqu’il est requis et légalement admis</li></ul><p>Les lois relatives à la protection des données dans d’autres pays peuvent différer de celles de votre juridiction. Lorsque la loi l’exige, le Prestataire de services appliquera des garanties appropriées et obtiendra tout consentement requis pour le transfert.</p><p>&nbsp;</p><p>Veuillez noter que l’Application utilise des services tiers qui disposent de leur propre Politique de confidentialité concernant le traitement des données. Vous trouverez ci-dessous les liens vers la Politique de confidentialité des prestataires de services tiers utilisés par l’Application :</p><ul><li><a href=\"https://www.google.com/policies/privacy/\" rel=\"noopener\" target=\"_blank\">Google Play Services</a></li><li><a href=\"https://www.mapbox.com/legal/privacy\" rel=\"noopener\" target=\"_blank\">Mapbox</a></li><li><a href=\"https://sentry.io/privacy/\" rel=\"noopener\" target=\"_blank\">Sentry</a></li><li><a href=\"https://firebase.google.com/support/privacy\" rel=\"noopener\" target=\"_blank\">Firebase Cloud Messaging</a></li></ul><p>Le Prestataire de services peut divulguer les Informations fournies par l’utilisateur et les Informations collectées automatiquement :</p><ul><li>lorsque la loi l’exige, notamment pour se conformer à une citation à comparaître ou à une procédure judiciaire similaire ;</li><li>lorsqu’il estime de bonne foi que la divulgation est nécessaire pour protéger ses droits, protéger votre sécurité ou celle d’autrui, enquêter sur une fraude ou répondre à une demande des autorités publiques ;</li><li>à ses prestataires de services de confiance qui agissent pour son compte, ne font pas d’utilisation indépendante des informations que le Prestataire de services leur communique et ont accepté de respecter les règles énoncées dans la présente déclaration de confidentialité.</li></ul><p></p>"
+    },
+    {
+      "id": "opt-out-rights",
+      "title": "Droit d’opposition",
+      "html": "<p>Vous pouvez mettre fin à toute nouvelle collecte d’informations depuis votre appareil mobile en désinstallant l’Application. La désinstallation met fin à la collecte de données depuis votre appareil par l’Application, mais n’entraîne pas automatiquement la suppression des informations déjà transmises au Prestataire de services ou à des tiers.</p><p>Pour demander la suppression de vos données personnelles, retirer votre consentement ou exercer l’un quelconque de vos droits, contactez le Prestataire de services à l’adresse <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p></p>"
+    },
+    {
+      "id": "data-retention-policy",
+      "title": "Politique de conservation des données",
+      "html": "<p>Le Prestataire de services conserve les données personnelles en fonction de leur nécessité au regard des finalités indiquées :</p><ul><li>Données fournies par l’utilisateur : conservées pendant toute la durée de votre utilisation de l’Application, puis pendant 12 mois, sauf si une durée de conservation plus longue est exigée par la loi</li><li>Données collectées automatiquement : conservées pendant 24 mois au maximum à compter de leur collecte, sauf si une durée de conservation plus longue est requise pour le respect d’obligations légales</li><li>Données agrégées et anonymisées : conservées pour une durée indéterminée, car elles ne permettent plus de vous identifier</li><li>Données requises pour le respect d’obligations légales : conservées aussi longtemps que l’exige la loi applicable</li></ul><p>Vous pouvez demander la suppression de vos données personnelles, sous réserve de toute obligation légale de conservation. Si vous souhaitez que le Prestataire de services supprime les Données fournies par l’utilisateur soumises par l’intermédiaire de l’Application, veuillez le contacter à l’adresse <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>. Veuillez noter que certaines Données fournies par l’utilisateur peuvent être nécessaires au bon fonctionnement de l’Application.</p><p></p>"
+    },
+    {
+      "id": "data-deletion",
+      "title": "Suppression des données",
+      "html": "<p>Vous pouvez demander la suppression de vos données personnelles ou de votre compte en contactant le Prestataire de services à l’adresse <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>. Le Prestataire de services traitera votre demande dans les délais prévus par la loi applicable.</p><p>Après vérification de votre identité, le Prestataire de services supprimera vos données personnelles de ses systèmes, sauf lorsque leur conservation est requise pour le respect d’obligations légales ou à des fins commerciales légitimes.</p><p></p>"
+    },
+    {
+      "id": "children",
+      "title": "Enfants",
+      "html": "<p>L’Application n’est pas destinée aux enfants de moins de 13 ans, ou de l’âge supérieur exigé par la loi applicable. Le Prestataire de services ne sollicite pas sciemment de données auprès d’enfants n’ayant pas atteint cet âge et ne leur destine pas la promotion de l’Application.</p><p>Lorsque le consentement d’un parent ou d’un tuteur est requis en vertu de la loi applicable, l’Application n’est pas destinée à être utilisée sans ce consentement. Le Prestataire de services ne collecte pas sciemment d’informations permettant d’identifier personnellement des enfants de moins de 13 ans en violation de la loi applicable. L’Application ne comporte pas de comptes et le Prestataire de services ne stocke pas de données personnelles sur ses propres serveurs ; toutefois, si vous êtes parent ou tuteur et pensez que votre enfant a fourni des informations personnelles par l’intermédiaire de l’Application, veuillez contacter le Prestataire de services (<a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>) afin qu’il puisse prendre les mesures nécessaires.</p><p></p>"
+    },
+    {
+      "id": "security",
+      "title": "Sécurité",
+      "html": "<p>Le Prestataire de services veille à préserver la confidentialité de vos informations. Le Prestataire de services met en œuvre des mesures de protection physiques, électroniques et procédurales afin de protéger les informations qu’il traite et conserve.</p><p></p>"
+    },
+    {
+      "id": "data-breach-notification",
+      "title": "Notification des violations de données",
+      "html": "<p>En cas de violation de données affectant vos données personnelles, le Prestataire de services vous en informera conformément aux exigences légales applicables, notamment, lorsque cela est requis, en fournissant des informations sur la nature de la violation et sur les mesures prises pour y remédier.</p><p></p>"
+    },
+    {
+      "id": "changes",
+      "title": "Modifications",
+      "html": "<p>Le Prestataire de services peut mettre à jour la présente Politique de confidentialité de temps à autre. Le Prestataire de services vous informera des modifications substantielles en publiant la Politique de confidentialité mise à jour assortie d’une date d’entrée en vigueur. Lorsque la loi l’exige, le Prestataire de services recueillera votre consentement aux modifications substantielles avant leur entrée en vigueur.<br>&nbsp;</p><p>Les versions antérieures de la présente Politique de confidentialité sont conservées et mises à disposition sur demande adressée au Prestataire de services à l’adresse <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p>La présente politique de confidentialité est en vigueur à compter du 2026-10-30</p><p></p>"
+    },
+    {
+      "id": "your-consent",
+      "title": "Votre consentement",
+      "html": "<p>Lorsque le traitement est fondé sur le consentement, vous donnez ce consentement en activant de manière explicite la fonctionnalité ou l’action concernée. Vous pouvez retirer votre consentement à tout moment, sans que cela n’affecte le traitement effectué avant ce retrait. Le traitement fondé sur d’autres bases légales est effectué conformément à ce qui est décrit ci-dessus.</p><p></p>"
+    },
+    {
+      "id": "contact-us",
+      "title": "Nous contacter",
+      "html": "<p>Pour toute question relative à la confidentialité lors de l’utilisation de l’Application, ou concernant ces pratiques, veuillez contacter le Prestataire de services par e-mail à l’adresse <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p>"
+    }
+  ]
+}

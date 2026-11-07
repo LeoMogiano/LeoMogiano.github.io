@@ -1,0 +1,96 @@
+{
+  "effective": "2026-10-30",
+  "intro": "<p>La presente informativa sulla privacy si applica all'app MiMicro per dispositivi mobili, unitamente a qualsiasi servizio correlato gestito da Leonardo Mogiano (collettivamente, l'«Applicazione»). Leonardo Mogiano è di seguito denominato il «Fornitore del Servizio».</p><p></p>",
+  "sections": [
+    {
+      "id": "information-collection-and-use",
+      "title": "Raccolta e utilizzo delle informazioni",
+      "html": "<p>L'Applicazione raccoglie informazioni quando viene scaricata e utilizzata. Tali informazioni possono includere, ad esempio:</p><ul><li>L'indirizzo IP (Internet Protocol) del dispositivo</li><li>Le pagine dell'Applicazione visitate, l'ora e la data della visita, il tempo trascorso su tali pagine</li><li>Il tempo trascorso sull'Applicazione</li><li>Il sistema operativo mobile utilizzato</li></ul>"
+    },
+    {
+      "id": "crash-reporting-and-diagnostics",
+      "title": "Segnalazione degli arresti anomali e diagnostica",
+      "html": "<p>L'Applicazione utilizza Sentry per rilevare e correggere gli errori. Quando l'Applicazione si arresta in modo anomalo, si blocca o registra un errore, invia una segnalazione che può includere: l'errore e lo stack trace, il modello del dispositivo e il sistema operativo, la versione dell'app, un identificativo casuale dell'installazione, dati sulle prestazioni (come i tempi di caricamento delle schermate), eventi recenti dell'app e uno screenshot della schermata in cui si è verificato l'errore. Lo screenshot può mostrare la mappa e i luoghi visualizzati sullo schermo. Le segnalazioni non includono il nome, l'indirizzo email o l'identità basata sull'indirizzo IP dell'utente, non sono associate all'utente e sono utilizzate esclusivamente per diagnosticare e migliorare l'Applicazione. Sono conservate per un massimo di 90 giorni.</p>"
+    },
+    {
+      "id": "push-notifications",
+      "title": "Notifiche push",
+      "html": "<p>Se l'utente consente le notifiche, l'Applicazione registra un token del dispositivo presso Firebase Cloud Messaging affinché il Fornitore del Servizio possa inviare all'utente novità sull'Applicazione. L'utente può disattivare le notifiche in qualsiasi momento nelle impostazioni dell'Applicazione o nelle impostazioni del dispositivo.</p>"
+    },
+    {
+      "id": "cookies-and-tracking-technologies",
+      "title": "Cookie e tecnologie di tracciamento",
+      "html": "<p>L'Applicazione o i suoi SDK di terze parti possono utilizzare cookie, SDK, pixel e tecnologie analoghe a supporto delle funzionalità, delle analisi o dell'erogazione del servizio. Ove richiesto dalla legge applicabile, il Fornitore del Servizio otterrà il consenso prima di utilizzare tecnologie di tracciamento non essenziali.</p><p></p>"
+    },
+    {
+      "id": "location-information",
+      "title": "Informazioni sulla posizione",
+      "html": "<p>L'Applicazione raccoglie la posizione del dispositivo per fornire funzionalità basate sulla posizione, migliorare l'Applicazione e supportare i servizi correlati.</p><ul><li>Servizi di geolocalizzazione: il Fornitore del Servizio può utilizzare i dati sulla posizione per fornire funzionalità o contenuti basati sulla posizione.</li><li>Analisi e miglioramenti: i dati aggregati sulla posizione possono aiutare il Fornitore del Servizio a comprendere le modalità di utilizzo e a migliorare le prestazioni.</li><li>Servizi di terze parti: i dati sulla posizione possono essere condivisi con servizi di terze parti utilizzati a supporto delle funzionalità dell'Applicazione, nel rispetto della presente informativa sulla privacy e della legge applicabile.</li></ul><p></p>"
+    },
+    {
+      "id": "your-rights",
+      "title": "Diritti dell'utente",
+      "html": "<p>L'utente può richiedere l'accesso, la rettifica o la cancellazione dei propri dati personali detenuti dal Fornitore del Servizio. Per esercitare tali diritti, o per revocare il consenso qualora il trattamento si basi sul consenso, è possibile contattare il Fornitore del Servizio all'indirizzo <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p></p>"
+    },
+    {
+      "id": "your-california-privacy-rights-ccpa-cpra",
+      "title": "Diritti in materia di privacy dei residenti in California (CCPA/CPRA)",
+      "html": "<p>Se l'utente è residente in California, ha il diritto di sapere quali informazioni personali vengono raccolte, il diritto di ottenere la cancellazione delle informazioni personali, il diritto di opporsi alla vendita o alla condivisione delle informazioni personali e il diritto di non essere discriminato per l'esercizio di tali diritti. Per esercitare i diritti previsti dal CCPA/CPRA, è possibile contattare il Fornitore del Servizio all'indirizzo <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p>Il Fornitore del Servizio può utilizzare le informazioni fornite dall'utente per inviare informazioni importanti, comunicazioni obbligatorie e, ove consentito dalla legge, comunicazioni di marketing.</p><p>Per una migliore esperienza durante l'utilizzo dell'Applicazione, il Fornitore del Servizio può richiedere all'utente di fornire determinate informazioni di identificazione personale, incluse, a titolo esemplificativo ma non esaustivo, posizione precisa, posizione approssimativa, query di ricerca di luoghi. Le informazioni richieste dal Fornitore del Servizio saranno conservate e utilizzate come descritto nella presente informativa sulla privacy.</p><p></p>"
+    },
+    {
+      "id": "third-party-access",
+      "title": "Accesso da parte di terzi",
+      "html": "<p>Solo dati aggregati e anonimizzati vengono periodicamente trasmessi a servizi esterni per aiutare il Fornitore del Servizio a migliorare l'Applicazione e il proprio servizio. Il Fornitore del Servizio può condividere le informazioni dell'utente con terze parti secondo le modalità descritte nella presente informativa sulla privacy.</p><p></p>"
+    },
+    {
+      "id": "international-data-transfers",
+      "title": "Trasferimenti internazionali di dati",
+      "html": "<p>Il Fornitore del Servizio o i suoi fornitori di servizi terzi possono trasferire dati personali verso paesi diversi dal paese di residenza dell'utente, anche al di fuori dello Spazio economico europeo (SEE). Ove la legge applicabile richieda garanzie per i trasferimenti internazionali, il Fornitore del Servizio utilizzerà meccanismi adeguati.</p><ul><li>Clausole contrattuali tipo (SCC) approvate dalla Commissione europea</li><li>Decisioni di adeguatezza o altri meccanismi di trasferimento giuridicamente riconosciuti</li><li>Il consenso dell'utente, ove richiesto e legalmente consentito</li></ul><p>Le leggi sulla protezione dei dati di altri paesi possono differire da quelle della giurisdizione dell'utente. Ove richiesto dalla legge, il Fornitore del Servizio applicherà garanzie adeguate e otterrà l'eventuale consenso necessario per il trasferimento.</p><p>&nbsp;</p><p>Si prega di notare che l'Applicazione utilizza servizi di terze parti dotati di una propria Informativa sulla privacy relativa al trattamento dei dati. Di seguito sono riportati i link all'Informativa sulla privacy dei fornitori di servizi terzi utilizzati dall'Applicazione:</p><ul><li><a href=\"https://www.google.com/policies/privacy/\" rel=\"noopener\" target=\"_blank\">Google Play Services</a></li><li><a href=\"https://www.mapbox.com/legal/privacy\" rel=\"noopener\" target=\"_blank\">Mapbox</a></li><li><a href=\"https://sentry.io/privacy/\" rel=\"noopener\" target=\"_blank\">Sentry</a></li><li><a href=\"https://firebase.google.com/support/privacy\" rel=\"noopener\" target=\"_blank\">Firebase Cloud Messaging</a></li></ul><p>Il Fornitore del Servizio può divulgare le Informazioni fornite dall'utente e le Informazioni raccolte automaticamente:</p><ul><li>ove richiesto dalla legge, ad esempio per ottemperare a un'ingiunzione o a un procedimento giudiziario analogo;</li><li>quando ritiene in buona fede che la divulgazione sia necessaria per tutelare i propri diritti, proteggere la sicurezza dell'utente o di altri, indagare su frodi o rispondere a una richiesta delle autorità pubbliche;</li><li>con i propri fornitori di servizi di fiducia che operano per suo conto, non fanno un uso autonomo delle informazioni che il Fornitore del Servizio comunica loro e hanno accettato di rispettare le regole stabilite nella presente informativa sulla privacy.</li></ul><p></p>"
+    },
+    {
+      "id": "opt-out-rights",
+      "title": "Diritto di opposizione",
+      "html": "<p>L'utente può interrompere ogni ulteriore raccolta di informazioni dal proprio dispositivo mobile disinstallando l'Applicazione. La disinstallazione impedisce all'Applicazione di raccogliere dati dal dispositivo, ma non comporta la cancellazione automatica delle informazioni già trasmesse al Fornitore del Servizio o a terzi.</p><p>Per richiedere la cancellazione dei propri dati personali, revocare il consenso o esercitare uno qualsiasi dei propri diritti, è possibile contattare il Fornitore del Servizio all'indirizzo <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p></p>"
+    },
+    {
+      "id": "data-retention-policy",
+      "title": "Politica di conservazione dei dati",
+      "html": "<p>Il Fornitore del Servizio conserva i dati personali in base alla loro necessità per le finalità dichiarate:</p><ul><li>Dati forniti dall'utente: conservati per tutta la durata dell'utilizzo dell'Applicazione e per i 12 mesi successivi, salvo che la legge richieda una conservazione più lunga</li><li>Dati raccolti automaticamente: conservati per un massimo di 24 mesi dalla raccolta, salvo che sia necessaria una conservazione più lunga per adempiere a obblighi di legge</li><li>Dati aggregati e anonimizzati: conservati a tempo indeterminato in quanto non consentono più di identificare l'utente</li><li>Dati necessari per adempiere a obblighi di legge: conservati per il tempo richiesto dalla legge applicabile</li></ul><p>L'utente può richiedere la cancellazione dei propri dati personali, fatti salvi eventuali obblighi di legge di conservarli. Se l'utente desidera che il Fornitore del Servizio cancelli i Dati forniti dall'utente inviati tramite l'Applicazione, può contattarlo all'indirizzo <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>. Si prega di notare che alcuni Dati forniti dall'utente possono essere necessari per il corretto funzionamento dell'Applicazione.</p><p></p>"
+    },
+    {
+      "id": "data-deletion",
+      "title": "Cancellazione dei dati",
+      "html": "<p>L'utente può richiedere la cancellazione dei propri dati personali o del proprio account contattando il Fornitore del Servizio all'indirizzo <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>. Il Fornitore del Servizio darà seguito alla richiesta entro i termini previsti dalla legge applicabile.</p><p>Previa verifica dell'identità dell'utente, il Fornitore del Servizio cancellerà i dati personali dell'utente dai propri sistemi, salvo che la conservazione sia necessaria per adempiere a obblighi di legge o per legittime finalità aziendali.</p><p></p>"
+    },
+    {
+      "id": "children",
+      "title": "Minori",
+      "html": "<p>L'Applicazione non è destinata a minori di 13 anni, o dell'età superiore eventualmente prevista dalla legge applicabile. Il Fornitore del Servizio non richiede consapevolmente dati a minori di tale età né promuove l'Applicazione nei loro confronti.</p><p>Ove la legge applicabile richieda il consenso di un genitore o tutore, l'Applicazione non è destinata all'uso in assenza di tale consenso. Il Fornitore del Servizio non raccoglie consapevolmente informazioni di identificazione personale da minori di 13 anni in violazione della legge applicabile. L'Applicazione non prevede account e il Fornitore del Servizio non memorizza dati personali sui propri server; tuttavia, se l'utente è un genitore o tutore e ritiene che il proprio figlio abbia fornito informazioni personali tramite l'Applicazione, è pregato di contattare il Fornitore del Servizio (<a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>) affinché possa adottare le misure necessarie.</p><p></p>"
+    },
+    {
+      "id": "security",
+      "title": "Sicurezza",
+      "html": "<p>Il Fornitore del Servizio ha a cuore la tutela della riservatezza delle informazioni dell'utente. Il Fornitore del Servizio adotta misure di sicurezza fisiche, elettroniche e procedurali per proteggere le informazioni che tratta e conserva.</p><p></p>"
+    },
+    {
+      "id": "data-breach-notification",
+      "title": "Notifica delle violazioni dei dati",
+      "html": "<p>In caso di violazione dei dati che interessi i dati personali dell'utente, il Fornitore del Servizio ne darà comunicazione all'utente in conformità ai requisiti di legge applicabili, fornendo, ove richiesto, informazioni sulla natura della violazione e sulle misure adottate per porvi rimedio.</p><p></p>"
+    },
+    {
+      "id": "changes",
+      "title": "Modifiche",
+      "html": "<p>Il Fornitore del Servizio può aggiornare di tanto in tanto la presente Informativa sulla privacy. Il Fornitore del Servizio comunicherà all'utente le modifiche sostanziali pubblicando l'Informativa sulla privacy aggiornata con la relativa data di entrata in vigore. Ove richiesto dalla legge, il Fornitore del Servizio chiederà il consenso dell'utente alle modifiche sostanziali prima che entrino in vigore.<br>&nbsp;</p><p>Le versioni precedenti della presente Informativa sulla privacy saranno conservate e rese disponibili su richiesta contattando il Fornitore del Servizio all'indirizzo <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p><p>La presente informativa sulla privacy è in vigore dal 2026-10-30</p><p></p>"
+    },
+    {
+      "id": "your-consent",
+      "title": "Consenso dell'utente",
+      "html": "<p>Qualora il trattamento si basi sul consenso, l'utente presta tale consenso aderendo attivamente alla funzionalità o all'azione pertinente. L'utente può revocare il consenso in qualsiasi momento senza pregiudicare la liceità del trattamento effettuato prima della revoca. Il trattamento basato su altre basi giuridiche è effettuato come descritto sopra.</p><p></p>"
+    },
+    {
+      "id": "contact-us",
+      "title": "Contatti",
+      "html": "<p>Per qualsiasi domanda in materia di privacy relativa all'utilizzo dell'Applicazione, o domande sulle pratiche adottate, è possibile contattare il Fornitore del Servizio via email all'indirizzo <a href=\"mailto:leomogiano@outlook.com\">leomogiano@outlook.com</a>.</p>"
+    }
+  ]
+}

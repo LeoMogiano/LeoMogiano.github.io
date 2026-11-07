@@ -36,7 +36,7 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
           <span class="hero__spark" style={`--rot:${deg}deg;--delay:${i % 2 === 0 ? 0 : 0.035}s`}></span>
         ))}
       </span>
-      <span class="hero__status" role="img" aria-label={t.statusAria} title={t.statusTitle}>😺</span>
+      <span class="hero__status" role="img" aria-label={`${t.statusAria}: ${t.statusTitle}`} title={t.statusTitle}>😺</span>
     </span>
     <figcaption class="hero__caption">{t.role}</figcaption>
     {/*
@@ -54,8 +54,8 @@ const cvHref = `/cv/leo-mogiano-cv-${t.code.slice(0, 2)}.pdf`;
   </figure>
 
   <div class="hero__greet">
-    <span class="hero__dot"></span>
-    <span class="hero__greet-text">{t.greetA}<em class="hero__em">Leo Mogiano</em>{t.greetB} <span class="hero__wave">👋</span></span>
+    <span class="hero__dot" aria-hidden="true"></span>
+    <span class="hero__greet-text">{t.greetA}<em class="hero__em">Leo Mogiano</em>{t.greetB} <span class="hero__wave" aria-hidden="true">👋</span></span>
     <span class="hero__pills hero__pills--narrow">
       <Pill as="span" role="img" icon="android" iconSize="17px" class="hero__brand" aria-label="Android" />
       <Pill as="span" role="img" icon="ios" iconSize="17px" class="hero__brand" aria-label="Apple" />

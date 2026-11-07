@@ -8,6 +8,7 @@
 const section = document.querySelector<HTMLElement>('[data-app-current]');
 
 const status = document.querySelector<HTMLElement>('[data-app-status]');
+const pickLabel = document.querySelector<HTMLElement>('[data-pick-label]');
 
 if (section) {
   const buttons = [...section.querySelectorAll<HTMLButtonElement>('[data-app-pick]')];
@@ -18,9 +19,10 @@ if (section) {
     }
     // Sin esto la pantalla del teléfono cambia en silencio: quien usa lector
     // pulsa el botón y no recibe ninguna señal de que pasó algo.
+    const active = buttons.find((b) => b.dataset.appPick === current);
+    const name = active?.querySelector('[data-app-name]')?.textContent?.trim();
+    if (pickLabel && name) pickLabel.textContent = name;
     if (status) {
-      const active = buttons.find((b) => b.dataset.appPick === current);
-      const name = active?.querySelector('[data-app-name]')?.textContent?.trim();
       if (name) status.textContent = `${status.dataset.appStatusLabel ?? ''} ${name}`.trim();
     }
   };

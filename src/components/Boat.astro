@@ -9,7 +9,6 @@ const { t } = Astro.props;
 ---
 <section id="tiempo" class="boat">
   <p class="boat__title">{t.boatA}<em class="boat__em">{t.boatEm}</em>{t.boatB}</p>
-  <p class="boat__sub">{t.boatSub}</p>
 </section>
 
 <style>
@@ -31,15 +30,5 @@ const { t } = Astro.props;
 
   .boat__em {
     color: var(--accent);
-  }
-
-  .boat__sub {
-    font-family: var(--label);
-    font-size: var(--fs-meta);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--faint);
-    text-align: center;
-    margin: 26px 0 0;
   }
 </style>

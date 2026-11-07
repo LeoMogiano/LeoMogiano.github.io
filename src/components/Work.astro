@@ -56,7 +56,7 @@ const shotsByApp = new Map(shotSources);
 
 <section id="work" data-app-current={defaultApp}>
   <SectionHeader num={1} label={t.workBadge} aria={t.sectionAria} gap="44px">
-    <h2>{t.workA}<em>{t.workEm}</em>{t.workB}</h2>
+    <h2>{t.workA}<em>{t.workEm}</em><span aria-hidden="true">{t.workB}</span></h2>
   </SectionHeader>
 
   <div class="work__grid">
@@ -160,6 +160,7 @@ const shotsByApp = new Map(shotSources);
           </button>
         ))}
       </div>
+      <p class="work__pick-label" aria-hidden="true" data-pick-label>{apps.find((a) => a.num === defaultApp)?.name}</p>
     </div>
 
     <div class="work__list">
@@ -285,8 +286,25 @@ const shotsByApp = new Map(shotSources);
     width: 34px;
     height: 34px;
     border-radius: 25%;
-    opacity: 0.32;
+    opacity: 0.7;
     transition: opacity 0.3s ease;
+  }
+
+  /* Nombre de la app elegida bajo los iconos; solo existe apilado. */
+  .work__pick-label {
+    display: none;
+    margin: 4px 0 0;
+    text-align: center;
+    font-family: var(--appfont);
+    font-weight: 600;
+    font-size: var(--fs-lead);
+    letter-spacing: var(--apptrack);
+  }
+
+  @media (max-width: 705px) {
+    .work__pick-label {
+      display: block;
+    }
   }
 
   .work__pick[aria-pressed='true'] :global(.work__pick-icon) {

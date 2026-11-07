@@ -60,7 +60,6 @@ export interface Dict {
   boatB: string;
   nowPlaying: string;
   appIconAlt: string;
-  boatSub: string;
   ctaA: string;
   ctaEm: string;
   ctaB: string;

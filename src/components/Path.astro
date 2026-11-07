@@ -21,7 +21,7 @@ const spanOf = (job: (typeof jobs)[number]) => ({
 
 <section id="path" class="path">
   <SectionHeader num={2} label={t.pathBadge} aria={t.sectionAria}>
-    <h2>{t.pathA}<em>{t.pathEm}</em>{t.pathB}</h2>
+    <h2>{t.pathA}<em>{t.pathEm}</em><span aria-hidden="true">{t.pathB}</span></h2>
   </SectionHeader>
 
   <div class="path__list">

@@ -57,6 +57,12 @@ const FONTS = [
     axes: { opsz: 14, wdth: 100 },
   },
   {
+    // Solo para las páginas legales de MiMicro: la misma cara que usa la app.
+    out: 'montserrat-var.woff2',
+    url: `${RAW}/ofl/montserrat/Montserrat%5Bwght%5D.ttf`,
+    scope: 'latin',
+  },
+  {
     out: 'dm-mono-400.woff2',
     url: `${RAW}/ofl/dmmono/DMMono-Regular.ttf`,
     scope: 'latin',

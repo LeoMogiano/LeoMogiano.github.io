@@ -120,4 +120,11 @@ const {
       color: var(--accent);
     }
   }
+
+  /* Va al final y con doble clase: a.pill (y su :hover) le ganaban a
+     .pill--active y dejaban texto claro o acento sobre fondo de acento. */
+  .pill.pill--active,
+  .pill.pill--active:hover {
+    color: var(--bg);
+  }
 </style>

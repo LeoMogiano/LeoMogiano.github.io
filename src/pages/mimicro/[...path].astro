@@ -93,7 +93,7 @@ const ICON = {
   <body>
     <a class="skip" href="#doc">{t.skip}</a>
 
-    <svg class="deco" viewBox="0 0 24 24" aria-hidden="true"><path d={ICON.explore} /></svg>
+    <div class="deco-clip" aria-hidden="true"><svg class="deco" viewBox="0 0 24 24"><path d={ICON.explore} /></svg></div>
 
     <header class="top">
       <span class="brand">
@@ -331,9 +331,16 @@ const ICON = {
   /* La brújula de Inicio, mismo gesto: 260px, −8°, recortada en la esquina.
      Separada del borde superior: si lo tocara, Safari iOS muestrearía su verde
      y teñiría la barra de direcciones. */
-  /* Contenedor de .deco: así la brújula recortada no ensancha la página. */
+  /* overflow-x del body se propaga al viewport y no evita que el móvil ensanche
+     el layout viewport: el recorte va en un contenedor propio. */
   body {
     position: relative;
+  }
+  .deco-clip {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
   }
   .deco {
     position: absolute;

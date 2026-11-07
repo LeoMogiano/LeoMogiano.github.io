@@ -137,7 +137,18 @@ main:focus {
   color: var(--fg);
   font-family: var(--font);
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip; /* clip y no hidden: hidden rompe el sticky del header */
+}
+
+/* Los saltos de ancla no deben dejar el título bajo la barra fija. */
+section[id] {
+  scroll-margin-top: 56px;
+}
+
+@media (min-width: 1041px) {
+  section[id] {
+    scroll-margin-top: 76px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
